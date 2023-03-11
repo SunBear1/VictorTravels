@@ -9,7 +9,7 @@ build: user_handler postgres
 
 run:
 	@echo "Starting platform..."
-	@user_handler=${USER_HANDLER_IMAGE_NAME} postgresql=${POSTGRES_IMAGE_NAME} docker-compose -p "RSWW" up
+	@user_handler=${USER_HANDLER_IMAGE_NAME} postgresql=${POSTGRES_IMAGE_NAME} docker-compose -p "victor-travels" up
 
 
 clean:
