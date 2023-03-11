@@ -1,0 +1,29 @@
+{
+  "rabbit_version": "latest",
+  "users": [
+    {
+      "name": "admin",
+      "password": "admin",
+      "tags": "administrator"
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "\/vhost1"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "admin",
+      "vhost": "\/vhost1",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "parameters": [],
+  "policies": [],
+  "queues": [],
+  "exchanges": [],
+  "bindings": []
+}

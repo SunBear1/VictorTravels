@@ -1,14 +1,29 @@
 version: "3.3"
 services:
   user-handler:
-    image: ${USER_HANDLER_IMAGE_NAME}
+    container_name: user-handler
+    image: ${USER_HANDLER_IMAGE}
     #network_mode: "host"
     ports:
       - "8000:8000"
     environment:
-      MYSQL_ADDRESS: "postgresql"
+      POSTGRES_ADDRESS: "postgresql"
+    depends_on:
+      - postgresql
   postgresql:
-    image: ${POSTGRES_IMAGE_NAME}
+    container_name: postgresql
+    image: ${POSTGRES_IMAGE}
     #network_mode: "host"
     ports:
       - "5432:5432"
+  mongodb:
+    container_name: mongodb
+    image: ${MONGO_IMAGE}
+    ports:
+      - "27017:27017"
+  message_broker:
+    container_name: rabbitmq
+    image: ${RABBIT_IMAGE}
+    ports:
+      - "5672:5672"
+      - "15672:15672"
