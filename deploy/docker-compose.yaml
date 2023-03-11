@@ -1,0 +1,14 @@
+version: "3.3"
+services:
+  user-handler:
+    image: ${USER_HANDLER_IMAGE_NAME}
+    #network_mode: "host"
+    ports:
+      - "8000:8000"
+    environment:
+      MYSQL_ADDRESS: "postgresql"
+  postgresql:
+    image: ${POSTGRES_IMAGE_NAME}
+    #network_mode: "host"
+    ports:
+      - "5432:5432"
