@@ -11,6 +11,6 @@ Projekt na przedmiot Rozproszone systemy wysokiej wydajności
 - Scrapper - Łukasz
 - RabbitMQ - Łukasz
 
-Query_tour - mongoDB
-Main_tour - postgresql
-Booking_stack - mongo
+- Query_tour - mongoDB
+- Main_tour - postgresql
+- Booking_stack - mongoDB
