@@ -1,6 +1,6 @@
 # Ogólna architektura systemu
 
-![Architektura systemu.png](architecture.png)
+![Architektura systemu.png](architecture.jpg)
 
 
 - **REST** - Serwisy komunikują się protokołem HTTP
@@ -11,13 +11,12 @@
 ---
 ## Lista serwisów w systemie
 
-- WEB_UI - warstwa prezentacji, czyli frontend.
+- GUI - warstwa prezentacji, czyli frontend.
 - USER_HANDLER - serwis odpowiedzialny za uwierzytelnienie użytkowników.
-- BOOKING_MS - serwis odpowiedzialny za obsługę rezerwacji oraz kupna wycieczek przez klienta.
+- DIRECTOR_MS - serwis odpowiedzialny za komunikację z TO oraz za komunikację z frontendem. Posiada on główną "czystą" bazę danych wycieczek.
 - TOUR_RESEARCHER_MS - serwis odpowiedzialny za wyszukiwanie i listowanie wycieczek dla klienta.
-- TOUR_OPERATOR_MS - serwis odpowiedzialny za tworzenie wycieczek, i aktualizowanie wycieczek dla innych serwisów.
-- HOTEL_HANDLER_MS - serwis odpowiedzialny za pobieranie, przechowywanie oraz wydawanie informacji o zakwaterowaniu. Serwis ten symuluje pobieranie informacji o hotelach na świecie.
-- TRANSPORT_HANDLER_MS - serwis odpowiedzialny za pobieranie, przechowywanie oraz wydawanie informacji o środkach transportu. Serwis ten symuluje pobieranie informacji o transporcie na świecie.
-- TOUR_DATA_GENERATOR - serwis symulujący wydarzenia losowe jak np. wzorst kosztu hotelu, albo zapełnienie się miejsca w samolocie.
+- RESERVATIONS_MS -  serwis odpowiedzialny za obsługę reserwacji. Serwis ten księguje oraz obsługuje operacje kupna wycieczki.
+- PURCHASE_MS -  serwis odpowiedzialny za obsługę kupna wycieczki. Serwis ten księguje oraz obsługuje operacje kupna wycieczki.
+- PAYMENT_MS - serwis odpowiedzialny za obsługę wpłat od klienta. Serwis ten symuluje przetwarzanie płatności, księguje je i losowo odrzuca płatność.
 
 Większość serwisów będzie posiadała swoją własną bazę danych, z której będzie korzystała.
