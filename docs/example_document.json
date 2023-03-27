@@ -1,0 +1,153 @@
+{
+  "tripID": 2137,
+  "hotel": {
+    "name": "OsovaCourt",
+    "image": "example_base64_photo",
+    "description": [
+      "Example description of a hotel",
+      "I love RSWW"
+    ],
+    "diet": {
+      "AllInclusive": 1500,
+      "Breakfast": 800,
+      "TwoMeals": 1200,
+      "None": 0
+    }
+  },
+  "localisation": {
+    "country": "France",
+    "region": "Paris"
+  },
+  "from": {
+    "Warszawa": {
+      "plane": {
+        "cost": 100,
+        "seatsLeft": 21
+      },
+      "train": {
+        "cost": 60,
+        "seatsLeft": 40
+      }
+    },
+    "Kraków": {
+      "plane": {
+        "cost": 105,
+        "seatsLeft": 20
+      },
+      "train": {
+        "cost": 60,
+        "seatsLeft": 45
+      }
+    },
+    "Gdańsk": {
+      "plane": {
+        "cost": 110,
+        "seatsLeft": 20
+      },
+      "train": {
+        "cost": 65,
+        "seatsLeft": 43
+      }
+    }
+  },
+  "to": {
+    "Warszawa": {
+      "plane": {
+        "cost": 100,
+        "seatsLeft": 21
+      },
+      "train": {
+        "cost": 60,
+        "seatsLeft": 40
+      }
+    },
+    "Kraków": {
+      "plane": {
+        "cost": 105,
+        "seatsLeft": 20
+      },
+      "train": {
+        "cost": 60,
+        "seatsLeft": 45
+      }
+    },
+    "Gdańsk": {
+      "plane": {
+        "cost": 110,
+        "seatsLeft": 20
+      },
+      "train": {
+        "cost": 65,
+        "seatsLeft": 43
+      }
+    }
+  },
+  "placesOnTurns": {
+    "01-06-2023:11-06-2023": {
+      "small": {
+        "cost": 600,
+        "available": 2
+      },
+      "medium": {
+        "cost": 200,
+        "available": 20
+      },
+      "large": {
+        "cost": 500,
+        "available": 5
+      },
+      "apartment": {
+        "cost": 800,
+        "available": 50
+      },
+      "studio": {
+        "cost": 1800,
+        "available": 20
+      }
+    },
+    "12-06-2023:22-06-2023": {
+      "small": {
+        "cost": 600,
+        "available": 9
+      },
+      "medium": {
+        "cost": 200,
+        "available": 29
+      },
+      "large": {
+        "cost": 500,
+        "available": 52
+      },
+      "apartment": {
+        "cost": 800,
+        "available": 53
+      },
+      "studio": {
+        "cost": 1800,
+        "available": 24
+      }
+    },
+    "22-06-2023:02-07-2023": {
+      "small": {
+        "cost": 600,
+        "available": 21
+      },
+      "medium": {
+        "cost": 200,
+        "available": 2
+      },
+      "large": {
+        "cost": 500,
+        "available": 50
+      },
+      "apartment": {
+        "cost": 800,
+        "available": 5
+      },
+      "studio": {
+        "cost": 1800,
+        "available": 2
+      }
+    }
+  }
+}
