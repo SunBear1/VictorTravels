@@ -1,7 +1,9 @@
+import random
+
 import bs4.element
 
 
-def create_base_hotel_dict(html_from_source: bs4.element.ResultSet) -> dict:
+def create_base_trip_dict(html_from_source: bs4.element.ResultSet) -> dict:
     base_trips = dict()
     for element in html_from_source:
         for i in range(len(element.contents) - 1):
@@ -23,3 +25,16 @@ def create_base_hotel_dict(html_from_source: bs4.element.ResultSet) -> dict:
                             }
                             break
     return base_trips
+
+
+def create_locations_list(html_from_source: bs4.element.ResultSet) -> list:
+    departure_locations = list()
+    [departure_locations.append(city_name.text) for city_name in html_from_source]
+    return departure_locations
+
+
+def fill_trips_with_departure_locations(departure_locations: list, trips: dict) -> dict:
+    for trip in trips.values():
+        dep_locs_number = random.randint(4, len(departure_locations) - 3)
+        trip["from"] = sorted(random.sample(departure_locations, dep_locs_number))
+    return trips
