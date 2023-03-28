@@ -2,6 +2,18 @@
 
 Źródło - itaka.pl
 
+### Wymagania
+
+`pip install -r requirements.txt`
+
+oraz
+
+`Google chrome 111.0.5563.*`
+
+### Wyniki
+
+Plik JSON z zescrapowanymi danymi znajduje się w `/trips_json.json`
+
 ### Co zbiera scrapper?
 
 1. Hotel
