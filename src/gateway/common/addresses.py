@@ -1,0 +1,4 @@
+TRIP_RESEARCHER_SERVICE_ADDRESS = "http://localhost:2137"
+RESERVATION_SERVICE_ADDRESS = "http://localhost:2138"
+PAYMENT_SERVICE_ADDRESS = "http://localhost:2139"
+PURCHASE_SERVICE_ADDRESS = "http://localhost:2140"

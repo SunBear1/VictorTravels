@@ -1,8 +1,8 @@
 import jwt
 import psycopg2.errors
 
+from common.authentication import hash_password, verify_password, JWT_SECRET, AUTHENTICATION_DISABLED
 from sql.postgresql_client import PostgreSQLClient
-from users.encryption import JWT_SECRET, verify_password, hash_password
 from users.exceptions import UserAlreadyExistsException, UserNotExistException, UserWrongPasswordException
 from users.models import UserUpdateData
 
@@ -25,7 +25,7 @@ def get_user_by_login(login: str) -> dict[str: str]:
     PostgreSQLClient.create_connection()
 
     PostgreSQLClient.client.execute("SELECT id, login FROM users WHERE login=%(username)s;",
-                                            {"username": login})
+                                    {"username": login})
     query_result = PostgreSQLClient.client.fetchone()
     if query_result is None:
         raise UserNotExistException(message=f"User does not exist in database")
@@ -89,7 +89,7 @@ def update_user_by_login(login: str, new_data: UserUpdateData):
 def authenticate_user(login: str, password: str) -> str:
     PostgreSQLClient.create_connection()
     PostgreSQLClient.client.execute("SELECT password FROM users WHERE login=%(username)s;",
-                                            {"username": login})
+                                    {"username": login})
     query_result = PostgreSQLClient.client.fetchone()
     if query_result is None:
         PostgreSQLClient.close_connection()
@@ -102,9 +102,12 @@ def authenticate_user(login: str, password: str) -> str:
 
 
 def verify_user_identify(login: str, password: str) -> bool:
+    if AUTHENTICATION_DISABLED:
+        return True
+
     PostgreSQLClient.create_connection()
-    query = PostgreSQLClient.client.execute("SELECT password FROM users WHERE login=%(username)s;",
-                                            {"username": login})
+    PostgreSQLClient.client.execute("SELECT password FROM users WHERE login=%(username)s;",
+                                    {"username": login})
     query_result = PostgreSQLClient.client.fetchone()
     if query_result is None:
         PostgreSQLClient.close_connection()

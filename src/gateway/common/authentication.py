@@ -1,10 +1,14 @@
 import hashlib
+import os
 
 import jwt
+from fastapi.security import OAuth2PasswordBearer
 
 from users.exceptions import UserWrongTokenSchemaException
 
-JWT_SECRET = "TAJNY_SEKRET"
+JWT_SECRET = "WIKTOR_TO_PET"
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+AUTHENTICATION_DISABLED = os.getenv("DISABLE_AUTHENTICATION", False)
 
 
 def hash_password(password) -> str:
