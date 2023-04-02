@@ -1,8 +1,8 @@
 version: "3.7"
 services:
   user-handler:
-    container_name: user-handler
-    image: ${USER_HANDLER_IMAGE}
+    container_name: gateway
+    image: ${GATEWAY_IMAGE}
     #network_mode: "host"
     ports:
       - "8000:8000"

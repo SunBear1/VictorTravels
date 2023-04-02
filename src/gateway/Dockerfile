@@ -1,6 +1,6 @@
 FROM python:3.11.2-alpine as build-stage
 
-WORKDIR /user-handler
+WORKDIR /gateway
 
 COPY . .
 
