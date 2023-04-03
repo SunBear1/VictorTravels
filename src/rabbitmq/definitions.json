@@ -9,13 +9,13 @@
   ],
   "vhosts": [
     {
-      "name": "\/vhost1"
+      "name": "/victor_travels"
     }
   ],
   "permissions": [
     {
       "user": "admin",
-      "vhost": "\/vhost1",
+      "vhost": "/victor_travels",
       "configure": ".*",
       "write": ".*",
       "read": ".*"
@@ -23,7 +23,115 @@
   ],
   "parameters": [],
   "policies": [],
-  "queues": [],
-  "exchanges": [],
-  "bindings": []
+  "queues": [
+    {
+      "name": "databaseUpdatesQueue",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "liveEventsQueue",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "reservationsQueue",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "purchasesQueue",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "paymentsQueue",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "databaseUpdatesExchange",
+      "vhost": "/victor_travels",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false
+    },
+    {
+      "name": "liveEventsExchange",
+      "vhost": "/victor_travels",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false
+    },
+    {
+      "name": "reservationsExchange",
+      "vhost": "/victor_travels",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false
+    },
+    {
+      "name": "purchasesExchange",
+      "vhost": "/victor_travels",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false
+    },
+    {
+      "name": "paymentsExchange",
+      "vhost": "/victor_travels",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false
+    }
+  ],
+  "bindings": [
+    {
+      "source": "databaseUpdatesExchange",
+      "vhost": "/victor_travels",
+      "destination": "databaseUpdatesQueue",
+      "destination_type": "queue",
+      "routing_key": "databaseUpdatesQueue"
+    },
+    {
+      "source": "liveEventsExchange",
+      "vhost": "/victor_travels",
+      "destination": "liveEventsQueue",
+      "destination_type": "queue",
+      "routing_key": "liveEventsQueue"
+    },
+    {
+      "source": "reservationsExchange",
+      "vhost": "/victor_travels",
+      "destination": "reservationsQueue",
+      "destination_type": "queue",
+      "routing_key": "reservationsQueue"
+    },
+    {
+      "source": "purchasesExchange",
+      "vhost": "/victor_travels",
+      "destination": "purchasesQueue",
+      "destination_type": "queue",
+      "routing_key": "purchasesQueue"
+    },
+    {
+      "source": "paymentsExchange",
+      "vhost": "/victor_travels",
+      "destination": "paymentsQueue",
+      "destination_type": "queue",
+      "routing_key": "paymentsQueue"
+    }
+  ]
 }

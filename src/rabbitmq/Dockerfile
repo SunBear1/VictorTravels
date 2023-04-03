@@ -7,6 +7,7 @@ RUN apt-get install -y curl
 RUN rabbitmq-plugins enable rabbitmq_management
 RUN rabbitmq-plugins enable rabbitmq_federation
 RUN rabbitmq-plugins enable rabbitmq_federation_management
+RUN rabbitmq-plugins enable rabbitmq_tracing
 
 ADD rabbitmq.config /etc/rabbitmq/
 ADD definitions.json /etc/rabbitmq/
