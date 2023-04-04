@@ -41,7 +41,7 @@ CRUD wycieczkowy
 
 TBD
 
-## User handler
+## Gateway
 
 #### Rest
 
