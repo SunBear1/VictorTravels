@@ -1,3 +1,11 @@
+import json
+
+
+def consume_live_event(ch, method, properties, body):
+    LiveEvents.add_event(message_body=json.loads(body.decode('utf-8')))
+    print(f"Received message: {LiveEvents.events_list}")
+
+
 class LiveEvents:
     events_list = {
         "bought_trip_id": [],

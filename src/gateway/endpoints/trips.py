@@ -5,8 +5,8 @@ import requests
 from fastapi import APIRouter, Response, Depends, status, Query
 from starlette.responses import JSONResponse
 
-from common.addresses import TRIP_RESEARCHER_SERVICE_ADDRESS
 from common.authentication import oauth2_scheme, verify_jwt_token
+from common.constants import TRIP_RESEARCHER_SERVICE_ADDRESS
 from users.service import verify_user_identify
 
 router = APIRouter(prefix="/api/v1/trips")

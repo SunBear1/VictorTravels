@@ -1,9 +1,6 @@
-import json
 import os
 
 import pika
-
-from rabbitmq.live_events import LiveEvents
 
 USERNAME = os.getenv("RABBITMQ_USERNAME", "admin")
 PASSWORD = os.getenv("RABBITMQ_PASSWORD", "admin")
@@ -17,20 +14,15 @@ class RabbitMQClient:
     connection = pika.BlockingConnection(
         pika.ConnectionParameters(host=HOST, port=PORT, credentials=credentials, virtual_host=VHOST, heartbeat=10))
     channel = connection.channel()
-    channel.queue_declare(queue='liveEventsQueue', durable=True)
 
     @classmethod
-    async def create_connection_and_start_consuming(cls):
-        def callback(ch, method, properties, body):
-            LiveEvents.add_event(message_body=json.loads(body.decode('utf-8')))
-            print(f"Received message: {LiveEvents.events_list}")
-
-        cls.channel.basic_consume(queue='liveEventsQueue', on_message_callback=callback, auto_ack=True)
+    async def create_connection_and_start_consuming(cls, queue_name: str, consume_function):
+        cls.channel.basic_consume(queue=queue_name, on_message_callback=consume_function, auto_ack=True)
         cls.channel.start_consuming()
 
     @classmethod
-    def send_data_to_queue(cls, queue_name: str, payload):
-        cls.channel.basic_publish(exchange='liveEventsExchange',
+    def send_data_to_queue(cls, queue_name: str, payload, exchange_name: str):
+        cls.channel.basic_publish(exchange=exchange_name,
                                   routing_key=queue_name,
                                   body=payload)
 
