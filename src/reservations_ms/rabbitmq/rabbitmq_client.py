@@ -8,6 +8,11 @@ VHOST = os.getenv("RABBITMQ_VHOST", "/victor_travels")
 HOST = os.getenv("RABBITMQ_ADDRESS", "localhost")
 PORT = os.getenv("RABBITMQ_PORT", 5672)
 
+PURCHASES_EXCHANGE_NAME = "purchasesExchange"
+PURCHASES_QUEUE_NAME = "purchasesQueue"
+RESERVATIONS_QUEUE_NAME = "reservationsQueue"
+RESERVATIONS_EXCHANGE_NAME = "reservationsExchange"
+
 
 class RabbitMQClient:
     __instance = None

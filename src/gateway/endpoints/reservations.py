@@ -27,7 +27,8 @@ async def make_reservation(trip_id: str, token: str = Depends(oauth2_scheme)):
             return Response(status_code=status.HTTP_403_FORBIDDEN,
                             content="User does not have permission to use this service", media_type="text/plain")
 
-        response = requests.post(f"{RESERVATION_MS_ADDRESS}/api/v1/reservation", timeout=3.00,
+        response = requests.post(f"{RESERVATION_MS_ADDRESS}/api/v1/reservation", params={"trip_id": trip_id},
+                                 timeout=3.00,
                                  verify=False)
 
         if response.status_code == status.HTTP_201_CREATED:

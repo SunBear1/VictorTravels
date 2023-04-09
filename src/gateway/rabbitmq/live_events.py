@@ -1,4 +1,14 @@
+import asyncio
 import json
+
+from rabbitmq.rabbitmq_client import RabbitMQClient
+
+
+def start_consuming(queue_name, consume_function):
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    client = RabbitMQClient.get_instance()
+    loop.run_until_complete(client.create_connection_and_start_consuming(queue_name, consume_function))
 
 
 def consume_live_event(ch, method, properties, body):

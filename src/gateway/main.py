@@ -1,4 +1,3 @@
-import asyncio
 import threading
 
 import uvicorn
@@ -11,8 +10,7 @@ from endpoints.purchases import router as purchases_router
 from endpoints.reservations import router as reservations_router
 from endpoints.trips import router as trips_router
 from endpoints.users import router as users_router
-from rabbitmq.live_events import consume_live_event
-from rabbitmq.rabbitmq_client import RabbitMQClient
+from rabbitmq.live_events import consume_live_event, start_consuming
 
 app = FastAPI()
 
@@ -27,12 +25,7 @@ app.include_router(event_router, tags=["Endpoints for status events operations"]
 app.include_router(api_router)
 
 if __name__ == "__main__":
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    thread = threading.Thread(target=loop.run_until_complete,
-                              args=(
-                                  RabbitMQClient.create_connection_and_start_consuming(
-                                      queue_name=LIVE_EVENTS_QUEUE_NAME,
-                                      consume_function=consume_live_event),))
-    thread.start()
+    live_events_consumer = threading.Thread(target=start_consuming,
+                                            args=(LIVE_EVENTS_QUEUE_NAME, consume_live_event))
+    live_events_consumer.start()
     uvicorn.run(app, host="127.0.0.1", port=8000)
