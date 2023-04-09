@@ -8,10 +8,13 @@ VHOST = os.getenv("RABBITMQ_VHOST", "/victor_travels")
 HOST = os.getenv("RABBITMQ_ADDRESS", "localhost")
 PORT = os.getenv("RABBITMQ_PORT", 5672)
 
-PURCHASES_EXCHANGE_NAME = "purchasesExchange"
-PURCHASES_QUEUE_NAME = "purchasesQueue"
-RESERVATIONS_QUEUE_NAME = "reservationsQueue"
-RESERVATIONS_EXCHANGE_NAME = "reservationsExchange"
+PURCHASES_CONSUME_QUEUE_NAME = "purchases-for-reservations-ms"
+RESERVATIONS_CONSUME_QUEUE_NAME = "reservations-for-reservations-ms"
+
+PURCHASES_EXCHANGE_NAME = "purchases"
+PURCHASES_PUBLISH_QUEUE_NAME = "purchases-for-purchase_ms"
+RESERVATIONS_EXCHANGE_NAME = "reservations"
+RESERVATIONS_PUBLISH_QUEUE_NAME = "reservations-for-director"
 
 
 class RabbitMQClient:
@@ -36,7 +39,7 @@ class RabbitMQClient:
             self.channel = self.connection.channel()
             RabbitMQClient.__instance = self
 
-    def create_connection_and_start_consuming(self, queue_name: str, consume_function):
+    def start_consuming(self, queue_name: str, consume_function):
         self.channel.basic_consume(queue=queue_name, on_message_callback=consume_function, auto_ack=True)
         self.channel.start_consuming()
 

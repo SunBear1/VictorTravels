@@ -1,8 +1,7 @@
-from fastapi import APIRouter, Response, Depends
-from starlette.responses import JSONResponse
-
 from common.authentication import oauth2_scheme, verify_jwt_token
 from common.validators import is_login_valid
+from fastapi import APIRouter, Response, Depends
+from starlette.responses import JSONResponse
 from users.exceptions import UserAlreadyExistsException, UserInvalidEmailException, UserNotExistException, \
     UserWrongPasswordException, UserWrongTokenSchemaException
 from users.models import UserLoginData, UserRegisterData, UserUpdateData

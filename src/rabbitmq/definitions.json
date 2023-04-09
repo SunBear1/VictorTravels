@@ -25,35 +25,56 @@
   "policies": [],
   "queues": [
     {
-      "name": "databaseUpdatesQueue",
+      "name": "db-updates-for-researcher",
       "vhost": "/victor_travels",
       "durable": true,
       "auto_delete": false,
       "arguments": {}
     },
     {
-      "name": "liveEventsQueue",
+      "name": "live-events-for-gateway",
       "vhost": "/victor_travels",
       "durable": true,
       "auto_delete": false,
       "arguments": {}
     },
     {
-      "name": "reservationsQueue",
+      "name": "reservations-for-director",
       "vhost": "/victor_travels",
       "durable": true,
       "auto_delete": false,
       "arguments": {}
     },
     {
-      "name": "purchasesQueue",
+      "name": "reservations-for-reservations-ms",
       "vhost": "/victor_travels",
       "durable": true,
       "auto_delete": false,
       "arguments": {}
     },
     {
-      "name": "paymentsQueue",
+      "name": "purchases-for-purchase_ms",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "purchases-for-reservations-ms",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "payment-for-payment-ms",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "payment-for-purchase-ms",
       "vhost": "/victor_travels",
       "durable": true,
       "auto_delete": false,
@@ -62,35 +83,35 @@
   ],
   "exchanges": [
     {
-      "name": "databaseUpdatesExchange",
+      "name": "database-updates",
       "vhost": "/victor_travels",
       "type": "direct",
       "durable": true,
       "auto_delete": false
     },
     {
-      "name": "liveEventsExchange",
+      "name": "live-events",
       "vhost": "/victor_travels",
       "type": "direct",
       "durable": true,
       "auto_delete": false
     },
     {
-      "name": "reservationsExchange",
+      "name": "reservations",
       "vhost": "/victor_travels",
       "type": "direct",
       "durable": true,
       "auto_delete": false
     },
     {
-      "name": "purchasesExchange",
+      "name": "purchases",
       "vhost": "/victor_travels",
       "type": "direct",
       "durable": true,
       "auto_delete": false
     },
     {
-      "name": "paymentsExchange",
+      "name": "payments",
       "vhost": "/victor_travels",
       "type": "direct",
       "durable": true,
@@ -99,39 +120,60 @@
   ],
   "bindings": [
     {
-      "source": "databaseUpdatesExchange",
+      "source": "database-updates",
       "vhost": "/victor_travels",
-      "destination": "databaseUpdatesQueue",
+      "destination": "db-updates-for-researcher",
       "destination_type": "queue",
-      "routing_key": "databaseUpdatesQueue"
+      "routing_key": "db-updates-for-researcher"
     },
     {
-      "source": "liveEventsExchange",
+      "source": "live-events",
       "vhost": "/victor_travels",
-      "destination": "liveEventsQueue",
+      "destination": "live-events-for-gateway",
       "destination_type": "queue",
-      "routing_key": "liveEventsQueue"
+      "routing_key": "live-events-for-gateway"
     },
     {
-      "source": "reservationsExchange",
+      "source": "reservations",
       "vhost": "/victor_travels",
-      "destination": "reservationsQueue",
+      "destination": "reservations-for-director",
       "destination_type": "queue",
-      "routing_key": "reservationsQueue"
+      "routing_key": "reservations-for-director"
     },
     {
-      "source": "purchasesExchange",
+      "source": "reservations",
       "vhost": "/victor_travels",
-      "destination": "purchasesQueue",
+      "destination": "reservations-for-reservations-ms",
       "destination_type": "queue",
-      "routing_key": "purchasesQueue"
+      "routing_key": "reservations-for-reservations-ms"
     },
     {
-      "source": "paymentsExchange",
+      "source": "purchases",
       "vhost": "/victor_travels",
-      "destination": "paymentsQueue",
+      "destination": "purchases-for-purchase_ms",
       "destination_type": "queue",
-      "routing_key": "paymentsQueue"
+      "routing_key": "purchases-for-purchase_ms"
+    },
+    {
+      "source": "purchases",
+      "vhost": "/victor_travels",
+      "destination": "purchases-for-reservations-ms",
+      "destination_type": "queue",
+      "routing_key": "purchases-for-reservations-ms"
+    },
+    {
+      "source": "payments",
+      "vhost": "/victor_travels",
+      "destination": "payment-for-purchase-ms",
+      "destination_type": "queue",
+      "routing_key": "payment-for-purchase-ms"
+    },
+    {
+      "source": "payments",
+      "vhost": "/victor_travels",
+      "destination": "payment-for-payment-ms",
+      "destination_type": "queue",
+      "routing_key": "payment-for-payment-ms"
     }
   ]
 }
