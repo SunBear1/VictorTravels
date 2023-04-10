@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 from fastapi import APIRouter, status
 from starlette.responses import JSONResponse
@@ -23,14 +24,14 @@ async def make_reservation(trip_id: str):
     Create a trip reservation
     """
     # TODO Czy trip jest w liście dostępnych tripów?
+    current_time = datetime.now().strftime("%Y-%m-%d:%H:%M:%S")
     init_doc = {
         "trip_id": trip_id,
-        "reserved": True,
-        "purchased": False,
-        "payed": False
+        "reservation_status": "temporary",
+        "reservation_creation_time": current_time,
     }
     try:
-        insert_result = MongoDBClient.trips_collection.insert_one(document=init_doc)
+        insert_result = MongoDBClient.reservations_collection.insert_one(document=init_doc)
         msg_to_purchase_ms = {
             "_id": str(insert_result.inserted_id),
             "reserved": True
@@ -41,10 +42,10 @@ async def make_reservation(trip_id: str):
         msg_to_director_ms = {
             "trip_id": trip_id,
             "reserved": True,
-            "payed": False
         }
         client.send_data_to_queue(queue_name=RESERVATIONS_PUBLISH_QUEUE_NAME, exchange_name=RESERVATIONS_EXCHANGE_NAME,
                                   payload=json.dumps(msg_to_director_ms, ensure_ascii=False).encode('utf-8'))
+        # TODO wysłać wiadomość do payment MS o czasie stworzenia rezerwacji
         return JSONResponse(status_code=status.HTTP_201_CREATED,
                             content={"reservation_id": str(insert_result.inserted_id)},
                             media_type="application/json")
