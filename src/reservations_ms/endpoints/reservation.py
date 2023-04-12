@@ -11,11 +11,7 @@ from rabbitmq.rabbitmq_client import RabbitMQClient, PURCHASES_EXCHANGE_NAME, \
     PURCHASES_PUBLISH_QUEUE_NAME, PAYMENTS_PUBLISH_QUEUE_NAME, PAYMENTS_EXCHANGE_NAME
 
 router = APIRouter(prefix="/api/v1/reservation")
-# logging.basicConfig(
-#         format="%(levelname)s %(asctime)-4s %(message)s",
-#         level=logging.INFO,
-#         datefmt="%Y-%m-%d %H:%M:%S",
-#     )
+
 logger = logging.getLogger("reservations")
 
 
@@ -80,4 +76,5 @@ async def make_reservation(trip_id: str):
                             content={"reservation_id": str(insert_result.inserted_id)},
                             media_type="application/json")
     except Exception as ex:
-        raise ex
+        logger.info(f"Exception in reservation ms occurred: {ex}")
+        return Response(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -1,4 +1,5 @@
 import json
+import logging
 
 import requests
 from fastapi import APIRouter, Response, Depends, status
@@ -9,6 +10,8 @@ from common.constants import RESERVATIONS_MS_ADDRESS
 from users.service import verify_user_identify
 
 router = APIRouter(prefix="/api/v1/reservations")
+
+logger = logging.getLogger("gateway")
 
 
 @router.post("/{trip_id}",
@@ -47,7 +50,6 @@ async def make_reservation(trip_id: str, token: str = Depends(oauth2_scheme)):
     except requests.exceptions.ConnectionError:
         return Response(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, content="Can't connect to reservation service",
                         media_type="text/plain")
-    except Exception as ex:  # TODO to exception będzie zmienione na bardziej konkretne kiedy powstanie reservation service
-        raise ex
-        # return Response(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content=f"Something went wrong",
-        #                 media_type="text/plain")
+    except Exception as ex:
+        logger.info(f"Exception in gateway occurred: {ex}")
+        return Response(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)

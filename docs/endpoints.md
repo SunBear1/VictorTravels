@@ -3,6 +3,7 @@
 ## WEB_UI
 
 #### AMQP Live events
+
 ```json
 {
     "placeholder" : "example"
@@ -12,11 +13,13 @@
 ## Tour Researcher
 
 #### Rest
+
 `GET /api/v1/trips?`
 
 Jeśli jakiegoś paramu nie ma to zakładamy że dowolny
 
 Params:
+
 - adults : number
 - kidsTo3yo : number
 - kidsTo10yo : number
@@ -33,6 +36,7 @@ Params:
 `GET /api/v1/trips/{trip_id}`
 
 #### AMQP
+
 ```
 CRUD wycieczkowy
 ```

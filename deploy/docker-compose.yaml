@@ -19,16 +19,18 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+      postgresql:
+        condition: service_healthy
   postgresql:
     container_name: postgresql
     image: ${POSTGRES_IMAGE}
     ports:
       - "5432:5432"
-#     healthcheck:
-#       test: ["CMD-SHELL", "pg_isready -U users"]
-#       interval: 5s
-#       timeout: 1s
-#       retries: 10
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 5s
+      timeout: 1s
+      retries: 10
   mongodb:
     container_name: mongodb
     image: ${MONGO_IMAGE}
@@ -64,6 +66,8 @@ services:
       RABBITMQ_ADDRESS: rabbitmq
     depends_on:
       rabbitmq:
+        condition: service_healthy
+      mongodb:
         condition: service_healthy
 
 

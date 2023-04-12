@@ -1,3 +1,4 @@
+import logging
 from datetime import date
 from typing import Optional
 
@@ -10,6 +11,8 @@ from common.constants import TRIP_RESEARCHER_SERVICE_ADDRESS
 from users.service import verify_user_identify
 
 router = APIRouter(prefix="/api/v1/trips")
+
+logger = logging.getLogger("gateway")
 
 
 @router.get("/{trip_id}",
@@ -45,9 +48,9 @@ async def get_trip(trip_id: str, token: str = Depends(oauth2_scheme)):
     except requests.exceptions.ConnectionError:
         return Response(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, content="Can't connect to tour researcher",
                         media_type="text/plain")
-    except Exception:  # TODO to exception będzie zmienione na bardziej konkretne kiedy powstanie trip_researcher
-        return Response(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content=f"Something went wrong",
-                        media_type="text/plain")
+    except Exception as ex:
+        logger.info(f"Exception in gateway occurred: {ex}")
+        return Response(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 @router.get("/",
@@ -105,6 +108,6 @@ async def get_trips(
             return Response(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content="Tour researcher crashed :-)",
                             media_type="text/plain")
 
-    except Exception:  # TODO to exception będzie zmienione na bardziej konkretne kiedy powstanie trip_researcher
-        return Response(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content=f"Something went wrong",
-                        media_type="text/plain")
+    except Exception as ex:
+        logger.info(f"Exception in gateway occuerd: {ex}")
+        return Response(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
