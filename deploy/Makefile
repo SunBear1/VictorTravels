@@ -6,9 +6,11 @@ MONGO_IMAGE_NAME := mongodb-image:latest
 MONGO_CONTAINER_NAME := mongo-db
 RABBIT_IMAGE_NAME := rabbitmq-image:latest
 RABBIT_CONTAINER_NAME := rabbitmq
+RESERVATIONS_IMAGE_NAME := reservations-image:latest
+RESERVATIONS_CONTAINER_NAME := reservations-ms
 
 
-build: gateway postgres mongo rabbit
+build: gateway postgres mongo rabbit reservations
 	@echo "Building images..."
 
 
@@ -18,11 +20,12 @@ run:
 	POSTGRES_IMAGE=${POSTGRES_IMAGE_NAME} \
 	MONGO_IMAGE=${MONGO_IMAGE_NAME} \
 	RABBIT_IMAGE=${RABBIT_IMAGE_NAME} \
+	RESERVATIONS_IMAGE=${RESERVATIONS_IMAGE_NAME} \
 	docker-compose -p "victor-travels" up
 
 
 clean:
-	@docker image rm ${USER_HANDLER_IMAGE_NAME} ${POSTGRES_IMAGE_NAME} ${MONGO_IMAGE_NAME} ${RABBIT_IMAGE_NAME} --force
+	@docker image rm ${GATEWAY_IMAGE_NAME} ${POSTGRES_IMAGE_NAME} ${MONGO_IMAGE_NAME} ${RABBIT_IMAGE_NAME} ${RESERVATIONS_IMAGE_NAME} --force
 
 
 gateway:
@@ -43,3 +46,7 @@ mongo:
 rabbit:
 	@echo "Building image for ${RABBIT_CONTAINER_NAME}..."
 	@docker build -f ../src/rabbitmq/Dockerfile -t ${RABBIT_IMAGE_NAME} ../src/rabbitmq
+
+reservations:
+	@echo "Building image for ${RESERVATIONS_CONTAINER_NAME}..."
+	@docker build -f ../src/reservations_ms/Dockerfile -t ${RESERVATIONS_IMAGE_NAME} ../src/reservations_ms

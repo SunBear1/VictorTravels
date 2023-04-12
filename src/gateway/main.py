@@ -1,3 +1,4 @@
+import logging
 import threading
 
 import uvicorn
@@ -24,8 +25,20 @@ app.include_router(trips_router, tags=["Endpoints for trip researcher operations
 app.include_router(event_router, tags=["Endpoints for status events operations"])
 app.include_router(api_router)
 
-if __name__ == "__main__":
+logger = logging.getLogger("gateway")
+
+handler = logging.StreamHandler()
+handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
+logger.setLevel(logging.INFO)
+logger.addHandler(handler)
+
+
+@app.on_event("startup")
+async def startup_event():
     live_events_consumer = threading.Thread(target=start_consuming,
                                             args=(LIVE_EVENTS_QUEUE_NAME, consume_live_event))
     live_events_consumer.start()
+
+
+if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)

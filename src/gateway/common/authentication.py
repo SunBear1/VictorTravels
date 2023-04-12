@@ -3,6 +3,7 @@ import os
 
 import jwt
 from fastapi.security import OAuth2PasswordBearer
+
 from users.exceptions import UserWrongTokenSchemaException
 
 JWT_SECRET = "WIKTOR_TO_PET"

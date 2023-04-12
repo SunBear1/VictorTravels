@@ -1,19 +1,23 @@
 import asyncio
 import json
+import logging
 
 from rabbitmq.rabbitmq_client import RabbitMQClient
+
+logger = logging.getLogger("gateway")
 
 
 def start_consuming(queue_name, consume_function):
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    client = RabbitMQClient.get_instance()
-    loop.run_until_complete(client.start_consuming(queue_name, consume_function))
+    consumer_client = RabbitMQClient()
+    loop.run_until_complete(consumer_client.start_consuming(queue_name, consume_function))
+    consumer_client.close_connection()
 
 
 def consume_live_event(ch, method, properties, body):
     LiveEvents.add_event(message_body=json.loads(body.decode('utf-8')))
-    print(f"Received message: {LiveEvents.events_list}")
+    logger.info(msg=f"Received a message from Director MS: {body}")
 
 
 class LiveEvents:

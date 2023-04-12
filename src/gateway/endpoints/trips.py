@@ -2,10 +2,11 @@ from datetime import date
 from typing import Optional
 
 import requests
-from common.authentication import oauth2_scheme, verify_jwt_token
-from common.constants import TRIP_RESEARCHER_SERVICE_ADDRESS
 from fastapi import APIRouter, Response, Depends, status, Query
 from starlette.responses import JSONResponse
+
+from common.authentication import oauth2_scheme, verify_jwt_token
+from common.constants import TRIP_RESEARCHER_SERVICE_ADDRESS
 from users.service import verify_user_identify
 
 router = APIRouter(prefix="/api/v1/trips")

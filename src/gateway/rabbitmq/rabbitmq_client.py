@@ -1,3 +1,4 @@
+import logging
 import os
 
 import pika
@@ -8,37 +9,30 @@ VHOST = os.getenv("RABBITMQ_VHOST", "/victor_travels")
 HOST = os.getenv("RABBITMQ_ADDRESS", "localhost")
 PORT = os.getenv("RABBITMQ_PORT", 5672)
 
+logger = logging.getLogger("reservations")
+
 
 class RabbitMQClient:
-    __instance = None
-
-    @staticmethod
-    def get_instance():
-        """Static access method to get the singleton instance."""
-        if RabbitMQClient.__instance is None:
-            RabbitMQClient()
-        return RabbitMQClient.__instance
-
     def __init__(self):
-        """Virtually private constructor."""
-        if RabbitMQClient.__instance is not None:
-            raise Exception("This class is a singleton!")
-        else:
-            self.credentials = pika.credentials.PlainCredentials(username=USERNAME, password=PASSWORD)
-            self.connection = pika.BlockingConnection(
-                pika.ConnectionParameters(host=HOST, port=PORT, credentials=self.credentials, virtual_host=VHOST,
-                                          heartbeat=10))
-            self.channel = self.connection.channel()
-            RabbitMQClient.__instance = self
+        self.credentials = pika.credentials.PlainCredentials(username=USERNAME, password=PASSWORD)
+        self.connection = pika.BlockingConnection(
+            pika.ConnectionParameters(host=HOST, port=PORT, credentials=self.credentials, virtual_host=VHOST,
+                                      heartbeat=10))
+        self.channel = self.connection.channel()
 
-    def create_connection_and_start_consuming(self, queue_name: str, consume_function):
+    def start_consuming(self, queue_name: str, consume_function):
         self.channel.basic_consume(queue=queue_name, on_message_callback=consume_function, auto_ack=True)
+        logger.info(f"Started consuming messages from queue {queue_name}")
         self.channel.start_consuming()
 
     def send_data_to_queue(self, queue_name: str, payload, exchange_name: str):
-        self.channel.basic_publish(exchange=exchange_name,
-                                   routing_key=queue_name,
-                                   body=payload)
+        try:
+            logger.info(f"Sending message for queue {queue_name}")
+            self.channel.basic_publish(exchange=exchange_name,
+                                       routing_key=queue_name,
+                                       body=payload)
+        except pika.exceptions.AMQPConnectionError as e:
+            print(f"Error sending message to queue {queue_name}: {e}")
 
     def close_connection(self):
         self.connection.close()

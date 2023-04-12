@@ -106,3 +106,16 @@ purchased: True | False
   "purchased": true
 }
 ```
+
+### Powiadomienie payments o czasie rozpoczęcia rezerwacji
+
+from **Purchase MS** to **Payment MS**
+
+purchased: True | False
+
+```json
+{
+  "_id": "example_reservation_id",
+  "reservation_creation_time": "YYYY-MM-DD:HH-MM-SS"
+}
+```

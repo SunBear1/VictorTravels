@@ -1,8 +1,11 @@
+import json
+
 import requests
-from common.authentication import oauth2_scheme, verify_jwt_token
-from common.constants import RESERVATION_MS_ADDRESS
 from fastapi import APIRouter, Response, Depends, status
 from starlette.responses import JSONResponse
+
+from common.authentication import oauth2_scheme, verify_jwt_token
+from common.constants import RESERVATIONS_MS_ADDRESS
 from users.service import verify_user_identify
 
 router = APIRouter(prefix="/api/v1/reservations")
@@ -26,12 +29,13 @@ async def make_reservation(trip_id: str, token: str = Depends(oauth2_scheme)):
             return Response(status_code=status.HTTP_403_FORBIDDEN,
                             content="User does not have permission to use this service", media_type="text/plain")
 
-        response = requests.post(f"{RESERVATION_MS_ADDRESS}/api/v1/reservation", params={"trip_id": trip_id},
+        response = requests.post(f"http://{RESERVATIONS_MS_ADDRESS}/api/v1/reservation/{trip_id}",
                                  timeout=3.00,
                                  verify=False)
 
         if response.status_code == status.HTTP_201_CREATED:
-            return JSONResponse(status_code=status.HTTP_201_CREATED, content=response.content,
+            return JSONResponse(status_code=status.HTTP_201_CREATED,
+                                content=json.loads(response.content.decode("utf-8")),
                                 media_type="application/json")
         if response.status_code == status.HTTP_404_NOT_FOUND:
             return Response(status_code=status.HTTP_404_NOT_FOUND, content=f"Trip with ID {trip_id} does not exist",
@@ -43,6 +47,7 @@ async def make_reservation(trip_id: str, token: str = Depends(oauth2_scheme)):
     except requests.exceptions.ConnectionError:
         return Response(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, content="Can't connect to reservation service",
                         media_type="text/plain")
-    except Exception:  # TODO to exception będzie zmienione na bardziej konkretne kiedy powstanie reservation service
-        return Response(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content=f"Something went wrong",
-                        media_type="text/plain")
+    except Exception as ex:  # TODO to exception będzie zmienione na bardziej konkretne kiedy powstanie reservation service
+        raise ex
+        # return Response(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content=f"Something went wrong",
+        #                 media_type="text/plain")
