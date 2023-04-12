@@ -1,29 +1,73 @@
-version: "3.7"
+version: "3.8"
 services:
-  user-handler:
-    container_name: user-handler
-    image: ${USER_HANDLER_IMAGE}
-    #network_mode: "host"
+  gateway:
+    container_name: gateway
+    image: ${GATEWAY_IMAGE}
     ports:
       - "8000:8000"
     environment:
-      POSTGRES_ADDRESS: "postgresql"
+      POSTGRES_PORT: 5432
+      POSTGRES_ADDRESS: postgresql
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: users
+      RESERVATIONS_MS_ADDRESS: reservations:8001
+      PAYMENT_MS_ADDRESS: localhost:8002
+      PURCHASE_MS_ADDRESS: localhost:8003
+      TRIP_RESEARCHER_ADDRESS: localhost:9000
+      RABBITMQ_ADDRESS: rabbitmq
     depends_on:
-      - postgresql
+      rabbitmq:
+        condition: service_healthy
+      postgresql:
+        condition: service_healthy
   postgresql:
     container_name: postgresql
     image: ${POSTGRES_IMAGE}
-    #network_mode: "host"
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 5s
+      timeout: 1s
+      retries: 10
   mongodb:
     container_name: mongodb
     image: ${MONGO_IMAGE}
     ports:
       - "27017:27017"
-  message_broker:
+    healthcheck:
+      test: ["CMD", "mongo", "--quiet", "--eval", "'db.stats()'"]
+      interval: 5s
+      timeout: 1s
+      retries: 10
+  rabbitmq:
     container_name: rabbitmq
     image: ${RABBIT_IMAGE}
     ports:
       - "5672:5672"
       - "15672:15672"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
+      interval: 5s
+      timeout: 1s
+      retries: 10
+  reservations:
+    container_name: reservations-ms
+    image: ${RESERVATIONS_IMAGE}
+    ports:
+      - "8001:8001"
+    environment:
+      MONGODB_PORT: 27017
+      MONGODB_ADDRESS: mongodb
+      MONGODB_USER: admin
+      MONGODB_PASSWORD: admin
+      MONGODB_DB: reservations_db
+      RABBITMQ_ADDRESS: rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+
+

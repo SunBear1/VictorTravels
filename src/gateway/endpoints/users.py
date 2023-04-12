@@ -1,18 +1,15 @@
 from fastapi import APIRouter, Response, Depends
-from fastapi.security import OAuth2PasswordBearer
 from starlette.responses import JSONResponse
 
-from users.encryption import verify_jwt_token
+from common.authentication import oauth2_scheme, verify_jwt_token
+from common.validators import is_login_valid
 from users.exceptions import UserAlreadyExistsException, UserInvalidEmailException, UserNotExistException, \
     UserWrongPasswordException, UserWrongTokenSchemaException
 from users.models import UserLoginData, UserRegisterData, UserUpdateData
 from users.service import create_user, get_user_by_login, get_all_users, delete_user_by_login, update_user_by_login, \
     authenticate_user, verify_user_identify
-from users.validators import is_login_valid
 
 router = APIRouter(prefix="/api/v1/users")
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 @router.get("/{user_id}",
