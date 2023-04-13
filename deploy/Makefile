@@ -8,9 +8,13 @@ RABBIT_IMAGE_NAME := rabbitmq-image:latest
 RABBIT_CONTAINER_NAME := rabbitmq
 RESERVATIONS_IMAGE_NAME := reservations-image:latest
 RESERVATIONS_CONTAINER_NAME := reservations-ms
+PURCHASE_IMAGE_NAME := purchase-image:latest
+PURCHASE_CONTAINER_NAME := purchase-ms
+PAYMENT_IMAGE_NAME := payment-image:latest
+PAYMENT_CONTAINER_NAME := payment-ms
 
 
-build: gateway postgres mongo rabbit reservations
+build: gateway postgres mongo rabbit reservations purchases payments
 	@echo "Building images..."
 
 
@@ -21,11 +25,13 @@ run:
 	MONGO_IMAGE=${MONGO_IMAGE_NAME} \
 	RABBIT_IMAGE=${RABBIT_IMAGE_NAME} \
 	RESERVATIONS_IMAGE=${RESERVATIONS_IMAGE_NAME} \
+	PURCHASE_IMAGE=${PURCHASE_IMAGE_NAME} \
+	PAYMENT_IMAGE=${PAYMENT_IMAGE_NAME} \
 	docker-compose -p "victor-travels" up
 
 
 clean:
-	@docker image rm ${GATEWAY_IMAGE_NAME} ${POSTGRES_IMAGE_NAME} ${MONGO_IMAGE_NAME} ${RABBIT_IMAGE_NAME} ${RESERVATIONS_IMAGE_NAME} --force
+	@docker image rm ${GATEWAY_IMAGE_NAME} ${POSTGRES_IMAGE_NAME} ${MONGO_IMAGE_NAME} ${RABBIT_IMAGE_NAME} ${RESERVATIONS_IMAGE_NAME} ${PURCHASE_IMAGE_NAME} ${PAYMENT_IMAGE_NAME} --force
 
 
 gateway:
@@ -50,3 +56,11 @@ rabbit:
 reservations:
 	@echo "Building image for ${RESERVATIONS_CONTAINER_NAME}..."
 	@docker build -f ../src/reservations_ms/Dockerfile -t ${RESERVATIONS_IMAGE_NAME} ../src/reservations_ms
+
+purchases:
+	@echo "Building image for ${PURCHASE_CONTAINER_NAME}..."
+	@docker build -f ../src/purchase_ms/Dockerfile -t ${PURCHASE_IMAGE_NAME} ../src/purchase_ms
+
+payments:
+	@echo "Building image for ${PAYMENT_CONTAINER_NAME}..."
+	@docker build -f ../src/payment_ms/Dockerfile -t ${PAYMENT_IMAGE_NAME} ../src/payment_ms

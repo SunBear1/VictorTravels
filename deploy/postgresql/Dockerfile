@@ -1,4 +1,4 @@
-FROM postgres:alpine3.17 as build-stage
+FROM postgres:alpine as build-stage
 
 WORKDIR /db
 

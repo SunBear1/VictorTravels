@@ -53,7 +53,7 @@
       "arguments": {}
     },
     {
-      "name": "purchases-for-purchase_ms",
+      "name": "purchases-for-purchase-ms",
       "vhost": "/victor_travels",
       "durable": true,
       "auto_delete": false,
@@ -67,14 +67,14 @@
       "arguments": {}
     },
     {
-      "name": "payment-for-payment-ms",
+      "name": "payments-for-payment-ms",
       "vhost": "/victor_travels",
       "durable": true,
       "auto_delete": false,
       "arguments": {}
     },
     {
-      "name": "payment-for-purchase-ms",
+      "name": "payments-for-purchase-ms",
       "vhost": "/victor_travels",
       "durable": true,
       "auto_delete": false,
@@ -150,9 +150,9 @@
     {
       "source": "purchases",
       "vhost": "/victor_travels",
-      "destination": "purchases-for-purchase_ms",
+      "destination": "purchases-for-purchase-ms",
       "destination_type": "queue",
-      "routing_key": "purchases-for-purchase_ms"
+      "routing_key": "purchases-for-purchase-ms"
     },
     {
       "source": "purchases",
@@ -164,16 +164,16 @@
     {
       "source": "payments",
       "vhost": "/victor_travels",
-      "destination": "payment-for-purchase-ms",
+      "destination": "payments-for-purchase-ms",
       "destination_type": "queue",
-      "routing_key": "payment-for-purchase-ms"
+      "routing_key": "payments-for-purchase-ms"
     },
     {
       "source": "payments",
       "vhost": "/victor_travels",
-      "destination": "payment-for-payment-ms",
+      "destination": "payments-for-payment-ms",
       "destination_type": "queue",
-      "routing_key": "payment-for-payment-ms"
+      "routing_key": "payments-for-payment-ms"
     }
   ]
 }
