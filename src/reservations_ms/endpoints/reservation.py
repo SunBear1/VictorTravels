@@ -3,9 +3,9 @@ import logging
 from datetime import datetime
 
 from fastapi import APIRouter, status
-from mongodb.mongodb_client import MongoDBClient, TRIPS_DOCUMENT_ID
 from starlette.responses import JSONResponse, Response
 
+from mongodb.mongodb_client import MongoDBClient, TRIPS_DOCUMENT_ID
 from rabbitmq.rabbitmq_client import RabbitMQClient, PURCHASES_EXCHANGE_NAME, \
     RESERVATIONS_EXCHANGE_NAME, RESERVATIONS_PUBLISH_QUEUE_NAME, \
     PURCHASES_PUBLISH_QUEUE_NAME, PAYMENTS_PUBLISH_QUEUE_NAME, PAYMENTS_EXCHANGE_NAME
@@ -19,7 +19,7 @@ logger = logging.getLogger("reservations")
              responses={
                  201: {"description": "Reservation successfully created"},
                  404: {"description": "Trip with provided ID does not exist"},
-                 422: {"description": "Unknown error occurred"}
+                 500: {"description": "Unknown error occurred"}
              },
              )
 async def make_reservation(trip_id: str):
@@ -32,6 +32,7 @@ async def make_reservation(trip_id: str):
         "trip_id": trip_id,
         "reservation_status": "temporary",
         "reservation_creation_time": current_time,
+        "uid": "example_uid"
     }
     try:
         trips_document = MongoDBClient.trips_collection.find_one({"_id": TRIPS_DOCUMENT_ID})
@@ -51,7 +52,8 @@ async def make_reservation(trip_id: str):
                                             exchange_name=PURCHASES_EXCHANGE_NAME,
                                             payload=json.dumps({
                                                 "_id": str(insert_result.inserted_id),
-                                                "reserved": True
+                                                "trip_id": trip_id,
+                                                "reserved": True  # TODO do wywalenia?
                                             }, ensure_ascii=False).encode('utf-8'))
         purchases_client.close_connection()
 

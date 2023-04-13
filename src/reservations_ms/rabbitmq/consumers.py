@@ -3,9 +3,9 @@ import json
 import logging
 
 from bson import ObjectId
-from mongodb.mongodb_client import MongoDBClient, TRIPS_DOCUMENT_ID
 
-from rabbitmq.rabbitmq_client import RabbitMQClient
+from mongodb.mongodb_client import MongoDBClient, TRIPS_DOCUMENT_ID
+from rabbitmq.rabbitmq_client import RabbitMQClient, RESERVATIONS_PUBLISH_QUEUE_NAME, RESERVATIONS_EXCHANGE_NAME
 
 logger = logging.getLogger("reservations")
 
@@ -23,6 +23,17 @@ def consume_purchase_ms_event(ch, method, properties, body):
     logger.info(msg=f"Received a message from Purchase MS: {received_msg}")
     MongoDBClient.reservations_collection.update_one(filter={"_id": ObjectId(received_msg["_id"])}, update={
         "$set": {"reservation_status": received_msg["transaction_status"]}})
+
+    if received_msg["transaction_status"] == "canceled":
+        reservation_doc = MongoDBClient.reservations_collection.find_one({"_id": ObjectId(received_msg["_id"])})
+        reservations_client = RabbitMQClient()
+        reservations_client.send_data_to_queue(queue_name=RESERVATIONS_PUBLISH_QUEUE_NAME,
+                                               exchange_name=RESERVATIONS_EXCHANGE_NAME,
+                                               payload=json.dumps({
+                                                   "trip_id": reservation_doc["trip_id"],
+                                                   "reserved": False,
+                                               }, ensure_ascii=False).encode('utf-8'))
+        reservations_client.close_connection()
 
 
 def consume_director_ms_event(ch, method, properties, body):

@@ -34,5 +34,4 @@ async def startup_event():
 
 
 if __name__ == "__main__":
-    logger.info("this is info level again")
     uvicorn.run(app, host="127.0.0.1", port=8001)
