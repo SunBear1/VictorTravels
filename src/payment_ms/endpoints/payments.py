@@ -4,6 +4,7 @@ import random
 from datetime import datetime
 
 import bson.errors
+import requests
 from bson import ObjectId
 from fastapi import APIRouter, status
 from starlette.responses import JSONResponse, Response
@@ -32,9 +33,12 @@ async def make_payment(reservation_id: str):
     """
 
     try:
-        current_time = datetime.now()
+        current_time_response = requests.get(url="https://timeapi.io/api/Time/current/zone?timeZone=Europe/Warsaw")
+        current_datetime = datetime.strptime(json.loads(current_time_response.text)["dateTime"][:-1],
+                                             "%Y-%m-%dT%H:%M:%S.%f")
+
         purchase_doc = MongoDBClient.payments_collection.find_one({"_id": ObjectId(reservation_id)})
-        if "purchase_status" not in purchase_doc:
+        if purchase_doc["purchase_status"] == "pending":
             logger.info(f"There is no information about the reservation purchase")
             return Response(status_code=status.HTTP_404_NOT_FOUND,
                             content=f"Reservation with ID {reservation_id} has not been purchased",
@@ -47,10 +51,11 @@ async def make_payment(reservation_id: str):
                             content=f"Reservation with ID {reservation_id} has already been paid for",
                             media_type="text/plain")
 
-        reservation_creation_time = datetime.strptime(purchase_doc["reservation_creation_time"], "%Y-%m-%d:%H:%M:%S")
-        time_diff = (current_time - reservation_creation_time).total_seconds()
+        reservation_creation_time = datetime.strptime(purchase_doc["reservation_creation_time"], "%Y-%m-%dT%H:%M:%S.%f")
+        time_diff = (current_datetime - reservation_creation_time).total_seconds()
 
         if time_diff > 180:
+            logger.info(f"Reservation have expired by {time_diff} seconds")
             payments_client = RabbitMQClient()
             payments_client.send_data_to_queue(queue_name=PURCHASES_PUBLISH_QUEUE_NAME,
                                                exchange_name=PURCHASES_EXCHANGE_NAME,

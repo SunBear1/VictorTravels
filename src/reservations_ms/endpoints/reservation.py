@@ -1,7 +1,7 @@
 import json
 import logging
-from datetime import datetime
 
+import requests
 from fastapi import APIRouter, status
 from starlette.responses import JSONResponse, Response
 
@@ -27,11 +27,12 @@ async def make_reservation(trip_id: str):
     Create a trip reservation
     """
 
-    current_time = datetime.now().strftime("%Y-%m-%d:%H:%M:%S")
+    current_time_response = requests.get(url="https://timeapi.io/api/Time/current/zone?timeZone=Europe/Warsaw")
+    current_datetime = json.loads(current_time_response.text)["dateTime"][:-1]
     init_doc = {
         "trip_id": trip_id,
         "reservation_status": "temporary",
-        "reservation_creation_time": current_time,
+        "reservation_creation_time": current_datetime,
         "uid": "example_uid"
     }
     try:
@@ -47,32 +48,28 @@ async def make_reservation(trip_id: str):
 
         insert_result = MongoDBClient.reservations_collection.insert_one(document=init_doc)
 
-        purchases_client = RabbitMQClient()
-        purchases_client.send_data_to_queue(queue_name=PURCHASES_PUBLISH_QUEUE_NAME,
-                                            exchange_name=PURCHASES_EXCHANGE_NAME,
-                                            payload=json.dumps({
-                                                "_id": str(insert_result.inserted_id),
-                                                "trip_id": trip_id,
-                                                "reserved": True  # TODO do wywalenia?
-                                            }, ensure_ascii=False).encode('utf-8'))
-        purchases_client.close_connection()
+        client = RabbitMQClient()
+        client.send_data_to_queue(queue_name=PURCHASES_PUBLISH_QUEUE_NAME,
+                                  exchange_name=PURCHASES_EXCHANGE_NAME,
+                                  payload=json.dumps({
+                                      "_id": str(insert_result.inserted_id),
+                                      "trip_id": trip_id,
+                                      "reserved": True  # TODO do wywalenia?
+                                  }, ensure_ascii=False).encode('utf-8'))
 
-        reservations_client = RabbitMQClient()
-        reservations_client.send_data_to_queue(queue_name=RESERVATIONS_PUBLISH_QUEUE_NAME,
-                                               exchange_name=RESERVATIONS_EXCHANGE_NAME,
-                                               payload=json.dumps({
-                                                   "trip_id": trip_id,
-                                                   "reserved": True,
-                                               }, ensure_ascii=False).encode('utf-8'))
-        reservations_client.close_connection()
+        client.send_data_to_queue(queue_name=RESERVATIONS_PUBLISH_QUEUE_NAME,
+                                  exchange_name=RESERVATIONS_EXCHANGE_NAME,
+                                  payload=json.dumps({
+                                      "trip_id": trip_id,
+                                      "reserved": True,
+                                  }, ensure_ascii=False).encode('utf-8'))
 
-        payments_client = RabbitMQClient()
-        payments_client.send_data_to_queue(queue_name=PAYMENTS_PUBLISH_QUEUE_NAME, exchange_name=PAYMENTS_EXCHANGE_NAME,
-                                           payload=json.dumps({
-                                               "_id": str(insert_result.inserted_id),
-                                               "reservation_creation_time": current_time
-                                           }, ensure_ascii=False).encode('utf-8'))
-        payments_client.close_connection()
+        client.send_data_to_queue(queue_name=PAYMENTS_PUBLISH_QUEUE_NAME, exchange_name=PAYMENTS_EXCHANGE_NAME,
+                                  payload=json.dumps({
+                                      "_id": str(insert_result.inserted_id),
+                                      "reservation_creation_time": current_datetime
+                                  }, ensure_ascii=False).encode('utf-8'))
+        client.close_connection()
 
         return JSONResponse(status_code=status.HTTP_201_CREATED,
                             content={"reservation_id": str(insert_result.inserted_id)},
