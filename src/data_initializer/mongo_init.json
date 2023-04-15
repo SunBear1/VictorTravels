@@ -1,0 +1,41 @@
+[
+  {
+    "trip": {
+      "tripID": 2137,
+      "hotel": {
+        "name": "OsovaCourt",
+        "image": "example_base64_photo",
+        "description": [
+          "Example description of a hotel",
+          "I love RSWW"
+        ],
+        "diet": {
+          "AllInclusive": 1500,
+          "Breakfast": 800,
+          "TwoMeals": 1200,
+          "None": 0
+        }
+      }
+    }
+  },
+  {
+    "trip": {
+      "tripID": 1234,
+      "hotel": {
+        "name": "OsovaCourt",
+        "image": "example_base64_photo",
+        "description": [
+          "Example description of a hotel",
+          "I love RSWW"
+        ],
+        "diet": {
+          "AllInclusive": 1500,
+          "Breakfast": 800,
+          "TwoMeals": 1200,
+          "None": 0
+        }
+      }
+    }
+  }
+]
+
