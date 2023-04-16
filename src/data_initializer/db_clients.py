@@ -1,3 +1,4 @@
+import logging
 import os
 
 import psycopg2
@@ -18,12 +19,14 @@ MONGO_PASSWD = os.getenv("MONGODB_PASSWORD", "admin")
 MONGO_DB_NAME = os.getenv("MONGODB_DB", "trips_db")
 MONGO_COLLECTION_NAME = os.getenv("MONGODB_COLL", "trips")
 
+logger = logging.getLogger("data-init")
+
 
 class MongoDBClient:
     client = MongoClient(f"mongodb://{MONGO_USER}:{MONGO_PASSWD}@{MONGO_HOST}:{MONGO_PORT}/?authSource=admin",
                          connectTimeoutMS=10000)
     db = client[MONGO_DB_NAME]
-    collection = db[MONGO_COLLECTION_NAME]
+    trips_collection = db[MONGO_COLLECTION_NAME]
 
 
 class PostgreSQLClient:
@@ -52,24 +55,26 @@ class PostgreSQLClient:
             port=self.port,
             database=db_name
         )
-        conn.cursor().execute(query)
-        conn.commit()
-        conn.close()
+        try:
+            conn.cursor().execute(query)
+            conn.commit()
+        except Exception as ex:
+            logger.info(f"Cant execute query because of: {ex}")
+        finally:
+            conn.close()
 
     def create_database(self, db_name: str):
-        # Execute CREATE DATABASE outside of a transaction block using a separate connection
         conn = psycopg2.connect(
             user=self.user,
             password=self.password,
             host=self.host,
             port=self.port,
         )
-        try:
-            conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT);
-            conn.cursor().execute(f"CREATE DATABASE {db_name};")
-            conn.close()
-        except psycopg2.errors.DuplicateDatabase:
-            print("dupa", db_name)
 
-    def close_connection(self):
-        self.connection.close()
+        try:
+            conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+            conn.cursor().execute(f"CREATE DATABASE {db_name};")
+        except psycopg2.errors.DuplicateDatabase:
+            logger.info(f"Database {db_name} already exists")
+        finally:
+            conn.close()
