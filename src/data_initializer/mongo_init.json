@@ -1,0 +1,173 @@
+[
+  {
+    "tripID": 2137,
+    "hotel": {
+      "name": "OsovaCourt",
+      "image": "example_base64_photo",
+      "description": [
+        "Example description of a hotel",
+        "I love RSWW"
+      ],
+      "diet": {
+        "AllInclusive": 1500,
+        "Breakfast": 800,
+        "TwoMeals": 1200,
+        "None": 0
+      }
+    },
+    "localisation": {
+      "country": "France",
+      "region": "Paris"
+    },
+    "from": {
+      "Warszawa": {
+        "plane": {
+          "cost": 100,
+          "seatsLeft": 21
+        },
+        "train": {
+          "cost": 60,
+          "seatsLeft": 40
+        }
+      },
+      "Kraków": {
+        "plane": {
+          "cost": 105,
+          "seatsLeft": 20
+        },
+        "train": {
+          "cost": 60,
+          "seatsLeft": 45
+        }
+      },
+      "Gdańsk": {
+        "plane": {
+          "cost": 110,
+          "seatsLeft": 20
+        },
+        "train": {
+          "cost": 65,
+          "seatsLeft": 43
+        }
+      }
+    },
+    "to": {
+      "Warszawa": {
+        "plane": {
+          "cost": 100,
+          "seatsLeft": 21
+        },
+        "train": {
+          "cost": 60,
+          "seatsLeft": 40
+        }
+      },
+      "Kraków": {
+        "plane": {
+          "cost": 105,
+          "seatsLeft": 20
+        },
+        "train": {
+          "cost": 60,
+          "seatsLeft": 45
+        }
+      },
+      "Gdańsk": {
+        "plane": {
+          "cost": 110,
+          "seatsLeft": 20
+        },
+        "train": {
+          "cost": 65,
+          "seatsLeft": 43
+        }
+      }
+    }
+  },
+  {
+    "tripID": 1234,
+    "hotel": {
+      "name": "OsovaCourt",
+      "image": "example_base64_photo",
+      "description": [
+        "Example description of a hotel",
+        "I love RSWW"
+      ],
+      "diet": {
+        "AllInclusive": 1500,
+        "Breakfast": 800,
+        "TwoMeals": 1200,
+        "None": 0
+      }
+    },
+    "localisation": {
+      "country": "France",
+      "region": "Paris"
+    },
+    "from": {
+      "Warszawa": {
+        "plane": {
+          "cost": 100,
+          "seatsLeft": 21
+        },
+        "train": {
+          "cost": 60,
+          "seatsLeft": 40
+        }
+      },
+      "Kraków": {
+        "plane": {
+          "cost": 105,
+          "seatsLeft": 20
+        },
+        "train": {
+          "cost": 60,
+          "seatsLeft": 45
+        }
+      },
+      "Gdańsk": {
+        "plane": {
+          "cost": 110,
+          "seatsLeft": 20
+        },
+        "train": {
+          "cost": 65,
+          "seatsLeft": 43
+        }
+      }
+    },
+    "to": {
+      "Warszawa": {
+        "plane": {
+          "cost": 100,
+          "seatsLeft": 21
+        },
+        "train": {
+          "cost": 60,
+          "seatsLeft": 40
+        }
+      },
+      "Kraków": {
+        "plane": {
+          "cost": 105,
+          "seatsLeft": 20
+        },
+        "train": {
+          "cost": 60,
+          "seatsLeft": 45
+        }
+      },
+      "Gdańsk": {
+        "plane": {
+          "cost": 110,
+          "seatsLeft": 20
+        },
+        "train": {
+          "cost": 65,
+          "seatsLeft": 43
+        }
+      }
+    }
+  }
+]
+

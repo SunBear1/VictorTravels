@@ -21,21 +21,47 @@ services:
         condition: service_healthy
       postgresql:
         condition: service_healthy
+  data-init:
+    container_name: data-init
+    image: ${DATA_INIT_IMAGE}
+    restart: "no"
+    environment:
+      POSTGRES_PORT: 5432
+      POSTGRES_ADDRESS: postgresql
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: users
+      MONGODB_PORT: 27017
+      MONGODB_ADDRESS: mongodb
+      MONGODB_USER: admin
+      MONGODB_PASSWORD: admin
+      MONGODB_DB: trips
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      postgresql:
+        condition: service_healthy
   postgresql:
     container_name: postgresql
-    image: ${POSTGRES_IMAGE}
+    image: postgres:alpine3.17
     ports:
       - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U admin -d users"]
+      test: [ "CMD-SHELL", "pg_isready -U admin"]
       interval: 5s
       timeout: 1s
       retries: 10
   mongodb:
     container_name: mongodb
-    image: ${MONGO_IMAGE}
+    image: mongo:6.0
     ports:
       - "27017:27017"
+    environment:
+        MONGO_INITDB_ROOT_USERNAME: admin
+        MONGO_INITDB_ROOT_PASSWORD: admin
     healthcheck:
       test: [ "CMD", "mongosh", "--version" ]
       interval: 5s

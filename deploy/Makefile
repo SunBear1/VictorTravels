@@ -1,52 +1,43 @@
-GATEWAY_IMAGE_NAME := gateway-image:latest
+GATEWAY_IMAGE_NAME := gateway-image:development
 GATEWAY_CONTAINER_NAME := gateway-app
-POSTGRES_IMAGE_NAME := postgres-image:latest
+POSTGRES_IMAGE_NAME := postgres-image:development
 POSTGRES_CONTAINER_NAME := postgres-db
-MONGO_IMAGE_NAME := mongodb-image:latest
+MONGO_IMAGE_NAME := mongodb-image:development
 MONGO_CONTAINER_NAME := mongo-db
-RABBIT_IMAGE_NAME := rabbitmq-image:latest
+RABBIT_IMAGE_NAME := rabbitmq-image:development
 RABBIT_CONTAINER_NAME := rabbitmq
-RESERVATIONS_IMAGE_NAME := reservations-image:latest
+RESERVATIONS_IMAGE_NAME := reservations-image:development
 RESERVATIONS_CONTAINER_NAME := reservations-ms
-PURCHASE_IMAGE_NAME := purchase-image:latest
+PURCHASE_IMAGE_NAME := purchase-image:development
 PURCHASE_CONTAINER_NAME := purchase-ms
-PAYMENT_IMAGE_NAME := payment-image:latest
+PAYMENT_IMAGE_NAME := payment-image:development
 PAYMENT_CONTAINER_NAME := payment-ms
+DATA_INIT_CONTAINER_NAME := data-init
+DATA_INIT_IMAGE_NAME :=data-init:development
 
 
-build: gateway postgres mongo rabbit reservations purchases payments
+build: gateway rabbit reservations purchases payments data-init
 	@echo "Building images..."
 
 
 run:
 	@echo "Starting platform..."
 	@GATEWAY_IMAGE=${GATEWAY_IMAGE_NAME} \
-	POSTGRES_IMAGE=${POSTGRES_IMAGE_NAME} \
-	MONGO_IMAGE=${MONGO_IMAGE_NAME} \
 	RABBIT_IMAGE=${RABBIT_IMAGE_NAME} \
 	RESERVATIONS_IMAGE=${RESERVATIONS_IMAGE_NAME} \
 	PURCHASE_IMAGE=${PURCHASE_IMAGE_NAME} \
 	PAYMENT_IMAGE=${PAYMENT_IMAGE_NAME} \
+	DATA_INIT_IMAGE=${DATA_INIT_IMAGE_NAME} \
 	docker-compose -p "victor-travels" up
 
 
 clean:
-	@docker image rm ${GATEWAY_IMAGE_NAME} ${POSTGRES_IMAGE_NAME} ${MONGO_IMAGE_NAME} ${RABBIT_IMAGE_NAME} ${RESERVATIONS_IMAGE_NAME} ${PURCHASE_IMAGE_NAME} ${PAYMENT_IMAGE_NAME} --force
+	@docker image rm ${GATEWAY_IMAGE_NAME} ${RABBIT_IMAGE_NAME} ${RESERVATIONS_IMAGE_NAME} ${PURCHASE_IMAGE_NAME} ${PAYMENT_IMAGE_NAME} ${DATA_INIT_IMAGE_NAME} --force
 
 
 gateway:
 	@echo "Building image for ${GATEWAY_CONTAINER_NAME}..."
 	@docker build -f ../src/gateway/Dockerfile -t ${GATEWAY_IMAGE_NAME} ../src/gateway
-
-
-postgres:
-	@echo "Building image for ${POSTGRES_CONTAINER_NAME}..."
-	@docker build -f postgresql/Dockerfile -t ${POSTGRES_IMAGE_NAME} postgresql
-
-
-mongo:
-	@echo "Building image for ${MONGO_CONTAINER_NAME}..."
-	@docker build -f mongodb/Dockerfile -t ${MONGO_IMAGE_NAME} mongodb
 
 
 rabbit:
@@ -64,3 +55,7 @@ purchases:
 payments:
 	@echo "Building image for ${PAYMENT_CONTAINER_NAME}..."
 	@docker build -f ../src/payment_ms/Dockerfile -t ${PAYMENT_IMAGE_NAME} ../src/payment_ms
+
+data-init:
+	@echo "Building image for ${DATA_INIT_CONTAINER_NAME}..."
+	@docker build -f ../src/data_initializer/Dockerfile -t ${DATA_INIT_IMAGE_NAME} ../src/data_initializer
