@@ -4,7 +4,7 @@ services:
     container_name: gateway
     image: ${GATEWAY_IMAGE}
     ports:
-      - "5000:5000"
+      - "8080:8080"
     environment:
       POSTGRES_PORT: 5432
       POSTGRES_ADDRESS: postgresql
@@ -56,14 +56,14 @@ services:
       retries: 10
   mongodb:
     container_name: mongodb
-    image: mongo:6.0
+    image: mongo:4.4.18
     ports:
       - "27017:27017"
     environment:
         MONGO_INITDB_ROOT_USERNAME: admin
         MONGO_INITDB_ROOT_PASSWORD: admin
     healthcheck:
-      test: [ "CMD", "mongosh", "--version" ]
+      test: [ "CMD", "mongo", "--eval", "\"db.adminCommand('ping')\"" ]
       interval: 5s
       timeout: 1s
       retries: 10
