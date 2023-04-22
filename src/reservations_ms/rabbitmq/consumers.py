@@ -31,7 +31,7 @@ def consume_purchase_ms_event(ch, method, properties, body):
                                                exchange_name=RESERVATIONS_EXCHANGE_NAME,
                                                payload=json.dumps({
                                                    "trip_id": reservation_doc["trip_id"],
-                                                   "reserved": False,
+                                                   "reservation_status": "canceled",
                                                }, ensure_ascii=False).encode('utf-8'))
         reservations_client.close_connection()
 

@@ -40,6 +40,8 @@ def consume_payment_ms_event(ch, method, properties, body):
     transaction_status = "canceled"
     if received_msg["payment_status"] == "accepted":
         transaction_status = "finalized"
+    if received_msg["payment_status"] == "expired":
+        transaction_status = "expired"
 
     purchases_client = RabbitMQClient()
     purchases_client.send_data_to_queue(queue_name=PURCHASES_PUBLISH_QUEUE_NAME, exchange_name=PURCHASES_EXCHANGE_NAME,
