@@ -30,7 +30,9 @@ services:
       POSTGRES_ADDRESS: postgresql
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: users
+      PG_DB_TRIPS_NAME: trips
+      PG_DB_USERS_NAME: users
+      PG_DB_EVENTS_NAME: events
       MONGODB_PORT: 27017
       MONGODB_ADDRESS: mongodb
       MONGODB_USER: admin

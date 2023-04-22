@@ -8,8 +8,9 @@ from pymongo import MongoClient
 PG_HOST = os.getenv("POSTGRES_ADDRESS", "localhost")
 PG_USER = os.getenv("POSTGRES_USER", "admin")
 PG_PASSWD = os.getenv("POSTGRES_PASSWORD", "admin")
-PG_DB_TRIPS_NAME = os.getenv("POSTGRES_DB", "trips")
-PG_DB_USERS_NAME = os.getenv("POSTGRES_DB", "users")
+PG_DB_TRIPS_NAME = os.getenv("PG_DB_TRIPS_NAME", "trips")
+PG_DB_USERS_NAME = os.getenv("PG_DB_USERS_NAME", "users")
+PG_DB_EVENTS_NAME = os.getenv("PG_DB_EVENTS_NAME", "events")
 PG_PORT = os.getenv("POSTGRES_PORT", 5432)
 
 MONGO_PORT = os.getenv("MONGODB_PORT", 27017)
@@ -58,6 +59,7 @@ class PostgreSQLClient:
         try:
             conn.cursor().execute(query)
             conn.commit()
+            logger.info(f"Committed init {db_name} data to postgreSQL")
         except Exception as ex:
             logger.info(f"Cant execute query because of: {ex}")
         finally:
