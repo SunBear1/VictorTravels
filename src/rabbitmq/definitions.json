@@ -25,7 +25,35 @@
   "policies": [],
   "queues": [
     {
-      "name": "db-updates-for-researcher",
+      "name": "hotel-transport-events-for-researcher-ms",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "transport-events-for-eventhub-ms",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "transport-events-for-transport-ms",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "hotel-events-for-eventhub-ms",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "hotel-events-for-hotel-ms",
       "vhost": "/victor_travels",
       "durable": true,
       "auto_delete": false,
@@ -39,7 +67,7 @@
       "arguments": {}
     },
     {
-      "name": "reservations-for-director",
+      "name": "reservations-for-eventhub-ms",
       "vhost": "/victor_travels",
       "durable": true,
       "auto_delete": false,
@@ -83,7 +111,28 @@
   ],
   "exchanges": [
     {
-      "name": "database-updates",
+      "name": "transport-updates",
+      "vhost": "/victor_travels",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false
+    },
+    {
+      "name": "hotel-updates",
+      "vhost": "/victor_travels",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false
+    },
+    {
+      "name": "transport-events",
+      "vhost": "/victor_travels",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false
+    },
+    {
+      "name": "hotel-events",
       "vhost": "/victor_travels",
       "type": "direct",
       "durable": true,
@@ -120,11 +169,46 @@
   ],
   "bindings": [
     {
-      "source": "database-updates",
+      "source": "transport-updates",
       "vhost": "/victor_travels",
-      "destination": "db-updates-for-researcher",
+      "destination": "hotel-transport-events-for-researcher-ms",
       "destination_type": "queue",
-      "routing_key": "db-updates-for-researcher"
+      "routing_key": "hotel-transport-events-for-researcher-ms"
+    },
+    {
+      "source": "hotel-updates",
+      "vhost": "/victor_travels",
+      "destination": "hotel-transport-events-for-researcher-ms",
+      "destination_type": "queue",
+      "routing_key": "hotel-transport-events-for-researcher-ms"
+    },
+    {
+      "source": "transport-events",
+      "vhost": "/victor_travels",
+      "destination": "transport-events-for-transport-ms",
+      "destination_type": "queue",
+      "routing_key": "transport-events-for-transport-ms"
+    },
+    {
+      "source": "transport-events",
+      "vhost": "/victor_travels",
+      "destination": "transport-events-for-eventhub-ms",
+      "destination_type": "queue",
+      "routing_key": "transport-events-for-eventhub-ms"
+    },
+    {
+      "source": "hotel-events",
+      "vhost": "/victor_travels",
+      "destination": "hotel-events-for-hotel-ms",
+      "destination_type": "queue",
+      "routing_key": "hotel-events-for-hotel-ms"
+    },
+    {
+      "source": "hotel-events",
+      "vhost": "/victor_travels",
+      "destination": "hotel-events-for-eventhub-ms",
+      "destination_type": "queue",
+      "routing_key": "hotel-events-for-eventhub-ms"
     },
     {
       "source": "live-events",
@@ -136,9 +220,9 @@
     {
       "source": "reservations",
       "vhost": "/victor_travels",
-      "destination": "reservations-for-director",
+      "destination": "reservations-for-eventhub-ms",
       "destination_type": "queue",
-      "routing_key": "reservations-for-director"
+      "routing_key": "reservations-for-eventhub-ms"
     },
     {
       "source": "reservations",

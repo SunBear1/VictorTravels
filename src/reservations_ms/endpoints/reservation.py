@@ -1,3 +1,4 @@
+import asyncio
 import json
 import logging
 
@@ -9,6 +10,7 @@ from mongodb.mongodb_client import MongoDBClient, TRIPS_DOCUMENT_ID
 from rabbitmq.rabbitmq_client import RabbitMQClient, PURCHASES_EXCHANGE_NAME, \
     RESERVATIONS_EXCHANGE_NAME, RESERVATIONS_PUBLISH_QUEUE_NAME, \
     PURCHASES_PUBLISH_QUEUE_NAME, PAYMENTS_PUBLISH_QUEUE_NAME, PAYMENTS_EXCHANGE_NAME
+from service.expiration_handler import start_measuring_reservation_time
 
 router = APIRouter(prefix="/api/v1/reservation")
 
@@ -48,6 +50,10 @@ async def make_reservation(trip_id: str):
 
         insert_result = MongoDBClient.reservations_collection.insert_one(document=init_doc)
 
+        expiration_timer_task = asyncio.create_task(start_measuring_reservation_time(
+            reservation_id=str(insert_result.inserted_id),
+            reservation_creation_time=current_datetime))
+
         client = RabbitMQClient()
         client.send_data_to_queue(queue_name=PURCHASES_PUBLISH_QUEUE_NAME,
                                   exchange_name=PURCHASES_EXCHANGE_NAME,
@@ -61,7 +67,7 @@ async def make_reservation(trip_id: str):
                                   exchange_name=RESERVATIONS_EXCHANGE_NAME,
                                   payload=json.dumps({
                                       "trip_id": trip_id,
-                                      "reserved": True,
+                                      "reservation_status": "created",
                                   }, ensure_ascii=False).encode('utf-8'))
 
         client.send_data_to_queue(queue_name=PAYMENTS_PUBLISH_QUEUE_NAME, exchange_name=PAYMENTS_EXCHANGE_NAME,

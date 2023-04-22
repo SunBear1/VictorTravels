@@ -15,7 +15,7 @@ RESERVATIONS_CONSUME_QUEUE_NAME = "reservations-for-reservations-ms"
 PURCHASES_EXCHANGE_NAME = "purchases"
 PURCHASES_PUBLISH_QUEUE_NAME = "purchases-for-purchase-ms"
 RESERVATIONS_EXCHANGE_NAME = "reservations"
-RESERVATIONS_PUBLISH_QUEUE_NAME = "reservations-for-director"
+RESERVATIONS_PUBLISH_QUEUE_NAME = "reservations-for-eventhub-ms"
 PAYMENTS_EXCHANGE_NAME = "payments"
 PAYMENTS_PUBLISH_QUEUE_NAME = "payments-for-payment-ms"
 
