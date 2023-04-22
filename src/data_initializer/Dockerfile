@@ -1,6 +1,6 @@
 FROM python:3.11.2-alpine as build-stage
 
-WORKDIR /gateway
+WORKDIR /data-init
 
 RUN apk update && apk add --no-cache mariadb-dev gcc musl-dev libpq-dev
 
@@ -10,6 +10,4 @@ COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 8000
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000", "--workers", "4", "--access-log", "--proxy-headers"]
+CMD ["python3", "main.py"]

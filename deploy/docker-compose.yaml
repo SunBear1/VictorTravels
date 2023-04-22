@@ -4,40 +4,66 @@ services:
     container_name: gateway
     image: ${GATEWAY_IMAGE}
     ports:
-      - "8000:8000"
+      - "8080:8080"
     environment:
       POSTGRES_PORT: 5432
       POSTGRES_ADDRESS: postgresql
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: users
+      TRIP_RESEARCHER_ADDRESS: localhost:8000
       RESERVATIONS_MS_ADDRESS: reservations:8001
-      PAYMENT_MS_ADDRESS: localhost:8002
-      PURCHASE_MS_ADDRESS: localhost:8003
-      TRIP_RESEARCHER_ADDRESS: localhost:9000
+      PURCHASE_MS_ADDRESS: purchases:8002
+      PAYMENT_MS_ADDRESS: payments:8003
       RABBITMQ_ADDRESS: rabbitmq
     depends_on:
       rabbitmq:
         condition: service_healthy
       postgresql:
         condition: service_healthy
+  data-init:
+    container_name: data-init
+    image: ${DATA_INIT_IMAGE}
+    restart: "no"
+    environment:
+      POSTGRES_PORT: 5432
+      POSTGRES_ADDRESS: postgresql
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: users
+      MONGODB_PORT: 27017
+      MONGODB_ADDRESS: mongodb
+      MONGODB_USER: admin
+      MONGODB_PASSWORD: admin
+      MONGODB_DB: trips
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      postgresql:
+        condition: service_healthy
   postgresql:
     container_name: postgresql
-    image: ${POSTGRES_IMAGE}
+    image: postgres:alpine3.17
     ports:
       - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
+      test: [ "CMD-SHELL", "pg_isready -U admin"]
       interval: 5s
       timeout: 1s
       retries: 10
   mongodb:
     container_name: mongodb
-    image: ${MONGO_IMAGE}
+    image: mongo:4.4.18
     ports:
       - "27017:27017"
+    environment:
+        MONGO_INITDB_ROOT_USERNAME: admin
+        MONGO_INITDB_ROOT_PASSWORD: admin
     healthcheck:
-      test: ["CMD", "mongo", "--quiet", "--eval", "'db.stats()'"]
+      test: [ "CMD", "mongo", "--eval", "\"db.adminCommand('ping')\"" ]
       interval: 5s
       timeout: 1s
       retries: 10
@@ -69,5 +95,37 @@ services:
         condition: service_healthy
       mongodb:
         condition: service_healthy
-
-
+  purchases:
+    container_name: purchase-ms
+    image: ${PURCHASE_IMAGE}
+    ports:
+      - "8002:8002"
+    environment:
+      MONGODB_PORT: 27017
+      MONGODB_ADDRESS: mongodb
+      MONGODB_USER: admin
+      MONGODB_PASSWORD: admin
+      MONGODB_DB: purchases_db
+      RABBITMQ_ADDRESS: rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+  payments:
+    container_name: payment-ms
+    image: ${PAYMENT_IMAGE}
+    ports:
+      - "8003:8003"
+    environment:
+      MONGODB_PORT: 27017
+      MONGODB_ADDRESS: mongodb
+      MONGODB_USER: admin
+      MONGODB_PASSWORD: admin
+      MONGODB_DB: payments_db
+      RABBITMQ_ADDRESS: rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy

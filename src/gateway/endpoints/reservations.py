@@ -2,11 +2,10 @@ import json
 import logging
 
 import requests
-from fastapi import APIRouter, Response, Depends, status
-from starlette.responses import JSONResponse
-
 from common.authentication import oauth2_scheme, verify_jwt_token
 from common.constants import RESERVATIONS_MS_ADDRESS
+from fastapi import APIRouter, Response, Depends, status
+from starlette.responses import JSONResponse
 from users.service import verify_user_identify
 
 router = APIRouter(prefix="/api/v1/reservations")
