@@ -15,7 +15,7 @@ async def start_measuring_reservation_time(reservation_id: str, reservation_crea
     await asyncio.sleep(delay=180)
     reservation_doc = MongoDBClient.reservations_collection.find_one({"_id": ObjectId(reservation_id)})
     if reservation_doc["reservation_status"] == "temporary":
-        logger.info(f"Reservation expired. Sending message to Director MS.")
+        logger.info(f"Reservation expired. Sending message to EventHub MS.")
         MongoDBClient.reservations_collection.update_one(filter={"_id": ObjectId(reservation_id)}, update={
             "$set": {"reservation_status": "expired"}})
         reservations_client = RabbitMQClient()

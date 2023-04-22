@@ -36,9 +36,9 @@ def consume_purchase_ms_event(ch, method, properties, body):
         reservations_client.close_connection()
 
 
-def consume_director_ms_event(ch, method, properties, body):
+def consume_eventhub_ms_event(ch, method, properties, body):
     received_msg = json.loads(body.decode('utf-8'))
-    logger.info(msg=f"Received a message from Director MS: {received_msg}")
+    logger.info(msg=f"Received a message from EventHub MS: {received_msg}")
     if received_msg["operation_type"] == "Add":
         MongoDBClient.trips_collection.update_one(
             filter={"_id": TRIPS_DOCUMENT_ID},

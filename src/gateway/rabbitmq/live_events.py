@@ -17,7 +17,7 @@ def start_consuming(queue_name, consume_function):
 
 def consume_live_event(ch, method, properties, body):
     LiveEvents.add_event(message_body=json.loads(body.decode('utf-8')))
-    logger.info(msg=f"Received a message from Director MS: {body}")
+    logger.info(msg=f"Received a message from EventHub MS: {body}")
 
 
 class LiveEvents:
