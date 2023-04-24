@@ -11,7 +11,7 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: users
-      TRIP_RESEARCHER_ADDRESS: localhost:8000
+      TRIPS_MS_ADDRESS: localhost:8000
       RESERVATIONS_MS_ADDRESS: reservations:8001
       PURCHASE_MS_ADDRESS: purchases:8002
       PAYMENT_MS_ADDRESS: payments:8003
@@ -69,6 +69,17 @@ services:
       interval: 5s
       timeout: 1s
       retries: 10
+  mongo-express:
+    image: mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_AUTH_USERNAME=admin
+      - ME_CONFIG_MONGODB_AUTH_PASSWORD=admin
+    depends_on:
+        - mongodb
+    ports:
+      - "8005:8081"
   rabbitmq:
     container_name: rabbitmq
     image: ${RABBIT_IMAGE}
@@ -125,6 +136,23 @@ services:
       MONGODB_USER: admin
       MONGODB_PASSWORD: admin
       MONGODB_DB: payments_db
+      RABBITMQ_ADDRESS: rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+  trips:
+    container_name: trips-ms
+    image: ${TRIPS_IMAGE}
+    ports:
+      - "8000:8080"
+    environment:
+      MONGODB_PORT: 27017
+      MONGODB_ADDRESS: mongodb
+      MONGODB_USER: admin
+      MONGODB_PASSWORD: admin
+      MONGODB_DB: trips
       RABBITMQ_ADDRESS: rabbitmq
     depends_on:
       rabbitmq:
