@@ -1,0 +1,592 @@
+{
+  "Hotel Fuerteventura Princess": {
+    "localisation": {
+      "country": "Wyspy Kanaryjskie",
+      "region": "Fuerteventura"
+    },
+    "from": [
+      "Berlin",
+      "Bydgoszcz",
+      "Gdańsk",
+      "Kraków",
+      "Lublin",
+      "Poznań",
+      "Rzeszów",
+      "Szczecin",
+      "Warszawa",
+      "Warszawa - Radom",
+      "Wrocław",
+      "Zielona Góra",
+      "Łódź"
+    ],
+    "description": [
+      "zabawa dla całej rodziny",
+      "wyremontowane pokoje i hotelowa infrastruktura",
+      "zadbane baseny z bezpłatnymi leżakami",
+      "strefa wellness tylko dla dorosłych"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/fueprin_0.jpg?version=1"
+  },
+  "Hotel Grand Blue Fafa": {
+    "localisation": {
+      "country": "Albania",
+      "region": "Durres"
+    },
+    "from": [
+      "Alfabetycznie",
+      "Gdańsk",
+      "Katowice",
+      "Poznań",
+      "Szczecin",
+      "Warszawa",
+      "Warszawa - Modlin",
+      "Zielona Góra",
+      "Łódź"
+    ],
+    "description": [
+      "wakacje z rodziną",
+      "w spokojnym Golem",
+      "bezpośrednio przy plaży",
+      "duży basen"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/tiablue_0.jpg?version=210310-06"
+  },
+  "Hotel Casa Mare Resort (ex. Royal Tulip Beach Resort)": {
+    "localisation": {
+      "country": "Egipt",
+      "region": "Marsa Alam"
+    },
+    "from": [
+      "Berlin",
+      "Bydgoszcz",
+      "Katowice",
+      "Kraków",
+      "Lublin",
+      "Poznań",
+      "Rzeszów",
+      "Warszawa - Modlin",
+      "Warszawa - Radom",
+      "Zielona Góra",
+      "Łódź"
+    ],
+    "description": [
+      "aktywne wakacje",
+      "piękna plaża i rafa koralowa",
+      "długie molo",
+      "zadbany, zielony ogród"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/rmftulr_0.jpg?version=1"
+  },
+  "Hotel Scaleta Beach": {
+    "localisation": {
+      "country": "Grecja",
+      "region": "Kreta"
+    },
+    "from": [
+      "Bydgoszcz",
+      "Poznań",
+      "Szczecin",
+      "Wrocław",
+      "Łódź"
+    ],
+    "description": [
+      "tylko dla dorosłych (16+)",
+      "romantyczne wakacje",
+      "piękne widoki na morze",
+      "blisko piaszczystej plaży"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/chqscal_0.jpg?version=1"
+  },
+  "Hotel Oasis Atlantico Belorizonte": {
+    "localisation": {
+      "country": "Wyspy Zielonego Przylądka",
+      "region": "Santa Maria (sal)"
+    },
+    "from": [
+      "Alfabetycznie",
+      "Bydgoszcz",
+      "Katowice",
+      "Poznań",
+      "Zielona Góra",
+      "Łódź"
+    ],
+    "description": [
+      "blisko centrum Santa Maria",
+      "bezpośrednio przy piaszczystej plaży z turkusowym oceanem",
+      "zaplecze sportoworekreacyjne",
+      "udogodnienia dla osób z niepełnosprawnościami"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/sidoasb_0.jpg?version=220909-08"
+  },
+  "Hotel Sagitta Holiday Village": {
+    "localisation": {
+      "country": "Chorwacja",
+      "region": "Dalmacja"
+    },
+    "from": [
+      "Alfabetycznie",
+      "Bydgoszcz",
+      "Gdańsk",
+      "Szczecin",
+      "Warszawa",
+      "Zielona Góra"
+    ],
+    "description": [
+      "polecany dla rodzin",
+      "różne rodzaje pokoi",
+      "przy plaży",
+      "bogata oferta sportowa"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/scrsagi_0.jpg?version=221214-08"
+  },
+  "Hotel Fafa Aqua Blue": {
+    "localisation": {
+      "country": "Albania",
+      "region": "Durres"
+    },
+    "from": [
+      "Alfabetycznie",
+      "Berlin",
+      "Gdańsk",
+      "Kraków",
+      "Lublin",
+      "Poznań",
+      "Szczecin",
+      "Warszawa",
+      "Warszawa - Modlin",
+      "Warszawa - Radom",
+      "Wrocław",
+      "Zielona Góra"
+    ],
+    "description": [
+      "świetna lokalizacja, w centrum Golem",
+      "nowoczesny i stylowy",
+      "atrakcje dla dzieci: miniklub, basen i animacje po polski",
+      "otwarty w 2022 r."
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/tiaaqua_0.jpg?version=221119-12"
+  },
+  "Hotel Royal Brayka Resort": {
+    "localisation": {
+      "country": "Egipt",
+      "region": "Marsa Alam"
+    },
+    "from": [
+      "Rzeszów",
+      "Szczecin",
+      "Warszawa",
+      "Warszawa - Radom"
+    ],
+    "description": [
+      "wakacje z dziećmi",
+      "basen ze zjeżdżalniami",
+      "liczne animacje",
+      "pokoje rodzinne"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/rmfroya_0.jpg?version=210811-04"
+  },
+  "Serenade Punta Cana Beach & Spa Resort": {
+    "localisation": {
+      "country": "Dominikana",
+      "region": "Punta Cana"
+    },
+    "from": [
+      "Gdańsk",
+      "Poznań",
+      "Szczecin",
+      "Warszawa - Modlin"
+    ],
+    "description": [
+      "luksusowy i nowoczesny",
+      "tuż przy bajecznej plaży",
+      "baseny ze zjeżdżalniami",
+      "komfortowe pokoje"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/pujsere_0.jpg?version=210708-10"
+  },
+  "Hotel Fafa Premium": {
+    "localisation": {
+      "country": "Albania",
+      "region": "Durres"
+    },
+    "from": [
+      "Berlin",
+      "Gdańsk",
+      "Katowice",
+      "Kraków"
+    ],
+    "description": [
+      "romantyczny wypoczynek",
+      "nowoczesny i elegancki",
+      "przy piaszczystej plaży",
+      "animacje po polsku (15.06.23-15.09.23)"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/tiamelp_0.jpg?version=220818-10"
+  },
+  "Hotel Royal Thalassa Monastir": {
+    "localisation": {
+      "country": "Tunezja",
+      "region": "Monastir"
+    },
+    "from": [
+      "Berlin",
+      "Bydgoszcz",
+      "Gdańsk",
+      "Katowice",
+      "Rzeszów",
+      "Szczecin",
+      "Warszawa",
+      "Warszawa - Modlin",
+      "Wrocław"
+    ],
+    "description": [
+      "przy pięknej, piaszczystej plaży",
+      "duży basen i brodzik z widokiem na morze",
+      "nowoczesne i zadbane pokoje",
+      "centrum thalassoterapii z krytym basenem"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/nberoya_0.jpg?version=220915-04"
+  },
+  "Hotel Diamonds Athuruga Island Resort": {
+    "localisation": {
+      "country": "Malediwy",
+      "region": "Athuruga Island"
+    },
+    "from": [
+      "Alfabetycznie",
+      "Berlin",
+      "Gdańsk",
+      "Lublin",
+      "Warszawa - Modlin",
+      "Warszawa - Radom",
+      "Wrocław",
+      "Zielona Góra"
+    ],
+    "description": [
+      "przy rajskiej plaży",
+      "pięknie położony",
+      "na małej, tropikalnej wysepce",
+      "eleganckie i przestronne pokoje"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/mleathu_0.jpg?version=210707-06"
+  },
+  "Hotel Lazuli": {
+    "localisation": {
+      "country": "Egipt",
+      "region": "Marsa Alam"
+    },
+    "from": [
+      "Bydgoszcz",
+      "Katowice",
+      "Lublin",
+      "Rzeszów",
+      "Szczecin",
+      "Warszawa - Modlin",
+      "Warszawa - Radom",
+      "Wrocław",
+      "Zielona Góra"
+    ],
+    "description": [
+      "hotelowa plaża z rafą koralową przy brzegu",
+      "bogata oferta sportoworekreacyjna",
+      "kilka basenów, zjeżdżalnie",
+      "komfortowe pokoje"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/rmflazu_0.jpg?version=220426-12"
+  },
+  "Hotel Solimar Turquoise": {
+    "localisation": {
+      "country": "Grecja",
+      "region": "Kreta"
+    },
+    "from": [
+      "Alfabetycznie",
+      "Bydgoszcz",
+      "Gdańsk",
+      "Katowice",
+      "Kraków",
+      "Rzeszów",
+      "Szczecin",
+      "Warszawa",
+      "Warszawa - Modlin",
+      "Warszawa - Radom",
+      "Wrocław",
+      "Zielona Góra",
+      "Łódź"
+    ],
+    "description": [
+      "tylko dla dorosłych (17+)",
+      "blisko plaży, w centrum Agia Marina",
+      "wygodne pokoje",
+      "nowoczesny"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/chqturq_0.jpg?version=1"
+  },
+  "Hotel Smy Kos Beach & Splash": {
+    "localisation": {
+      "country": "Grecja",
+      "region": "Kos"
+    },
+    "from": [
+      "Alfabetycznie",
+      "Berlin",
+      "Gdańsk",
+      "Kraków",
+      "Lublin",
+      "Poznań",
+      "Rzeszów",
+      "Szczecin",
+      "Warszawa",
+      "Warszawa - Radom",
+      "Wrocław",
+      "Zielona Góra",
+      "Łódź"
+    ],
+    "description": [
+      "aktywny, rodzinny wypoczynek",
+      "2 baseny i brodzik dla dzieci",
+      "bezpośrednio przy piaszczystej plaży",
+      "pyszna kuchnia"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/kgsprin_0.jpg?version=220929-10"
+  },
+  "Hotel Fanar & Residences": {
+    "localisation": {
+      "country": "Oman",
+      "region": "Salalah"
+    },
+    "from": [
+      "Bydgoszcz",
+      "Rzeszów",
+      "Warszawa",
+      "Warszawa - Modlin",
+      "Warszawa - Radom",
+      "Wrocław",
+      "Zielona Góra",
+      "Łódź"
+    ],
+    "description": [
+      "3 piękne plaże przy hotelu",
+      "eleganckie pokoje",
+      "serwis na wysokim poziomie",
+      "4 restauracje, 7 barów"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/sllfana_0.jpg?version=220521-10"
+  },
+  "Hotel Dom Pedro Garajau Apartment & Nature": {
+    "localisation": {
+      "country": "Madera",
+      "region": "Garajau"
+    },
+    "from": [
+      "Katowice",
+      "Kraków",
+      "Lublin",
+      "Warszawa",
+      "Warszawa - Modlin",
+      "Warszawa - Radom",
+      "Zielona Góra",
+      "Łódź"
+    ],
+    "description": [
+      "niedaleko Ponta do Garajau",
+      "blisko sklepów i restauracji",
+      "zadbany ogród",
+      "dobra jakość usług"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/fncdomg_0.jpg?version=1"
+  },
+  "Hotel Gaia Royal": {
+    "localisation": {
+      "country": "Grecja",
+      "region": "Kos"
+    },
+    "from": [
+      "Alfabetycznie",
+      "Bydgoszcz",
+      "Gdańsk",
+      "Katowice",
+      "Lublin",
+      "Poznań",
+      "Warszawa",
+      "Warszawa - Radom",
+      "Wrocław",
+      "Zielona Góra",
+      "Łódź"
+    ],
+    "description": [
+      "wakacje z dziećmi",
+      "pokoje rodzinne 5os.",
+      "blisko pięknej plaży",
+      "kort tenisowy"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/kgsgaro_0.jpg?version=220903-08"
+  },
+  "Hotel Casa Blue Luxury Resort": {
+    "localisation": {
+      "country": "Egipt",
+      "region": "Marsa Alam"
+    },
+    "from": [
+      "Alfabetycznie",
+      "Berlin",
+      "Bydgoszcz",
+      "Gdańsk",
+      "Kraków",
+      "Lublin",
+      "Rzeszów",
+      "Warszawa",
+      "Warszawa - Modlin",
+      "Warszawa - Radom",
+      "Wrocław",
+      "Zielona Góra"
+    ],
+    "description": [
+      "tylko dla Gości powyżej 12. roku życia",
+      "zbudowany w 2022/23 r.",
+      "przy plaży z bezpłatnym serwisem i barem all inclusive.",
+      "3 baseny, w tym 1 relaksacyjny z hydromasażem"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/rmfcasa_0.jpg?version=230118-08"
+  },
+  "Hotel Epidamn White Sensation": {
+    "localisation": {
+      "country": "Albania",
+      "region": "Durres"
+    },
+    "from": [
+      "Alfabetycznie",
+      "Berlin",
+      "Gdańsk",
+      "Katowice",
+      "Kraków",
+      "Poznań",
+      "Szczecin",
+      "Warszawa",
+      "Warszawa - Radom",
+      "Wrocław"
+    ],
+    "description": [
+      "otwarty w 2022 r.",
+      "położony w dzielnicy hotelowej",
+      "prywatna plaża tuż przy hotelu",
+      "nowoczesne i stylowe wnętrza"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/tiawhit_0.jpg?version=221209-10"
+  },
+  "Hotel Strand Taba Heights Beach & Golf Resort (ex. InterContinental)": {
+    "localisation": {
+      "country": "Egipt",
+      "region": "Taba"
+    },
+    "from": [
+      "Katowice",
+      "Kraków",
+      "Szczecin",
+      "Warszawa",
+      "Warszawa - Radom",
+      "Zielona Góra"
+    ],
+    "description": [
+      "idealny dla rodzin",
+      "basen, 2 brodziki",
+      "eleganckie wnętrza",
+      "imponująca architektura"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/tcpinte_0.jpg?version=220623-06"
+  },
+  "Hotel Atlas Boutique": {
+    "localisation": {
+      "country": "Grecja",
+      "region": "Santorini"
+    },
+    "from": [
+      "Alfabetycznie",
+      "Berlin",
+      "Szczecin",
+      "Warszawa - Radom",
+      "Zielona Góra"
+    ],
+    "description": [
+      "kameralny, tylko 14 pokoi",
+      "całkowicie odnowiony w 2014 r.",
+      "blisko centrum Kamari i promenady",
+      "tuż przy plaży"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/jtratla_0.jpg?version=221213-10"
+  },
+  "Hotel Sea View Lodge": {
+    "localisation": {
+      "country": "Zanzibar",
+      "region": "Jambiani"
+    },
+    "from": [
+      "Berlin",
+      "Kraków",
+      "Rzeszów",
+      "Warszawa - Modlin",
+      "Wrocław",
+      "Zielona Góra",
+      "Łódź"
+    ],
+    "description": [
+      "wakacje we dwoje",
+      "kameralny i stylowy",
+      "tylko 18 pokoi",
+      "basen z hydromasażem"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/znzseav_0.jpg?version=1"
+  },
+  "Hotel WGrand": {
+    "localisation": {
+      "country": "Czarnogóra",
+      "region": "Petrovac"
+    },
+    "from": [
+      "Alfabetycznie",
+      "Berlin",
+      "Katowice",
+      "Kraków",
+      "Poznań",
+      "Rzeszów",
+      "Szczecin",
+      "Warszawa",
+      "Warszawa - Modlin",
+      "Wrocław",
+      "Zielona Góra",
+      "Łódź"
+    ],
+    "description": [
+      "malowniczo położony",
+      "blisko plaży",
+      "rodzinna atmosfera",
+      "komfortowe i funkcjonalne pokoje"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/tivwgra_0.jpg?version=221206-10"
+  },
+  "Hotel Odysee Resort": {
+    "localisation": {
+      "country": "Tunezja",
+      "region": "Djerba"
+    },
+    "from": [
+      "Alfabetycznie",
+      "Berlin",
+      "Gdańsk",
+      "Katowice",
+      "Lublin",
+      "Rzeszów",
+      "Szczecin",
+      "Warszawa - Modlin",
+      "Warszawa - Radom",
+      "Łódź"
+    ],
+    "description": [
+      "rozrywki dla całej rodziny",
+      "luksusowe centrum spa i talasoterapii",
+      "blisko atrakcji regionu",
+      "basen termalny"
+    ],
+    "img": "https://i.content4travel.com/cms/img/u/desktop/seres/djeodys_0.jpg?version=220623-06"
+  }
+}

@@ -9,13 +9,13 @@
   ],
   "vhosts": [
     {
-      "name": "\/vhost1"
+      "name": "/victor_travels"
     }
   ],
   "permissions": [
     {
       "user": "admin",
-      "vhost": "\/vhost1",
+      "vhost": "/victor_travels",
       "configure": ".*",
       "write": ".*",
       "read": ".*"
@@ -23,7 +23,241 @@
   ],
   "parameters": [],
   "policies": [],
-  "queues": [],
-  "exchanges": [],
-  "bindings": []
+  "queues": [
+    {
+      "name": "hotel-transport-events-for-researcher-ms",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "transport-events-for-eventhub-ms",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "transport-events-for-transport-ms",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "hotel-events-for-eventhub-ms",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "hotel-events-for-hotel-ms",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "live-events-for-gateway",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "reservations-for-eventhub-ms",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "reservations-for-reservations-ms",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "purchases-for-purchase-ms",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "purchases-for-reservations-ms",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "payments-for-payment-ms",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "payments-for-purchase-ms",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "transport-updates",
+      "vhost": "/victor_travels",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false
+    },
+    {
+      "name": "hotel-updates",
+      "vhost": "/victor_travels",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false
+    },
+    {
+      "name": "transport-events",
+      "vhost": "/victor_travels",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false
+    },
+    {
+      "name": "hotel-events",
+      "vhost": "/victor_travels",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false
+    },
+    {
+      "name": "live-events",
+      "vhost": "/victor_travels",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false
+    },
+    {
+      "name": "reservations",
+      "vhost": "/victor_travels",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false
+    },
+    {
+      "name": "purchases",
+      "vhost": "/victor_travels",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false
+    },
+    {
+      "name": "payments",
+      "vhost": "/victor_travels",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false
+    }
+  ],
+  "bindings": [
+    {
+      "source": "transport-updates",
+      "vhost": "/victor_travels",
+      "destination": "hotel-transport-events-for-researcher-ms",
+      "destination_type": "queue",
+      "routing_key": "hotel-transport-events-for-researcher-ms"
+    },
+    {
+      "source": "hotel-updates",
+      "vhost": "/victor_travels",
+      "destination": "hotel-transport-events-for-researcher-ms",
+      "destination_type": "queue",
+      "routing_key": "hotel-transport-events-for-researcher-ms"
+    },
+    {
+      "source": "transport-events",
+      "vhost": "/victor_travels",
+      "destination": "transport-events-for-transport-ms",
+      "destination_type": "queue",
+      "routing_key": "transport-events-for-transport-ms"
+    },
+    {
+      "source": "transport-events",
+      "vhost": "/victor_travels",
+      "destination": "transport-events-for-eventhub-ms",
+      "destination_type": "queue",
+      "routing_key": "transport-events-for-eventhub-ms"
+    },
+    {
+      "source": "hotel-events",
+      "vhost": "/victor_travels",
+      "destination": "hotel-events-for-hotel-ms",
+      "destination_type": "queue",
+      "routing_key": "hotel-events-for-hotel-ms"
+    },
+    {
+      "source": "hotel-events",
+      "vhost": "/victor_travels",
+      "destination": "hotel-events-for-eventhub-ms",
+      "destination_type": "queue",
+      "routing_key": "hotel-events-for-eventhub-ms"
+    },
+    {
+      "source": "live-events",
+      "vhost": "/victor_travels",
+      "destination": "live-events-for-gateway",
+      "destination_type": "queue",
+      "routing_key": "live-events-for-gateway"
+    },
+    {
+      "source": "reservations",
+      "vhost": "/victor_travels",
+      "destination": "reservations-for-eventhub-ms",
+      "destination_type": "queue",
+      "routing_key": "reservations-for-eventhub-ms"
+    },
+    {
+      "source": "reservations",
+      "vhost": "/victor_travels",
+      "destination": "reservations-for-reservations-ms",
+      "destination_type": "queue",
+      "routing_key": "reservations-for-reservations-ms"
+    },
+    {
+      "source": "purchases",
+      "vhost": "/victor_travels",
+      "destination": "purchases-for-purchase-ms",
+      "destination_type": "queue",
+      "routing_key": "purchases-for-purchase-ms"
+    },
+    {
+      "source": "purchases",
+      "vhost": "/victor_travels",
+      "destination": "purchases-for-reservations-ms",
+      "destination_type": "queue",
+      "routing_key": "purchases-for-reservations-ms"
+    },
+    {
+      "source": "payments",
+      "vhost": "/victor_travels",
+      "destination": "payments-for-purchase-ms",
+      "destination_type": "queue",
+      "routing_key": "payments-for-purchase-ms"
+    },
+    {
+      "source": "payments",
+      "vhost": "/victor_travels",
+      "destination": "payments-for-payment-ms",
+      "destination_type": "queue",
+      "routing_key": "payments-for-payment-ms"
+    }
+  ]
 }

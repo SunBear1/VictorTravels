@@ -6,10 +6,10 @@
 
 `make clean` - Czyści wszystkie obrazy
 
-`make user_handler` - Buduje tylko obraz user_handler'a
-
-`make postgres` - Buduje tylko obraz postgresa'a
-
-`make mongo` - Buduje tylko obraz mongo
+`make gateway - Buduje tylko obraz gateway'a
 
 `make rabbit` - Buduje tylko obraz rabbit'a
+
+itd itd....
+
+szczegóły w Makefilu
