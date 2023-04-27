@@ -32,8 +32,9 @@ async def get_trip(trip_id: str, token: str = Depends(oauth2_scheme)):
             return Response(status_code=status.HTTP_403_FORBIDDEN,
                             content="User does not have permission to use this service", media_type="text/plain")
 
-        response = requests.get(TRIP_RESEARCHER_SERVICE_ADDRESS, params={"trip_id": trip_id}, timeout=3.00,
-                                verify=False)
+        response = requests.post(f"http://{TRIP_RESEARCHER_SERVICE_ADDRESS}/api/v1/{trip_id}",
+                                 timeout=3.00,
+                                 verify=False)
 
         if response.status_code == status.HTTP_200_OK:
             return JSONResponse(status_code=status.HTTP_200_OK, content=response.content, media_type="application/json")

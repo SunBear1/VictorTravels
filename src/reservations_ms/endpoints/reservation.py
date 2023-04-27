@@ -60,7 +60,6 @@ async def make_reservation(trip_id: str):
                                   payload=json.dumps({
                                       "_id": str(insert_result.inserted_id),
                                       "trip_id": trip_id,
-                                      "reserved": True  # TODO do wywalenia?
                                   }, ensure_ascii=False).encode('utf-8'))
 
         client.send_data_to_queue(queue_name=RESERVATIONS_PUBLISH_QUEUE_NAME,
