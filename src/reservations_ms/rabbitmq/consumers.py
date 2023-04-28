@@ -24,14 +24,14 @@ def consume_purchase_ms_event(ch, method, properties, body):
     MongoDBClient.reservations_collection.update_one(filter={"_id": ObjectId(received_msg["_id"])}, update={
         "$set": {"reservation_status": received_msg["transaction_status"]}})
 
-    if received_msg["transaction_status"] == "canceled":
+    if received_msg["transaction_status"] != "expired":
         reservation_doc = MongoDBClient.reservations_collection.find_one({"_id": ObjectId(received_msg["_id"])})
         reservations_client = RabbitMQClient()
         reservations_client.send_data_to_queue(queue_name=RESERVATIONS_PUBLISH_QUEUE_NAME,
                                                exchange_name=RESERVATIONS_EXCHANGE_NAME,
                                                payload=json.dumps({
                                                    "trip_id": reservation_doc["trip_id"],
-                                                   "reservation_status": "canceled",
+                                                   "reservation_status": received_msg["transaction_status"],
                                                }, ensure_ascii=False).encode('utf-8'))
         reservations_client.close_connection()
 
@@ -39,13 +39,13 @@ def consume_purchase_ms_event(ch, method, properties, body):
 def consume_eventhub_ms_event(ch, method, properties, body):
     received_msg = json.loads(body.decode('utf-8'))
     logger.info(msg=f"Received a message from EventHub MS: {received_msg}")
-    if received_msg["operation_type"] == "Add":
+    if received_msg["operation_type"] == "add":
         MongoDBClient.trips_collection.update_one(
             filter={"_id": TRIPS_DOCUMENT_ID},
             update={"$addToSet": {"trips": {"$each": received_msg["trips_affected"]}}},
             upsert=True
         )
-    elif received_msg["operation_type"] == "Delete":
+    elif received_msg["operation_type"] == "delete":
         MongoDBClient.trips_collection.update_one(
             {"_id": TRIPS_DOCUMENT_ID},
             {"$pull": {"trips": {"$in": received_msg["trips_affected"]}}}

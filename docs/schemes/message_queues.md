@@ -40,7 +40,7 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 ```json
 {
   "trip_id": "1234",
-  "reservation_status": "created|canceled|expired|bought"
+  "reservation_status": "created|canceled|expired|finalized"
 }
 ```
 
@@ -64,12 +64,10 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 
 ## Messages from **Purchase MS**
 
-transaction_status: finalized | canceled
-
 ```json
 {
   "_id": "example_reservation_id",
-  "transaction_status": "finalized"
+  "transaction_status": "finalized|canceled|expired"
 }
 ```
 
