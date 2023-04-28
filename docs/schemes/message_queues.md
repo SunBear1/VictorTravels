@@ -5,6 +5,7 @@
 ### Zmiana dostępnych wycieczek do kupienia/rezerwacji
 
 trips_affected: ID konkretnej wycieczki, czyli turnusu
+
 ```json
 {
   "operation_type": "add|delete",

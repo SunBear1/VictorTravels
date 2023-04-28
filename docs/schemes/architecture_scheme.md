@@ -2,7 +2,6 @@
 
 ![Architektura systemu.png](../diagrams/system_architecture_diagram.png)
 
-
 ## Lista serwisów w systemie
 
 - GUI - warstwa prezentacji, czyli frontend.
