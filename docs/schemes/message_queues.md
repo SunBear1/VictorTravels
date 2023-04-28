@@ -7,9 +7,7 @@
 trips_affected: ID konkretnej wycieczki, czyli turnusu
 ```json
 {
-  "operation_type": "add"
-  |
-  "delete",
+  "operation_type": "add|delete",
   "trips_affected": [
     "1234",
     "325325",
@@ -42,13 +40,7 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 ```json
 {
   "trip_id": "1234",
-  "reservation_status": "created"
-  |
-  "canceled"
-  |
-  "expired"
-  |
-  "bought"
+  "reservation_status": "created|canceled|expired|bought"
 }
 ```
 
@@ -98,11 +90,7 @@ transaction_status: finalized | canceled
 ```json
 {
   "_id": "example_reservation_id",
-  "payment": "rejected"
-  |
-  "accepted"
-  |
-  "expired"
+  "payment": "rejected|accepted|expired"
 }
 ```
 
@@ -114,9 +102,7 @@ Ta wiadomość jest wysyłana za każdym razem jak miejsce w wycieczce ulegną z
 
 ```json
 {
-  "operation": "add"
-  |
-  "delete",
+  "operation": "add|delete",
   "trips": [
     "1234",
     "4312"
@@ -130,9 +116,7 @@ Ta wiadomość jest wysyłana kiedy miejsca w jakiejś wycieczce są równe zero
 
 ```json
 {
-  "operation": "add"
-  |
-  "delete",
+  "operation": "add|delete",
   "trips": [
     "1234",
     "4312"
@@ -148,9 +132,7 @@ Ta wiadomość jest wysyłana za każdym razem jak miejsce w wycieczce ulegną z
 
 ```json
 {
-  "operation": "add"
-  |
-  "delete",
+  "operation": "add|delete",
   "trips": [
     "1234",
     "4312"
@@ -164,9 +146,7 @@ Ta wiadomość jest wysyłana kiedy miejsca w jakiejś wycieczce są równe zero
 
 ```json
 {
-  "operation": "add"
-  |
-  "delete",
+  "operation": "add|delete",
   "trips": [
     "1234",
     "4312"
