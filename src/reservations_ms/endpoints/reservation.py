@@ -4,13 +4,13 @@ import logging
 
 import requests
 from fastapi import APIRouter, status
+from service.expiration_handler import start_measuring_reservation_time
 from starlette.responses import JSONResponse, Response
 
 from mongodb.mongodb_client import MongoDBClient, TRIPS_DOCUMENT_ID
 from rabbitmq.rabbitmq_client import RabbitMQClient, PURCHASES_EXCHANGE_NAME, \
     RESERVATIONS_EXCHANGE_NAME, RESERVATIONS_PUBLISH_QUEUE_NAME, \
     PURCHASES_PUBLISH_QUEUE_NAME, PAYMENTS_PUBLISH_QUEUE_NAME, PAYMENTS_EXCHANGE_NAME
-from service.expiration_handler import start_measuring_reservation_time
 
 router = APIRouter(prefix="/api/v1/reservation")
 
@@ -60,7 +60,6 @@ async def make_reservation(trip_id: str):
                                   payload=json.dumps({
                                       "_id": str(insert_result.inserted_id),
                                       "trip_id": trip_id,
-                                      "reserved": True  # TODO do wywalenia?
                                   }, ensure_ascii=False).encode('utf-8'))
 
         client.send_data_to_queue(queue_name=RESERVATIONS_PUBLISH_QUEUE_NAME,

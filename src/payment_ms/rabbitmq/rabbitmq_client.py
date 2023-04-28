@@ -32,7 +32,7 @@ class RabbitMQClient:
 
     def send_data_to_queue(self, queue_name: str, payload, exchange_name: str):
         try:
-            logger.info(f"Sending message for queue {queue_name}")
+            logger.info(f"Sending message {payload} for queue {queue_name}")
             self.channel.basic_publish(exchange=exchange_name,
                                        routing_key=queue_name,
                                        body=payload)
