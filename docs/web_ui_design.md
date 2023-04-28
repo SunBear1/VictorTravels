@@ -1,5 +1,7 @@
 # Web UI design
 
+Wzorujemy się na [Itace](https://www.itaka.pl/)
+
 ## Ekran pierwszego wyszukiwania
 
 Formularz z możliwością wypełnienia danych:
