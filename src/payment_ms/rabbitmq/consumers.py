@@ -30,10 +30,12 @@ def consume_purchase_ms_event(ch, method, properties, body):
             "uid": "example_uid"
         }
         MongoDBClient.payments_collection.insert_one(document=init_document)
+        logger.info("Payment entry for reservation successfully CREATED.")
     else:
         logger.info(msg=f"Received a message from purchase MS: {received_msg}")
         MongoDBClient.payments_collection.update_one(filter={"_id": ObjectId(received_msg["_id"])}, update={
             "$set": {
-                "trip_id": received_msg["trip_id"],
+                "trip_offer_id": received_msg["trip_offer_id"],
                 "purchase_status": received_msg["purchase_status"]
             }}, upsert=True)
+        logger.info("Payment entry for purchase successfully UPDATED.")
