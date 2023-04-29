@@ -3,7 +3,6 @@ import json
 import logging
 
 from bson import ObjectId
-
 from mongodb.mongodb_client import MongoDBClient
 from rabbitmq.rabbitmq_client import RabbitMQClient, PURCHASES_PUBLISH_QUEUE_NAME, PURCHASES_EXCHANGE_NAME
 
@@ -23,12 +22,13 @@ def consume_reservation_ms_event(ch, method, properties, body):
     logger.info(msg=f"Received a message from Reservation MS: {received_msg}")
     init_document = {
         "_id": ObjectId(received_msg["_id"]),
-        "trip_id": received_msg["trip_id"],
+        "trip_offer_id": received_msg["trip_id"],
         "purchase_status": "pending",
         "payment_status": "pending",
         "uid": "example_uid"
     }
     MongoDBClient.purchases_collection.insert_one(document=init_document)
+    logger.info("Purchase entry successfully CREATED.")
 
 
 def consume_payment_ms_event(ch, method, properties, body):
@@ -36,6 +36,7 @@ def consume_payment_ms_event(ch, method, properties, body):
     logger.info(msg=f"Received a message from Reservation MS: {received_msg}")
     MongoDBClient.purchases_collection.update_one(filter={"_id": ObjectId(received_msg["_id"])}, update={
         "$set": {"payment_status": received_msg["payment_status"]}})
+    logger.info("Purchase entry for payment successfully UPDATED.")
 
     transaction_status = "canceled"
     if received_msg["payment_status"] == "accepted":

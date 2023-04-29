@@ -13,6 +13,7 @@ PAYMENTS_COLLECTION_NAME = "payments"
 
 logger = logging.getLogger("payments")
 
+
 class MongoDBClient:
     client = MongoClient(f"mongodb://{USER}:{PASSWD}@{HOST}:{PORT}/?authSource=admin", connectTimeoutMS=10000)
     db = client[DB_NAME]

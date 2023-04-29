@@ -7,10 +7,9 @@ import bson.errors
 import requests
 from bson import ObjectId
 from fastapi import APIRouter, status
-from starlette.responses import JSONResponse, Response
-
 from mongodb.mongodb_client import MongoDBClient
 from rabbitmq.rabbitmq_client import RabbitMQClient, PURCHASES_PUBLISH_QUEUE_NAME, PURCHASES_EXCHANGE_NAME
+from starlette.responses import JSONResponse, Response
 
 router = APIRouter(prefix="/api/v1/payment")
 
@@ -49,7 +48,7 @@ async def make_payment(reservation_id: str):
         # TODO sprawdzić czy rezerwacja należy do usera
 
         if purchase_doc["payment_status"] != "pending":
-            logger.info(f"Payment status for this reservation doesn't have pending status.")
+            logger.info(f"Payment status for reservation {reservation_id} doesn't have pending status.")
             return Response(status_code=status.HTTP_400_BAD_REQUEST,
                             content=f"Reservation with ID {reservation_id} has already been paid for",
                             media_type="text/plain")
@@ -58,7 +57,7 @@ async def make_payment(reservation_id: str):
         time_diff = (current_datetime - reservation_creation_time).total_seconds()
 
         if time_diff > RESERVATION_EXPIRE_TIME:
-            logger.info(f"Reservation have expired by {time_diff} seconds.")
+            logger.info(f"Reservation {reservation_id} have expired by {time_diff} seconds.")
             payments_client = RabbitMQClient()
             payments_client.send_data_to_queue(queue_name=PURCHASES_PUBLISH_QUEUE_NAME,
                                                exchange_name=PURCHASES_EXCHANGE_NAME,
@@ -76,7 +75,7 @@ async def make_payment(reservation_id: str):
                             media_type="text/plain")
 
         if random.randint(1, 10) < CHANCE_OF_FAILING_PAYMENT:
-            logger.info("Payment was rejected.")
+            logger.info(f"Payment for reservation {reservation_id} was rejected.")
             payments_client = RabbitMQClient()
             payments_client.send_data_to_queue(queue_name=PURCHASES_PUBLISH_QUEUE_NAME,
                                                exchange_name=PURCHASES_EXCHANGE_NAME,
@@ -105,7 +104,7 @@ async def make_payment(reservation_id: str):
                                            }, ensure_ascii=False).encode('utf-8'))
         payments_client.close_connection()
 
-        logger.info("Payment was successfull.")
+        logger.info(f"Payment for reservation {reservation_id} was successfull.")
         return JSONResponse(status_code=status.HTTP_200_OK,
                             content={"reservation_id": reservation_id, "receipt_id": "0987654321"},
                             media_type="application/json")

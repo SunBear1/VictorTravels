@@ -4,13 +4,12 @@ import logging
 
 import requests
 from fastapi import APIRouter, status
-from service.expiration_handler import start_measuring_reservation_time
-from starlette.responses import JSONResponse, Response
-
 from mongodb.mongodb_client import MongoDBClient, TRIPS_DOCUMENT_ID
 from rabbitmq.rabbitmq_client import RabbitMQClient, PURCHASES_EXCHANGE_NAME, \
     RESERVATIONS_EXCHANGE_NAME, RESERVATIONS_PUBLISH_QUEUE_NAME, \
     PURCHASES_PUBLISH_QUEUE_NAME, PAYMENTS_PUBLISH_QUEUE_NAME, PAYMENTS_EXCHANGE_NAME
+from service.expiration_handler import start_measuring_reservation_time
+from starlette.responses import JSONResponse, Response
 
 router = APIRouter(prefix="/api/v1/reservation")
 

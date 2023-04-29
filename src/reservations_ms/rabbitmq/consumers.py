@@ -3,7 +3,6 @@ import json
 import logging
 
 from bson import ObjectId
-
 from mongodb.mongodb_client import MongoDBClient, TRIPS_DOCUMENT_ID
 from rabbitmq.rabbitmq_client import RabbitMQClient, RESERVATIONS_PUBLISH_QUEUE_NAME, RESERVATIONS_EXCHANGE_NAME
 

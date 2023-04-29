@@ -18,3 +18,4 @@ class MongoDBClient:
     db = client[DB_NAME]
     trips_collection = db[TRIPS_COLLECTION_NAME]
     reservations_collection = db[RESERVATIONS_COLLECTION_NAME]
+    logger.info(f"Connection to mongoDB at {HOST}:{PORT} established.")

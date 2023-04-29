@@ -4,10 +4,9 @@ import logging
 import bson.errors
 from bson import ObjectId
 from fastapi import APIRouter, status
-from starlette.responses import JSONResponse, Response
-
 from mongodb.mongodb_client import MongoDBClient
 from rabbitmq.rabbitmq_client import RabbitMQClient, PAYMENTS_PUBLISH_QUEUE_NAME, PAYMENTS_EXCHANGE_NAME
+from starlette.responses import JSONResponse, Response
 
 router = APIRouter(prefix="/api/v1/purchase")
 
@@ -48,6 +47,7 @@ async def make_purchase(reservation_id: str):
                                            }, ensure_ascii=False).encode('utf-8'))
         payments_client.close_connection()
 
+        logger.info(f"Purchase for reservation ID {reservation_id} performed successfully.")
         return JSONResponse(status_code=status.HTTP_201_CREATED,
                             content={"reservation_id": reservation_id},
                             media_type="application/json")

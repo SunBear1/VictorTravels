@@ -3,9 +3,8 @@ import json
 from common.constants import LIVE_EVENTS_QUEUE_NAME, LIVE_EVENTS_EXCHANGE_NAME
 from fastapi import APIRouter, status
 from rabbitmq.live_events import LiveEvents
-from starlette.responses import JSONResponse, Response
-
 from rabbitmq.rabbitmq_client import RabbitMQClient
+from starlette.responses import JSONResponse, Response
 
 router = APIRouter(prefix="/api/v1/events")
 
