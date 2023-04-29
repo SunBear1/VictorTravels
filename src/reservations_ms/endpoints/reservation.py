@@ -43,40 +43,42 @@ async def make_reservation(trip_id: str):
             return Response(status_code=status.HTTP_404_NOT_FOUND, content=f"Trip with ID {trip_id} does not exist",
                             media_type="text/plain")
         if trip_id not in trips_document["trips"]:
-            logger.info(f"From available trips {trips_document} there is no value {trip_id}")
+            logger.info(f"From available trip offers {trips_document} there is no value {trip_id}")
             return Response(status_code=status.HTTP_404_NOT_FOUND, content=f"Trip with ID {trip_id} does not exist",
                             media_type="text/plain")
 
         insert_result = MongoDBClient.reservations_collection.insert_one(document=init_doc)
+        reservation_id = str(insert_result.inserted_id)
 
         expiration_timer_task = asyncio.create_task(start_measuring_reservation_time(
-            reservation_id=str(insert_result.inserted_id),
+            reservation_id=reservation_id,
             reservation_creation_time=current_datetime))
 
         client = RabbitMQClient()
         client.send_data_to_queue(queue_name=PURCHASES_PUBLISH_QUEUE_NAME,
                                   exchange_name=PURCHASES_EXCHANGE_NAME,
                                   payload=json.dumps({
-                                      "_id": str(insert_result.inserted_id),
-                                      "trip_id": trip_id,
+                                      "_id": reservation_id,
+                                      "trip_offer_id": trip_id,
                                   }, ensure_ascii=False).encode('utf-8'))
 
         client.send_data_to_queue(queue_name=RESERVATIONS_PUBLISH_QUEUE_NAME,
                                   exchange_name=RESERVATIONS_EXCHANGE_NAME,
                                   payload=json.dumps({
-                                      "trip_id": trip_id,
+                                      "trip_offer_id": trip_id,
                                       "reservation_status": "created",
                                   }, ensure_ascii=False).encode('utf-8'))
 
         client.send_data_to_queue(queue_name=PAYMENTS_PUBLISH_QUEUE_NAME, exchange_name=PAYMENTS_EXCHANGE_NAME,
                                   payload=json.dumps({
-                                      "_id": str(insert_result.inserted_id),
+                                      "_id": reservation_id,
                                       "reservation_creation_time": current_datetime
                                   }, ensure_ascii=False).encode('utf-8'))
         client.close_connection()
 
+        logger.info(f"Reservation with ID {reservation_id} created.")
         return JSONResponse(status_code=status.HTTP_201_CREATED,
-                            content={"reservation_id": str(insert_result.inserted_id)},
+                            content={"reservation_id": reservation_id},
                             media_type="application/json")
     except Exception as ex:
         logger.info(f"Exception in reservation ms occurred: {ex}")

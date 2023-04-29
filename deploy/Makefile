@@ -16,8 +16,10 @@ DATA_INIT_CONTAINER_NAME := data-init
 DATA_INIT_IMAGE_NAME :=data-init:development
 
 
-build: gateway rabbit reservations purchases payments data-init
-	@echo "Building images..."
+build-and-run: build run
+
+
+build: gateway rabbit reservations purchases payments data-init clean
 
 
 run:
@@ -32,6 +34,15 @@ run:
 
 
 clean:
+	@echo "Removing stopped containers..."
+	@docker container prune -f
+	@echo "Removing old images..."
+	@if [ -n "$$(docker images -f 'dangling=true' -q)" ]; then \
+		docker rmi $$(docker images -f 'dangling=true' -q); \
+	fi
+
+
+delete:
 	@docker image rm ${GATEWAY_IMAGE_NAME} ${RABBIT_IMAGE_NAME} ${RESERVATIONS_IMAGE_NAME} ${PURCHASE_IMAGE_NAME} ${PAYMENT_IMAGE_NAME} ${DATA_INIT_IMAGE_NAME} --force
 
 

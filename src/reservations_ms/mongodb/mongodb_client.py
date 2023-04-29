@@ -1,3 +1,4 @@
+import logging
 import os
 
 from pymongo import MongoClient
@@ -8,9 +9,11 @@ USER = os.getenv("MONGODB_USER", "admin")
 PASSWD = os.getenv("MONGODB_PASSWORD", "admin")
 DB_NAME = os.getenv("MONGODB_DB", "reservations_db")
 
-TRIPS_COLLECTION_NAME = "trips"
+TRIPS_COLLECTION_NAME = "trip-offers"
 RESERVATIONS_COLLECTION_NAME = "reservations"
-TRIPS_DOCUMENT_ID = "trips-list"
+TRIPS_DOCUMENT_ID = "trip-offers-list"
+
+logger = logging.getLogger("reservations")
 
 
 class MongoDBClient:
