@@ -35,8 +35,9 @@ async def purchase_trip(reservation_id: str, token: str = Depends(oauth2_scheme)
         response = requests.post(f"http://{PURCHASE_MS_ADDRESS}/api/v1/purchase/{reservation_id}",
                                  timeout=3.00,
                                  verify=False)
+        logger.info(f"Request redirected to {PURCHASE_MS_ADDRESS}.")
 
-        if response.status_code == status.HTTP_201_CREATED or status.HTTP_200_OK:
+        if response.status_code in [status.HTTP_201_CREATED, status.HTTP_200_OK]:
             return JSONResponse(status_code=response.status_code,
                                 content=json.loads(response.content.decode("utf-8")),
                                 media_type="application/json")

@@ -13,7 +13,7 @@ router = APIRouter(prefix="/api/v1/reservations")
 logger = logging.getLogger("gateway")
 
 
-@router.post("/{trip_id}",
+@router.post("/{trip_offer_id}",
              responses={
                  201: {"description": "Reservation successfully created"},
                  403: {"description": "User does not have permission to use this service"},
@@ -21,7 +21,7 @@ logger = logging.getLogger("gateway")
                  422: {"description": "Unknown error occurred"}
              },
              )
-async def make_reservation(trip_id: str, token: str = Depends(oauth2_scheme)):
+async def make_reservation(trip_offer_id: str, token: str = Depends(oauth2_scheme)):
     """
     Make a trip reservation
     """
@@ -31,16 +31,18 @@ async def make_reservation(trip_id: str, token: str = Depends(oauth2_scheme)):
             return Response(status_code=status.HTTP_403_FORBIDDEN,
                             content="User does not have permission to use this service", media_type="text/plain")
 
-        response = requests.post(f"http://{RESERVATIONS_MS_ADDRESS}/api/v1/reservation/{trip_id}",
+        response = requests.post(f"http://{RESERVATIONS_MS_ADDRESS}/api/v1/reservation/{trip_offer_id}",
                                  timeout=3.00,
                                  verify=False)
+        logger.info(f"Request redirected to {RESERVATIONS_MS_ADDRESS}.")
 
         if response.status_code == status.HTTP_201_CREATED:
             return JSONResponse(status_code=status.HTTP_201_CREATED,
                                 content=json.loads(response.content.decode("utf-8")),
                                 media_type="application/json")
         if response.status_code == status.HTTP_404_NOT_FOUND:
-            return Response(status_code=status.HTTP_404_NOT_FOUND, content=f"Trip with ID {trip_id} does not exist",
+            return Response(status_code=status.HTTP_404_NOT_FOUND,
+                            content=f"Trip with ID {trip_offer_id} does not exist",
                             media_type="text/plain")
         if response.status_code == status.HTTP_500_INTERNAL_SERVER_ERRO:
             return Response(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content="Reservation service crashed :-)",

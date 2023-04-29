@@ -1,6 +1,6 @@
 import logging
 from datetime import date
-from typing import Optional
+from typing import Optional, List
 
 import requests
 from common.authentication import oauth2_scheme, verify_jwt_token
@@ -35,6 +35,7 @@ async def get_trip(trip_id: str, token: str = Depends(oauth2_scheme)):
         response = requests.post(f"http://{TRIP_RESEARCHER_SERVICE_ADDRESS}/api/v1/{trip_id}",
                                  timeout=3.00,
                                  verify=False)
+        logger.info(f"Request redirected to {TRIP_RESEARCHER_SERVICE_ADDRESS}.")
 
         if response.status_code == status.HTTP_200_OK:
             return JSONResponse(status_code=status.HTTP_200_OK, content=response.content, media_type="application/json")
@@ -68,11 +69,11 @@ async def get_trips(
         kids_to_18yo: Optional[int] = Query(None, ge=0),
         date_from: Optional[date] = Query(None),
         date_to: Optional[date] = Query(None),
-        departure_region: Optional[str] = Query(None),
-        arrival_region: Optional[str] = Query(None),
-        transport: Optional[str] = Query(None),
+        departure_region: List[Optional[str]] = Query(None),
+        arrival_region: List[Optional[str]] = Query(None),
+        transport: List[Optional[str]] = Query(None),
         order: Optional[str] = Query(None),
-        diet: Optional[str] = Query(None),
+        diet: List[Optional[str]] = Query(None),
         max_price: Optional[int] = Query(None, gt=0),
         token: str = Depends(oauth2_scheme)
 ):
@@ -98,6 +99,7 @@ async def get_trips(
         }
         response = requests.get(TRIP_RESEARCHER_SERVICE_ADDRESS, params=query_params, timeout=3.00,
                                 verify=False)
+        logger.info(f"Request redirected to {TRIP_RESEARCHER_SERVICE_ADDRESS}.")
 
         if response.status_code == status.HTTP_200_OK:
             return JSONResponse(status_code=status.HTTP_200_OK, content=response.content, media_type="application/json")

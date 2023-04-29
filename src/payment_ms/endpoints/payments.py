@@ -41,7 +41,8 @@ async def make_payment(reservation_id: str):
                                              "%Y-%m-%dT%H:%M:%S.%f")
 
         purchase_doc = MongoDBClient.payments_collection.find_one({"_id": ObjectId(reservation_id)})
-        if purchase_doc["purchase_status"] == "pending":
+
+        if purchase_doc is None or purchase_doc["purchase_status"] == "pending":
             logger.info(f"There is no information about the reservation purchase")
             return Response(status_code=status.HTTP_404_NOT_FOUND,
                             content=f"Reservation with ID {reservation_id} has not been purchased",

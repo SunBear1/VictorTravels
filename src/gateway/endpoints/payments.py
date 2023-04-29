@@ -34,12 +34,14 @@ async def buy_trip(reservation_id: str, token: str = Depends(oauth2_scheme)):
         response = requests.post(f"http://{PAYMENT_MS_ADDRESS}/api/v1/payment/{reservation_id}",
                                  timeout=3.00,
                                  verify=False)
+        logger.info(f"Request redirected to {PAYMENT_MS_ADDRESS}.")
 
         if response.status_code == status.HTTP_201_CREATED:
             return JSONResponse(status_code=status.HTTP_201_CREATED,
                                 content=json.loads(response.content.decode("utf-8")),
                                 media_type="application/json")
-        if response.status_code == status.HTTP_400_BAD_REQUEST or status.HTTP_402_PAYMENT_REQUIRED or status.HTTP_404_NOT_FOUND or status.HTTP_410_GONE:
+        if response.status_code in [status.HTTP_400_BAD_REQUEST, status.HTTP_402_PAYMENT_REQUIRED,
+                                    status.HTTP_404_NOT_FOUND, status.HTTP_410_GONE]:
             return Response(status_code=response.status_code,
                             content=response.content,
                             media_type="text/plain")
