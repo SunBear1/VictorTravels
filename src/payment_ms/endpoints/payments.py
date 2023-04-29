@@ -7,9 +7,10 @@ import bson.errors
 import requests
 from bson import ObjectId
 from fastapi import APIRouter, status
+from starlette.responses import JSONResponse, Response
+
 from mongodb.mongodb_client import MongoDBClient
 from rabbitmq.rabbitmq_client import RabbitMQClient, PURCHASES_PUBLISH_QUEUE_NAME, PURCHASES_EXCHANGE_NAME
-from starlette.responses import JSONResponse, Response
 
 router = APIRouter(prefix="/api/v1/payment")
 

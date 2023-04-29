@@ -3,6 +3,7 @@ import json
 import logging
 
 from bson import ObjectId
+
 from mongodb.mongodb_client import MongoDBClient, TRIPS_DOCUMENT_ID
 from rabbitmq.rabbitmq_client import RabbitMQClient, RESERVATIONS_PUBLISH_QUEUE_NAME, RESERVATIONS_EXCHANGE_NAME
 
@@ -30,7 +31,7 @@ def consume_purchase_ms_event(ch, method, properties, body):
         reservations_client.send_data_to_queue(queue_name=RESERVATIONS_PUBLISH_QUEUE_NAME,
                                                exchange_name=RESERVATIONS_EXCHANGE_NAME,
                                                payload=json.dumps({
-                                                   "trip_offer_id": reservation_doc["trip_id"],
+                                                   "trip_offer_id": reservation_doc["trip_offer_id"],
                                                    "reservation_status": received_msg["transaction_status"],
                                                }, ensure_ascii=False).encode('utf-8'))
         reservations_client.close_connection()
