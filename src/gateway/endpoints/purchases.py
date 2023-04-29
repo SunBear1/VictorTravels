@@ -16,6 +16,7 @@ logger = logging.getLogger("gateway")
 @router.post("/{reservation_id}",
              responses={
                  201: {"description": "Purchase successfully created"},
+                 200: {"description": "Purchase was already performed"},
                  403: {"description": "User does not have permission to use this service"},
                  404: {"description": "Reservation with provided ID does not exist"},
                  422: {"description": "Unknown error occurred"}
@@ -34,16 +35,17 @@ async def purchase_trip(reservation_id: str, token: str = Depends(oauth2_scheme)
         response = requests.post(f"http://{PURCHASE_MS_ADDRESS}/api/v1/purchase/{reservation_id}",
                                  timeout=3.00,
                                  verify=False)
+        logger.info(f"Request redirected to {PURCHASE_MS_ADDRESS}.")
 
-        if response.status_code == status.HTTP_201_CREATED:
-            return JSONResponse(status_code=status.HTTP_201_CREATED,
+        if response.status_code in [status.HTTP_201_CREATED, status.HTTP_200_OK]:
+            return JSONResponse(status_code=response.status_code,
                                 content=json.loads(response.content.decode("utf-8")),
                                 media_type="application/json")
         if response.status_code == status.HTTP_404_NOT_FOUND:
             return Response(status_code=status.HTTP_404_NOT_FOUND,
                             content=f"Reservation with ID {reservation_id} does not exist",
                             media_type="text/plain")
-        if response.status_code == status.HTTP_500_INTERNAL_SERVER_ERRO:
+        if response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR:
             return Response(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content="Purchase service crashed :-)",
                             media_type="text/plain")
 
