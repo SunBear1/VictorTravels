@@ -1,6 +1,6 @@
 CREATE TABLE Offers
 (
-    id          SERIAL PRIMARY KEY,
+    ID          SERIAL PRIMARY KEY,
     TripOfferID VARCHAR(50) UNIQUE,
     TripID      VARCHAR(50),
     HotelID     VARCHAR(50)

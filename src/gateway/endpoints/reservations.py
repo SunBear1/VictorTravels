@@ -5,12 +5,19 @@ import requests
 from common.authentication import oauth2_scheme, verify_jwt_token
 from common.constants import RESERVATIONS_MS_ADDRESS
 from fastapi import APIRouter, Response, Depends, status
+from pydantic import BaseModel
 from starlette.responses import JSONResponse
 from users.service import verify_user_identify
 
 router = APIRouter(prefix="/api/v1/reservations")
 
 logger = logging.getLogger("gateway")
+
+
+class TripReservationData(BaseModel):
+    hotel_id: str
+    room_type: str
+    connection_id: str
 
 
 @router.post("/{trip_offer_id}",
@@ -21,7 +28,7 @@ logger = logging.getLogger("gateway")
                  422: {"description": "Unknown error occurred"}
              },
              )
-async def make_reservation(trip_offer_id: str, token: str = Depends(oauth2_scheme)):
+async def make_reservation(trip_offer_id: str, payload: TripReservationData, token: str = Depends(oauth2_scheme)):
     """
     Make a trip reservation
     """
@@ -30,10 +37,14 @@ async def make_reservation(trip_offer_id: str, token: str = Depends(oauth2_schem
         if not verify_user_identify(login=users_credentials["login"], password=users_credentials["password"]):
             return Response(status_code=status.HTTP_403_FORBIDDEN,
                             content="User does not have permission to use this service", media_type="text/plain")
-
+        request_body = {
+            "hotel_id": payload.hotel_id,
+            "room_type": payload.room_type,
+            "connection_id": payload.connection_id
+        }
         response = requests.post(f"http://{RESERVATIONS_MS_ADDRESS}/api/v1/reservation/{trip_offer_id}",
                                  timeout=3.00,
-                                 verify=False)
+                                 verify=False, json=request_body)
         logger.info(f"Request redirected to {RESERVATIONS_MS_ADDRESS}.")
 
         if response.status_code == status.HTTP_201_CREATED:

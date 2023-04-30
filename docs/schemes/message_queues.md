@@ -49,7 +49,10 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 {
   "title": "reservation_status_update",
   "trip_offer_id": "1234",
-  "reservation_status": "created|canceled|expired|finalized"
+  "reservation_status": "created|canceled|expired|finalized",
+  "hotel_id": "OSV-1",
+  "room_type": "small",
+  "connection_id": "PRS-WAW-TRAIN-XYZ"
 }
 ```
 
@@ -162,7 +165,7 @@ Ta wiadomość jest wysyłana kiedy miejsca w jakiejś wycieczce są równe zero
 
 ```json
 {
-  "title": "transport_status",
+  "title": "transport_booking_status",
   "trip_offers_id": [
     "1234",
     "4312"
