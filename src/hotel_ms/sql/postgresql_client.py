@@ -30,7 +30,7 @@ class PostgreSQLClient:
             port=self.port,
         )
 
-    def execute_query_for_database(self, query: str, db_name: str = PG_DB_HOTELS_NAME) -> List:
+    def execute_query_for_database(self, query: str, db_name: str = PG_DB_HOTELS_NAME, fetch_data: bool = True) -> List:
         conn = psycopg2.connect(
             user=self.user,
             password=self.password,
@@ -41,11 +41,14 @@ class PostgreSQLClient:
         cursor = conn.cursor()
         try:
             cursor.execute(query=query)
-            query_result = cursor.fetchall()
+            conn.commit()
             logger.info(f"Executed query {query} to {db_name} database.")
-            return query_result
+            if fetch_data:
+                query_result = cursor.fetchall()
+                return query_result
         except Exception as ex:
             logger.info(f"Cant execute query because of: {ex}")
             raise ex
         finally:
+            cursor.close()
             conn.close()

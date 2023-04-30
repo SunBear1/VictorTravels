@@ -138,3 +138,21 @@ services:
         condition: service_healthy
       mongodb:
         condition: service_healthy
+  hotels:
+    container_name: hotel-ms
+    image: ${HOTEL_IMAGE}
+    restart: always
+    ports:
+      - "8004:8004"
+    environment:
+      RABBITMQ_ADDRESS: rabbitmq
+      POSTGRES_PORT: 5432
+      POSTGRES_ADDRESS: postgresql
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: hotels
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgresql:
+        condition: service_healthy
