@@ -1,5 +1,6 @@
 import logging
 
+from service.errors import UnprocessableEntityError
 from sql.postgresql_client import PostgreSQLClient
 
 logger = logging.getLogger("hotels")
@@ -11,6 +12,8 @@ def get_hotel_for_offer(trip_offer_id: str) -> str:
     pg_client = PostgreSQLClient()
     hotel_query = pg_client.execute_query_for_database(query=hotel_id_query)
 
+    if not hotel_query:
+        raise UnprocessableEntityError(f"Trip offer with ID {trip_offer_id} does not exist.")
     return hotel_query[0][0]
 
 

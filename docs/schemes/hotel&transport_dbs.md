@@ -29,8 +29,17 @@
 
 ## Offers
 
-| TripOfferID | TripID | ConnectionID      | PlacesLeft |
-|-------------|--------|-------------------|------------|
-| 1234        | 1      | PRS-WAW-TRAIN-XYZ | 28         |
-| 1235        | 1      | PRS-WAW-TRAIN-XYZ | 0          |
-| 8912        | 5      | ORD-GDN-PLANE-XYZ | 14         |
+| TripOfferID | TripID | ConnectionID      |
+|-------------|--------|-------------------|
+| 1234        | 1      | PRS-WAW-TRAIN-XYZ |
+| 1235        | 2      | PRS-WAW-TRAIN-XYZ |
+| 8912        | 5      | ORD-GDN-PLANE-XYZ |
+| 0921        | 3      | WAW-GDN-PLANE-XYZ |
+
+## SeatsLeft
+
+| ID | ConnectionID      | SeatsLeft |
+|----|-------------------|-----------|
+| 1  | PRS-WAW-TRAIN-XYZ | 2         |
+| 3  | ORD-GDN-PLANE-XYZ | 14        |
+| 4  | WAW-GDN-PLANE-XYZ | 3         |

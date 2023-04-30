@@ -31,9 +31,10 @@ services:
       POSTGRES_ADDRESS: postgresql
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      PG_DB_TRIPS_NAME: trips
       PG_DB_USERS_NAME: users
       PG_DB_EVENTS_NAME: events
+      PG_DB_HOTELS_NAME: hotels
+      PG_DB_TRANSPORTS_NAME: transports
       MONGODB_PORT: 27017
       MONGODB_ADDRESS: mongodb
       MONGODB_USER: admin
@@ -142,15 +143,29 @@ services:
     container_name: hotel-ms
     image: ${HOTEL_IMAGE}
     restart: always
-    ports:
-      - "8004:8004"
     environment:
       RABBITMQ_ADDRESS: rabbitmq
       POSTGRES_PORT: 5432
       POSTGRES_ADDRESS: postgresql
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: hotels
+      PG_DB_HOTELS_NAME: hotels
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgresql:
+        condition: service_healthy
+  transports:
+    container_name: transport-ms
+    image: ${TRANSPORT_IMAGE}
+    restart: always
+    environment:
+      RABBITMQ_ADDRESS: rabbitmq
+      POSTGRES_PORT: 5432
+      POSTGRES_ADDRESS: postgresql
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      PG_DB_TRANSPORTS_NAME: transports
     depends_on:
       rabbitmq:
         condition: service_healthy

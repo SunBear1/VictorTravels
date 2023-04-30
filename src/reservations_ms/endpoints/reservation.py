@@ -4,6 +4,7 @@ import logging
 
 import requests
 from fastapi import APIRouter, status
+from pydantic import BaseModel
 from starlette.responses import JSONResponse, Response
 
 from mongodb.mongodb_client import MongoDBClient, TRIPS_DOCUMENT_ID
@@ -17,6 +18,12 @@ router = APIRouter(prefix="/api/v1/reservation")
 logger = logging.getLogger("reservations")
 
 
+class TripReservationData(BaseModel):
+    hotel_id: str
+    room_type: str
+    connection_id: str
+
+
 @router.post("/{trip_offer_id}",
              responses={
                  201: {"description": "Reservation successfully created"},
@@ -24,7 +31,7 @@ logger = logging.getLogger("reservations")
                  500: {"description": "Unknown error occurred"}
              },
              )
-async def make_reservation(trip_offer_id: str):
+async def make_reservation(trip_offer_id: str, payload: TripReservationData):
     """
     Create a trip reservation
     """
@@ -61,6 +68,7 @@ async def make_reservation(trip_offer_id: str):
         client.send_data_to_queue(queue_name=PURCHASES_PUBLISH_QUEUE_NAME,
                                   exchange_name=PURCHASES_EXCHANGE_NAME,
                                   payload=json.dumps({
+                                      "title": "reservation_creation",
                                       "_id": reservation_id,
                                       "trip_offer_id": trip_offer_id,
                                   }, ensure_ascii=False).encode('utf-8'))
@@ -68,12 +76,17 @@ async def make_reservation(trip_offer_id: str):
         client.send_data_to_queue(queue_name=RESERVATIONS_PUBLISH_QUEUE_NAME,
                                   exchange_name=RESERVATIONS_EXCHANGE_NAME,
                                   payload=json.dumps({
+                                      "title": "reservation_status_update",
                                       "trip_offer_id": trip_offer_id,
                                       "reservation_status": "created",
+                                      "hotel_id": payload.hotel_id,
+                                      "room_type": payload.room_type,
+                                      "connection_id": payload.connection_id,
                                   }, ensure_ascii=False).encode('utf-8'))
 
         client.send_data_to_queue(queue_name=PAYMENTS_PUBLISH_QUEUE_NAME, exchange_name=PAYMENTS_EXCHANGE_NAME,
                                   payload=json.dumps({
+                                      "title": "reservation_creation_time",
                                       "_id": reservation_id,
                                       "reservation_creation_time": current_datetime
                                   }, ensure_ascii=False).encode('utf-8'))

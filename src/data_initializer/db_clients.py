@@ -11,6 +11,7 @@ PG_PASSWD = os.getenv("POSTGRES_PASSWORD", "admin")
 PG_DB_USERS_NAME = os.getenv("PG_DB_USERS_NAME", "users")
 PG_DB_EVENTS_NAME = os.getenv("PG_DB_EVENTS_NAME", "events")
 PG_DB_HOTELS_NAME = os.getenv("PG_DB_HOTELS_NAME", "hotels")
+PG_DB_TRANSPORTS_NAME = os.getenv("PG_DB_TRANSPORTS_NAME", "transports")
 PG_PORT = os.getenv("POSTGRES_PORT", 5432)
 
 MONGO_PORT = os.getenv("MONGODB_PORT", 27017)
