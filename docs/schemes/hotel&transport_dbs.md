@@ -10,18 +10,27 @@
 
 ## Offers
 
-| ID | TripID | HotelID | SmallRoomsLeft | MediumRoomsLeft | LargeRoomsLeft | ApartmentRoomsLeft | StudioRoomsLeft |
-|----|--------|---------|----------------|-----------------|----------------|--------------------|-----------------|
-| 1  | 1234   | OSV     | 2              | 10              | 0              | 15                 | 1               |
-| 4  | 1234   | OSV     | 0              | 2               | 6              | 3                  | 0               |
-| 2  | 7632   | BTV     | 5              | 1               | 2              | 0                  | 2               |
+| TripOfferID | TripID | HotelID |
+|-------------|--------|---------|
+| 1234        | 1      | OSV-XYZ |
+| 4212        | 2      | OSV-XYZ |
+| 9124        | 3      | BTV-XYZ |
+| 1235        | 1      | OSV-TCV |
+
+## RoomsLeft
+
+| ID | HotelID | SmallRoomsLeft | MediumRoomsLeft | LargeRoomsLeft | ApartmentRoomsLeft | StudioRoomsLeft |
+|----|---------|----------------|-----------------|----------------|--------------------|-----------------|
+| 1  | OSV-XYZ | 2              | 10              | 0              | 15                 | 1               |
+| 4  | OSV-TCV | 0              | 2               | 6              | 3                  | 0               |
+| 2  | BTV-XYZ | 5              | 1               | 2              | 0                  | 2               |
 
 # Transport MS
 
 ## Offers
 
-| ID | TripID | ConnectionID      | PlacesLeft |
-|----|--------|-------------------|------------|
-| 1  | 1234   | PRS-WAW-TRAIN-XYZ | 28         |
-| 3  | 1234   | PRS-WAW-TRAIN-XYZ | 0          |
-| 5  | 8912   | ORD-GDN-PLANE-XYZ | 14         |
+| TripOfferID | TripID | ConnectionID      | PlacesLeft |
+|-------------|--------|-------------------|------------|
+| 1234        | 1      | PRS-WAW-TRAIN-XYZ | 28         |
+| 1235        | 1      | PRS-WAW-TRAIN-XYZ | 0          |
+| 8912        | 5      | ORD-GDN-PLANE-XYZ | 14         |

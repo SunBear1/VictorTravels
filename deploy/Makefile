@@ -13,13 +13,15 @@ PURCHASE_CONTAINER_NAME := purchase-ms
 PAYMENT_IMAGE_NAME := payment-image:development
 PAYMENT_CONTAINER_NAME := payment-ms
 DATA_INIT_CONTAINER_NAME := data-init
-DATA_INIT_IMAGE_NAME :=data-init:development
+DATA_INIT_IMAGE_NAME := data-init-image:development
+HOTEL_IMAGE_NAME :=  hotel-image:development
+HOTEL_CONTAINER_NAME := hotel-ms
 
 
 build-and-run: build run
 
 
-build: gateway rabbit reservations purchases payments data-init clean
+build: gateway rabbit reservations purchases payments data-init hotels clean
 
 
 run:
@@ -30,6 +32,7 @@ run:
 	PURCHASE_IMAGE=${PURCHASE_IMAGE_NAME} \
 	PAYMENT_IMAGE=${PAYMENT_IMAGE_NAME} \
 	DATA_INIT_IMAGE=${DATA_INIT_IMAGE_NAME} \
+	HOTEL_IMAGE=${HOTEL_IMAGE_NAME} \
 	docker-compose -p "victor-travels" up
 
 
@@ -43,7 +46,7 @@ clean:
 
 
 delete:
-	@docker image rm ${GATEWAY_IMAGE_NAME} ${RABBIT_IMAGE_NAME} ${RESERVATIONS_IMAGE_NAME} ${PURCHASE_IMAGE_NAME} ${PAYMENT_IMAGE_NAME} ${DATA_INIT_IMAGE_NAME} --force
+	@docker image rm ${GATEWAY_IMAGE_NAME} ${RABBIT_IMAGE_NAME} ${RESERVATIONS_IMAGE_NAME} ${PURCHASE_IMAGE_NAME} ${PAYMENT_IMAGE_NAME} ${DATA_INIT_IMAGE_NAME} ${HOTEL_IMAGE_NAME} --force
 
 
 gateway:
@@ -70,3 +73,7 @@ payments:
 data-init:
 	@echo "Building image for ${DATA_INIT_CONTAINER_NAME}..."
 	@docker build -f ../src/data_initializer/Dockerfile -t ${DATA_INIT_IMAGE_NAME} ../src/data_initializer
+
+hotels:
+	@echo "Building image for ${HOTEL_CONTAINER_NAME}..."
+	@docker build -f ../src/hotel_ms/Dockerfile -t ${HOTEL_IMAGE_NAME} ../src/hotel_ms

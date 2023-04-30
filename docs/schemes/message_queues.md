@@ -8,6 +8,7 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 
 ```json
 {
+  "title": "update_reservations_available",
   "operation_type": "add|delete",
   "trip_offers_affected": [
     "1234",
@@ -22,7 +23,10 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 
 ```json
 {
-  "trip_offer_id": "1234"
+  "title": "trip_offer_hotel_room_update",
+  "trip_offer_id": "1234",
+  "operation_type": "add|delete",
+  "room_type": "small|medium|large|apartment|studio"
 }
 ```
 
@@ -30,7 +34,9 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 
 ```json
 {
+  "title": "trip_offer_transport_update",
   "trip_offer_id": "1234",
+  "operation_type": "add|delete",
   "connection_id": "PRS-WAW-TRAIN-XYZ"
 }
 ```
@@ -41,6 +47,7 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 
 ```json
 {
+  "title": "reservation_status_update",
   "trip_offer_id": "1234",
   "reservation_status": "created|canceled|expired|finalized"
 }
@@ -50,6 +57,7 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 
 ```json
 {
+  "title": "reservation_creation",
   "_id": "example_reservation_id",
   "trip_offer_id": "1234"
 }
@@ -59,6 +67,7 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 
 ```json
 {
+  "title": "reservation_creation_time",
   "_id": "example_reservation_id",
   "reservation_creation_time": "2023-04-27T17:22:10.936561"
 }
@@ -68,6 +77,7 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 
 ```json
 {
+  "title": "update_transaction_status",
   "_id": "example_reservation_id",
   "transaction_status": "finalized|canceled|expired"
 }
@@ -77,6 +87,7 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 
 ```json
 {
+  "title": "update_purchase_status",
   "_id": "example_reservation_id",
   "offers_id": "1234",
   "purchase_status": "confirmed"
@@ -89,6 +100,7 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 
 ```json
 {
+  "title": "update_payment_status",
   "_id": "example_reservation_id",
   "payment": "rejected|accepted|expired"
 }
@@ -102,11 +114,13 @@ Ta wiadomość jest wysyłana za każdym razem jak miejsce w wycieczce ulegną z
 
 ```json
 {
-  "operation": "add|delete",
+  "title": "hotel_rooms_update",
   "trip_offers_id": [
     "1234",
-    "4312"
-  ]
+    "4212"
+  ],
+  "operation_type": "add|delete",
+  "room_type": "small|medium|large|apartment|studio"
 }
 ```
 
@@ -116,11 +130,11 @@ Ta wiadomość jest wysyłana kiedy miejsca w jakiejś wycieczce są równe zero
 
 ```json
 {
-  "operation": "add|delete",
+  "title": "hotel_booking_status",
   "trip_offers_id": [
-    "1234",
-    "4312"
-  ]
+    "1235"
+  ],
+  "is_hotel_booked_up": "false|true"
 }
 ```
 
@@ -132,11 +146,13 @@ Ta wiadomość jest wysyłana za każdym razem jak miejsce w wycieczce ulegną z
 
 ```json
 {
-  "operation": "add|delete",
+  "title": "transport_update",
   "trip_offers_id": [
     "1234",
-    "4312"
-  ]
+    "4212"
+  ],
+  "operation_type": "add|delete",
+  "connection_id": "PRS-WAW-TRAIN-XYZ"
 }
 ```
 
@@ -146,10 +162,12 @@ Ta wiadomość jest wysyłana kiedy miejsca w jakiejś wycieczce są równe zero
 
 ```json
 {
-  "operation": "add|delete",
+  "title": "transport_status",
   "trip_offers_id": [
     "1234",
     "4312"
-  ]
+  ],
+  "connection_id": "PRS-WAW-TRAIN-XYZ",
+  "is_transport_booked_up": "false|true"
 }
 ```
