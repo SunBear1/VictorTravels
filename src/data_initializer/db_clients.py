@@ -8,9 +8,9 @@ from pymongo import MongoClient
 PG_HOST = os.getenv("POSTGRES_ADDRESS", "localhost")
 PG_USER = os.getenv("POSTGRES_USER", "admin")
 PG_PASSWD = os.getenv("POSTGRES_PASSWORD", "admin")
-PG_DB_TRIPS_NAME = os.getenv("PG_DB_TRIPS_NAME", "trips")
 PG_DB_USERS_NAME = os.getenv("PG_DB_USERS_NAME", "users")
 PG_DB_EVENTS_NAME = os.getenv("PG_DB_EVENTS_NAME", "events")
+PG_DB_HOTELS_NAME = os.getenv("PG_DB_HOTELS_NAME", "hotels")
 PG_PORT = os.getenv("POSTGRES_PORT", 5432)
 
 MONGO_PORT = os.getenv("MONGODB_PORT", 27017)

@@ -22,7 +22,9 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 
 ```json
 {
-  "trip_offer_id": "1234"
+  "trip_offer_id": "1234",
+  "operation_type": "add|delete",
+  "room_type": "small|medium|large|apartment|studio"
 }
 ```
 
@@ -102,7 +104,7 @@ Ta wiadomość jest wysyłana za każdym razem jak miejsce w wycieczce ulegną z
 
 ```json
 {
-  "operation": "add|delete",
+  "operation_type": "add|delete",
   "trip_offers_id": [
     "1234",
     "4312"
@@ -116,7 +118,7 @@ Ta wiadomość jest wysyłana kiedy miejsca w jakiejś wycieczce są równe zero
 
 ```json
 {
-  "operation": "add|delete",
+  "operation_type": "add|delete",
   "trip_offers_id": [
     "1234",
     "4312"
@@ -132,7 +134,7 @@ Ta wiadomość jest wysyłana za każdym razem jak miejsce w wycieczce ulegną z
 
 ```json
 {
-  "operation": "add|delete",
+  "operation_type": "add|delete",
   "trip_offers_id": [
     "1234",
     "4312"
@@ -146,7 +148,7 @@ Ta wiadomość jest wysyłana kiedy miejsca w jakiejś wycieczce są równe zero
 
 ```json
 {
-  "operation": "add|delete",
+  "operation_type": "add|delete",
   "trip_offers_id": [
     "1234",
     "4312"
