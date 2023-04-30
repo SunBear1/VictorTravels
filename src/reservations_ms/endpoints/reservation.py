@@ -39,7 +39,7 @@ async def make_reservation(trip_offer_id: str, payload: TripReservationData):
     current_time_response = requests.get(url="https://timeapi.io/api/Time/current/zone?timeZone=Europe/Warsaw")
     current_datetime = json.loads(current_time_response.text)["dateTime"][:-1]
     init_doc = {
-        "trip_id": trip_offer_id,
+        "trip_offer_id": trip_offer_id,
         "reservation_status": "temporary",
         "reservation_creation_time": current_datetime,
         "uid": "example_uid"
