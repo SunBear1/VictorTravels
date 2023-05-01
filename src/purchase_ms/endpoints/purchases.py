@@ -28,9 +28,10 @@ async def make_purchase(reservation_id: str):
     """
 
     try:
+        logger.info(f"Purchase process for reservation {reservation_id} started.")
         purchase_doc = MongoDBClient.purchases_collection.find_one({"_id": ObjectId(reservation_id)})
         if purchase_doc is None:
-            logger.info(f"There is no information about the reservation")
+            logger.info(f"There is no information about the reservation {reservation_id}")
             return Response(status_code=status.HTTP_404_NOT_FOUND,
                             content=f"Reservation with ID {reservation_id} does not exist",
                             media_type="text/plain")
