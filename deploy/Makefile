@@ -66,3 +66,4 @@ trips:
 data-init:
 	@echo "Building image for ${DATA_INIT_CONTAINER_NAME}..."
 	@docker build -f ../src/data_initializer/Dockerfile -t ${DATA_INIT_IMAGE_NAME} ../src/data_initializer
+	
