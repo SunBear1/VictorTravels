@@ -4,7 +4,6 @@ import random
 from datetime import datetime
 
 import bson.errors
-import requests
 from bson import ObjectId
 from fastapi import APIRouter, status
 from starlette.responses import JSONResponse, Response
@@ -17,7 +16,7 @@ router = APIRouter(prefix="/api/v1/payment")
 logger = logging.getLogger("payments")
 
 RESERVATION_EXPIRE_TIME = 180
-CHANCE_OF_FAILING_PAYMENT = 3
+CHANCE_OF_FAILING_PAYMENT = 4
 
 
 @router.post("/{reservation_id}",
@@ -36,14 +35,10 @@ async def make_payment(reservation_id: str):
     """
 
     try:
-        current_time_response = requests.get(url="https://timeapi.io/api/Time/current/zone?timeZone=Europe/Warsaw")
-        current_datetime = datetime.strptime(json.loads(current_time_response.text)["dateTime"][:-1],
-                                             "%Y-%m-%dT%H:%M:%S.%f")
-
+        logger.info(f"Payment process for reservation {reservation_id} started.")
         purchase_doc = MongoDBClient.payments_collection.find_one({"_id": ObjectId(reservation_id)})
-
         if purchase_doc is None or purchase_doc["purchase_status"] == "pending":
-            logger.info(f"There is no information about the reservation purchase")
+            logger.info(f"There is no information about the reservation {reservation_id} purchase")
             return Response(status_code=status.HTTP_404_NOT_FOUND,
                             content=f"Reservation with ID {reservation_id} has not been purchased",
                             media_type="text/plain")
@@ -56,10 +51,10 @@ async def make_payment(reservation_id: str):
                             media_type="text/plain")
 
         reservation_creation_time = datetime.strptime(purchase_doc["reservation_creation_time"], "%Y-%m-%dT%H:%M:%S.%f")
-        time_diff = (current_datetime - reservation_creation_time).total_seconds()
+        time_diff = (datetime.now() - reservation_creation_time).total_seconds()
 
         if time_diff > RESERVATION_EXPIRE_TIME:
-            logger.info(f"Reservation {reservation_id} have expired by {time_diff} seconds.")
+            logger.info(f"Reservation {reservation_id} have expired by {time_diff - RESERVATION_EXPIRE_TIME} seconds.")
             payments_client = RabbitMQClient()
             payments_client.send_data_to_queue(queue_name=PURCHASES_PUBLISH_QUEUE_NAME,
                                                exchange_name=PURCHASES_EXCHANGE_NAME,

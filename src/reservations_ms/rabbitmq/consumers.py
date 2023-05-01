@@ -31,10 +31,13 @@ def consume_purchase_ms_event(ch, method, properties, body):
         reservations_client.send_data_to_queue(queue_name=RESERVATIONS_PUBLISH_QUEUE_NAME,
                                                exchange_name=RESERVATIONS_EXCHANGE_NAME,
                                                payload=json.dumps({
+                                                   "title": "reservation_status_update",
                                                    "trip_offer_id": reservation_doc["trip_offer_id"],
+                                                   "reservation_id": received_msg["_id"],
                                                    "reservation_status": received_msg["transaction_status"],
                                                }, ensure_ascii=False).encode('utf-8'))
         reservations_client.close_connection()
+        logger.info(f"Reservation {received_msg['_id']} ended with status {received_msg['transaction_status']}.")
 
 
 def consume_eventhub_ms_event(ch, method, properties, body):
@@ -43,14 +46,14 @@ def consume_eventhub_ms_event(ch, method, properties, body):
     if received_msg["operation_type"] == "add":
         MongoDBClient.trips_collection.update_one(
             filter={"_id": TRIPS_DOCUMENT_ID},
-            update={"$addToSet": {"trips": {"$each": received_msg["trip_offers_affected"]}}},
+            update={"$addToSet": {"trip_offers": {"$each": received_msg["trip_offers_affected"]}}},
             upsert=True
         )
         logger.info(f"Trip offer {received_msg['trip_offers_affected']} ADDED.")
     elif received_msg["operation_type"] == "delete":
         MongoDBClient.trips_collection.update_one(
             {"_id": TRIPS_DOCUMENT_ID},
-            {"$pull": {"trips": {"$in": received_msg["trip_offers_affected"]}}}
+            {"$pull": {"trip_offers": {"$in": received_msg["trip_offers_affected"]}}}
         )
         logger.info(f"Trip offer {received_msg['trip_offers_affected']} DELETED.")
     else:
