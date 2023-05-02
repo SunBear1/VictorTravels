@@ -1,0 +1,19 @@
+[
+  {
+    "_id": "available_connections",
+    "connections": [
+      "PRS-WAW-TRAIN-XYZ",
+      "ORD-GDN-PLANE-XYZ",
+      "WAW-GDN-PLANE-XYZ"
+    ]
+  },
+  {
+    "_id": "available_trip_offers",
+    "offers": [
+      "1234",
+      "325325",
+      "43534",
+      "08453"
+    ]
+  }
+]
