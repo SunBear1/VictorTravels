@@ -9,12 +9,15 @@ VHOST = os.getenv("RABBITMQ_VHOST", "/victor_travels")
 HOST = os.getenv("RABBITMQ_ADDRESS", "localhost")
 PORT = os.getenv("RABBITMQ_PORT", 5672)
 
-PAYMENTS_CONSUME_QUEUE_NAME = "payments-for-payment-ms"
+HOTEL_CONSUME_QUEUE_NAME = "hotel-events-for-hotel-ms"
 
-PURCHASES_EXCHANGE_NAME = "payments"
-PURCHASES_PUBLISH_QUEUE_NAME = "payments-for-purchase-ms"
+TRIP_RESEARCHER_EXCHANGE_NAME = "hotel-updates"
+TRIP_RESEARCHER_PUBLISH_QUEUE_NAME = "hotel-transport-events-for-researcher-ms"
 
-logger = logging.getLogger("payments")
+EVENT_HUB_EXCHANGE_NAME = "hotel-events"
+EVENT_HUB_PUBLISH_QUEUE_NAME = "hotel-events-for-eventhub-ms"
+
+logger = logging.getLogger("hotels")
 
 
 class RabbitMQClient:

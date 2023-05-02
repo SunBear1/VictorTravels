@@ -1,0 +1,87 @@
+{
+  "_id": "1234",
+  "hotel": {
+    "hotel_id": "OSVC-4",
+    "name": "OsovaCourt",
+    "image": "URL_to_photo",
+    "description": [
+      "Example description of a hotel",
+      "I love RSWW"
+    ],
+    "diet": {
+      "AllInclusive": 1500,
+      "Breakfast": 800,
+      "TwoMeals": 1200,
+      "None": 0
+    },
+    "rooms": {
+      "small": {
+        "cost": 600,
+        "available": 2
+      },
+      "medium": {
+        "cost": 200,
+        "available": 20
+      },
+      "large": {
+        "cost": 500,
+        "available": 5
+      },
+      "apartment": {
+        "cost": 800,
+        "available": 50
+      },
+      "studio": {
+        "cost": 1800,
+        "available": 20
+      }
+    }
+  },
+  "localisation": {
+    "country": "France",
+    "region": "Paris"
+  },
+  "date": "01-06-2023:11-06-2023",
+  "from": {
+    "Warszawa": {
+      "plane": {
+        "id": "PRS-WAW-PLANE-XYZ",
+        "cost": 110,
+        "seatsLeft": 20
+      },
+      "train": {
+        "id": "PRS-WAW-TRAIN-XYZ",
+        "cost": 65,
+        "seatsLeft": 43
+      }
+    },
+    "Gdańsk": {
+      "plane": {
+        "id": "PRS-GDN-PLANE-XYZ",
+        "cost": 110,
+        "seatsLeft": 20
+      },
+      "train": {
+        "id": "PRS-GDN-TRAIN-XYZ",
+        "cost": 65,
+        "seatsLeft": 43
+      }
+    }
+  },
+  "to": {
+    "Warszawa": {
+      "train": {
+        "id": "WAW-PRS-TRAIN-XYZ",
+        "cost": 60,
+        "seatsLeft": 40
+      }
+    },
+    "Gdańsk": {
+      "plane": {
+        "id": "GDN-PRS-PLANE-XYZ",
+        "cost": 110,
+        "seatsLeft": 20
+      }
+    }
+  }
+}

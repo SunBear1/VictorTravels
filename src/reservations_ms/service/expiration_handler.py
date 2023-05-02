@@ -9,10 +9,12 @@ from rabbitmq.rabbitmq_client import RabbitMQClient, RESERVATIONS_PUBLISH_QUEUE_
 
 logger = logging.getLogger("reservations")
 
+RESERVATION_EXPIRE_TIME = 180
+
 
 async def start_measuring_reservation_time(reservation_id: str, reservation_creation_time):
     logger.info(f"Reservation created at {reservation_creation_time}. Expiration timer started.")
-    await asyncio.sleep(delay=180)
+    await asyncio.sleep(delay=RESERVATION_EXPIRE_TIME)
     reservation_doc = MongoDBClient.reservations_collection.find_one({"_id": ObjectId(reservation_id)})
     if reservation_doc["reservation_status"] == "temporary":
         logger.info(f"Reservation expired. Sending message to EventHub MS.")

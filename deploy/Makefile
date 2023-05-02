@@ -15,11 +15,17 @@ PAYMENT_CONTAINER_NAME := payment-ms
 TRIPS_IMAGE_NAME := trips-image:development
 TRIPS_CONTAINER_NAME := trips-ms
 DATA_INIT_CONTAINER_NAME := data-init
-DATA_INIT_IMAGE_NAME :=data-init:development
+DATA_INIT_IMAGE_NAME := data-init-image:development
+HOTEL_IMAGE_NAME :=  hotel-image:development
+HOTEL_CONTAINER_NAME := hotel-ms
+TRANSPORT_IMAGE_NAME :=  transport-image:development
+TRANSPORT_CONTAINER_NAME := transport-ms
 
 
-build: gateway rabbit reservations purchases payments data-init trips
-	@echo "Building images..."
+build-and-run: build run
+
+
+build: gateway rabbit reservations purchases payments data-init trips hotels transports clean
 
 
 run:
@@ -31,11 +37,23 @@ run:
 	PAYMENT_IMAGE=${PAYMENT_IMAGE_NAME} \
 	TRIPS_IMAGE=${TRIPS_IMAGE_NAME} \
 	DATA_INIT_IMAGE=${DATA_INIT_IMAGE_NAME} \
+	HOTEL_IMAGE=${HOTEL_IMAGE_NAME} \
+	TRANSPORT_IMAGE=${TRANSPORT_IMAGE_NAME} \
 	docker-compose -p "victor-travels" up
 
 
 clean:
 	@docker image rm ${GATEWAY_IMAGE_NAME} ${RABBIT_IMAGE_NAME} ${RESERVATIONS_IMAGE_NAME} ${PURCHASE_IMAGE_NAME} ${PAYMENT_IMAGE_NAME} ${TRIPS_IMAGE_NAME} ${DATA_INIT_IMAGE_NAME} --force
+	@echo "Removing stopped containers..."
+	@docker container prune -f
+	@echo "Removing old images..."
+	@if [ -n "$$(docker images -f 'dangling=true' -q)" ]; then \
+		docker rmi $$(docker images -f 'dangling=true' -q); \
+	fi
+
+
+delete:
+	@docker image rm ${GATEWAY_IMAGE_NAME} ${RABBIT_IMAGE_NAME} ${RESERVATIONS_IMAGE_NAME} ${PURCHASE_IMAGE_NAME} ${PAYMENT_IMAGE_NAME} ${DATA_INIT_IMAGE_NAME} ${HOTEL_IMAGE_NAME} ${TRANSPORT_IMAGE_NAME} --force
 
 
 gateway:
@@ -66,4 +84,11 @@ trips:
 data-init:
 	@echo "Building image for ${DATA_INIT_CONTAINER_NAME}..."
 	@docker build -f ../src/data_initializer/Dockerfile -t ${DATA_INIT_IMAGE_NAME} ../src/data_initializer
-	
+
+hotels:
+	@echo "Building image for ${HOTEL_CONTAINER_NAME}..."
+	@docker build -f ../src/hotel_ms/Dockerfile -t ${HOTEL_IMAGE_NAME} ../src/hotel_ms
+
+transports:
+	@echo "Building image for ${TRANSPORT_CONTAINER_NAME}..."
+	@docker build -f ../src/transport_ms/Dockerfile -t ${TRANSPORT_IMAGE_NAME} ../src/transport_ms

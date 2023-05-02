@@ -4,6 +4,7 @@ import logging
 
 import requests
 from fastapi import APIRouter, status
+from pydantic import BaseModel
 from starlette.responses import JSONResponse, Response
 
 from mongodb.mongodb_client import MongoDBClient, TRIPS_DOCUMENT_ID
@@ -17,14 +18,20 @@ router = APIRouter(prefix="/api/v1/reservation")
 logger = logging.getLogger("reservations")
 
 
-@router.post("/{trip_id}",
+class TripReservationData(BaseModel):
+    hotel_id: str
+    room_type: str
+    connection_id: str
+
+
+@router.post("/{trip_offer_id}",
              responses={
                  201: {"description": "Reservation successfully created"},
                  404: {"description": "Trip with provided ID does not exist"},
                  500: {"description": "Unknown error occurred"}
              },
              )
-async def make_reservation(trip_id: str):
+async def make_reservation(trip_offer_id: str, payload: TripReservationData):
     """
     Create a trip reservation
     """
@@ -32,7 +39,7 @@ async def make_reservation(trip_id: str):
     current_time_response = requests.get(url="https://timeapi.io/api/Time/current/zone?timeZone=Europe/Warsaw")
     current_datetime = json.loads(current_time_response.text)["dateTime"][:-1]
     init_doc = {
-        "trip_id": trip_id,
+        "trip_offer_id": trip_offer_id,
         "reservation_status": "temporary",
         "reservation_creation_time": current_datetime,
         "uid": "example_uid"
@@ -41,44 +48,53 @@ async def make_reservation(trip_id: str):
         trips_document = MongoDBClient.trips_collection.find_one({"_id": TRIPS_DOCUMENT_ID})
         if trips_document is None:
             logger.info(f"Trips database is empty")
-            return Response(status_code=status.HTTP_404_NOT_FOUND, content=f"Trip with ID {trip_id} does not exist",
+            return Response(status_code=status.HTTP_404_NOT_FOUND,
+                            content=f"Trip with ID {trip_offer_id} does not exist",
                             media_type="text/plain")
-        if trip_id not in trips_document["trips"]:
-            logger.info(f"From available trips {trips_document} there is no value {trip_id}")
-            return Response(status_code=status.HTTP_404_NOT_FOUND, content=f"Trip with ID {trip_id} does not exist",
+        if trip_offer_id not in trips_document["trips"]:
+            logger.info(f"From available trip offers {trips_document} there is no value {trip_offer_id}")
+            return Response(status_code=status.HTTP_404_NOT_FOUND,
+                            content=f"Trip with ID {trip_offer_id} does not exist",
                             media_type="text/plain")
 
         insert_result = MongoDBClient.reservations_collection.insert_one(document=init_doc)
+        reservation_id = str(insert_result.inserted_id)
 
         expiration_timer_task = asyncio.create_task(start_measuring_reservation_time(
-            reservation_id=str(insert_result.inserted_id),
+            reservation_id=reservation_id,
             reservation_creation_time=current_datetime))
 
         client = RabbitMQClient()
         client.send_data_to_queue(queue_name=PURCHASES_PUBLISH_QUEUE_NAME,
                                   exchange_name=PURCHASES_EXCHANGE_NAME,
                                   payload=json.dumps({
-                                      "_id": str(insert_result.inserted_id),
-                                      "trip_id": trip_id,
-                                      "reserved": True  # TODO do wywalenia?
+                                      "title": "reservation_creation",
+                                      "_id": reservation_id,
+                                      "trip_offer_id": trip_offer_id,
                                   }, ensure_ascii=False).encode('utf-8'))
 
         client.send_data_to_queue(queue_name=RESERVATIONS_PUBLISH_QUEUE_NAME,
                                   exchange_name=RESERVATIONS_EXCHANGE_NAME,
                                   payload=json.dumps({
-                                      "trip_id": trip_id,
+                                      "title": "reservation_status_update",
+                                      "trip_offer_id": trip_offer_id,
                                       "reservation_status": "created",
+                                      "hotel_id": payload.hotel_id,
+                                      "room_type": payload.room_type,
+                                      "connection_id": payload.connection_id,
                                   }, ensure_ascii=False).encode('utf-8'))
 
         client.send_data_to_queue(queue_name=PAYMENTS_PUBLISH_QUEUE_NAME, exchange_name=PAYMENTS_EXCHANGE_NAME,
                                   payload=json.dumps({
-                                      "_id": str(insert_result.inserted_id),
+                                      "title": "reservation_creation_time",
+                                      "_id": reservation_id,
                                       "reservation_creation_time": current_datetime
                                   }, ensure_ascii=False).encode('utf-8'))
         client.close_connection()
 
+        logger.info(f"Reservation with ID {reservation_id} created.")
         return JSONResponse(status_code=status.HTTP_201_CREATED,
-                            content={"reservation_id": str(insert_result.inserted_id)},
+                            content={"reservation_id": reservation_id},
                             media_type="application/json")
     except Exception as ex:
         logger.info(f"Exception in reservation ms occurred: {ex}")

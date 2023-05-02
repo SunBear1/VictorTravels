@@ -2,8 +2,8 @@ import json
 import logging
 import sys
 
-from db_clients import PostgreSQLClient, MongoDBClient, PG_DB_TRIPS_NAME, PG_DB_USERS_NAME, MONGO_DB_NAME, \
-    PG_DB_EVENTS_NAME
+from db_clients import PostgreSQLClient, MongoDBClient, PG_DB_USERS_NAME, MONGO_DB_NAME, \
+    PG_DB_EVENTS_NAME, PG_DB_HOTELS_NAME, PG_DB_TRANSPORTS_NAME
 
 logger = logging.getLogger("data-init")
 
@@ -16,8 +16,9 @@ if __name__ == "__main__":
     logger.info("Data initializer started")
 
     postgres_init_data = [(PG_DB_USERS_NAME, "postgresql_init_users.sql"),
-                          (PG_DB_TRIPS_NAME, "postgresql_init_trips.sql"),
                           (PG_DB_EVENTS_NAME, "postgresql_init_events.sql"),
+                          (PG_DB_HOTELS_NAME, "postgresql_init_hotels.sql"),
+                          (PG_DB_TRANSPORTS_NAME, "postgresql_init_transports.sql"),
                           ]
 
     pg_client = PostgreSQLClient()
