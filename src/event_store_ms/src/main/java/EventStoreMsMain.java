@@ -1,45 +1,24 @@
-import com.rabbitmq.client.*;
-import java.io.IOException;
-import java.sql.*;
+import config.Config;
+import database.DatabaseHandler;
+import messageHandlers.HotelForEventhubMQHandler;
+import messageHandlers.ReservationsForEventhubMQHandler;
+import messageHandlers.TransportForEventhubMQHandler;
+
 import java.sql.Connection;
 
 public class EventStoreMsMain {
 
     public static void main(String[] args) throws Exception{
-        Thread threadHotel = new Thread(new HotelForEventhubMQHandler());
-        Thread threadTransport = new Thread(new TransportForEventhubMQHandler());
-        Thread threadReservations = new Thread(new ReservationsForEventhubMQHandler());
+        DatabaseHandler databaseHandler = new DatabaseHandler(Config.setupDBConnection());
+        Connection conn = Config.setupDBConnection();
 
-        threadHotel.start();
-        threadTransport.start();
+        HotelForEventhubMQHandler hotelMQ = new HotelForEventhubMQHandler(databaseHandler);
+        hotelMQ.setup();
+        TransportForEventhubMQHandler transportMQ = new TransportForEventhubMQHandler(databaseHandler);
+        transportMQ.setup();
+        ReservationsForEventhubMQHandler reservationMQ = new ReservationsForEventhubMQHandler(databaseHandler, hotelMQ, transportMQ);
+        Thread threadReservations = new Thread(reservationMQ);
+        
         threadReservations.start();
-
-        /*Connection conn = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/events", "admin", "admin");
-
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery("SELECT * FROM eventslog");
-
-            while (rs.next()) {
-                System.out.println(rs.getInt("id") + " " + rs.getString("type"));
-            }
-        }
-        catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        finally {
-            try {
-                rs.close();
-                stmt.close();
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }*/
     }
 }
