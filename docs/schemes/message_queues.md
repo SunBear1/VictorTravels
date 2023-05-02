@@ -6,6 +6,9 @@
 
 trips_affected: ID konkretnej wycieczki, czyli turnusu
 
+Klucze "trip_offers_affected" oraz "connection_affected" są opcjonalne. Mogą istnieć oba naraz, tylko jeden naraz, albo
+wogule.
+
 ```json
 {
   "title": "update_reservations_available",
@@ -15,6 +18,10 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
     "325325",
     "43534",
     "08453"
+  ],
+  "connection_affected": [
+    "ORD-GDN-PLANE-XYZ",
+    "WAW-GDN-PLANE-XYZ"
   ]
 }
 ```

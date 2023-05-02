@@ -2,8 +2,8 @@ import json
 import logging
 import sys
 
-from db_clients import PostgreSQLClient, MongoDBClient, PG_DB_USERS_NAME, MONGO_DB_NAME, \
-    PG_DB_EVENTS_NAME, PG_DB_HOTELS_NAME, PG_DB_TRANSPORTS_NAME
+from db_clients import PostgreSQLClient, MongoDBClient, PG_DB_USERS_NAME, \
+    PG_DB_EVENTS_NAME, PG_DB_HOTELS_NAME, PG_DB_TRANSPORTS_NAME, MONGO_DB_TRIPS_NAME, MONGO_DB_RESERVATIONS_NAME
 
 logger = logging.getLogger("data-init")
 
@@ -28,15 +28,19 @@ if __name__ == "__main__":
                                              query=open(file=init_file, mode="r",
                                                         encoding="utf-8").read())
 
-    with open(file="mongo_init.json", mode="r", encoding="utf-8") as init_file:
-        docs = json.load(init_file)
+    with open(file="mongodb_init_trips.json", mode="r", encoding="utf-8") as init_file:
+        trips_db_docs = json.load(init_file)
+
+    with open(file="mongodb_init_reservations.json", mode="r", encoding="utf-8") as init_file:
+        reservation_db_docs = json.load(init_file)
 
     try:
-        MongoDBClient.trips_collection.insert_many(documents=docs)
+        MongoDBClient.trips_collection.insert_many(documents=trips_db_docs)
+        logger.info(f"Committed init {MONGO_DB_TRIPS_NAME} data to mongoDB")
+        MongoDBClient.reservations_collection.insert_many(documents=reservation_db_docs)
+        logger.info(f"Committed init {MONGO_DB_RESERVATIONS_NAME} data to mongoDB")
     except Exception as ex:
         logger.info(f"Error occurred when inserting data to mongodb: {ex}")
-
-    logger.info(f"Committed init {MONGO_DB_NAME} data to mongoDB")
 
     logger.info("Finished initializing data")
     sys.exit(0)
