@@ -18,8 +18,10 @@ MONGO_PORT = os.getenv("MONGODB_PORT", 27017)
 MONGO_HOST = os.getenv("MONGODB_ADDRESS", "localhost")
 MONGO_USER = os.getenv("MONGODB_USER", "admin")
 MONGO_PASSWD = os.getenv("MONGODB_PASSWORD", "admin")
-MONGO_DB_NAME = os.getenv("MONGODB_DB", "trips_db")
-MONGO_COLLECTION_NAME = os.getenv("MONGODB_COLL", "trips")
+MONGO_DB_RESERVATIONS_NAME = os.getenv("MONGODB_RESERVATIONS_DB", "reservations_db")
+MONGO_TRIPS_COLLECTION_NAME = os.getenv("MONGODB_TRIPS_COLL", "trips")
+MONGO_DB_TRIPS_NAME = os.getenv("MONGODB_TRIPS_DB", "trips_db")
+MONGO_RESERVATIONS_COLLECTION_NAME = os.getenv("MONGODB_RESERVATIONS_COLL", "trip-offers")
 
 logger = logging.getLogger("data-init")
 
@@ -27,8 +29,11 @@ logger = logging.getLogger("data-init")
 class MongoDBClient:
     client = MongoClient(f"mongodb://{MONGO_USER}:{MONGO_PASSWD}@{MONGO_HOST}:{MONGO_PORT}/?authSource=admin",
                          connectTimeoutMS=10000)
-    db = client[MONGO_DB_NAME]
-    trips_collection = db[MONGO_COLLECTION_NAME]
+    trips_db = client[MONGO_DB_TRIPS_NAME]
+    trips_collection = trips_db[MONGO_TRIPS_COLLECTION_NAME]
+
+    reservations_db = client[MONGO_DB_RESERVATIONS_NAME]
+    reservations_collection = reservations_db[MONGO_RESERVATIONS_COLLECTION_NAME]
 
 
 class PostgreSQLClient:

@@ -1,17 +1,18 @@
 import asyncio
 import json
 import logging
+from datetime import datetime
 
-import requests
 from fastapi import APIRouter, status
 from pydantic import BaseModel
 from starlette.responses import JSONResponse, Response
 
-from mongodb.mongodb_client import MongoDBClient, TRIPS_DOCUMENT_ID
+from mongodb.mongodb_client import MongoDBClient
 from rabbitmq.rabbitmq_client import RabbitMQClient, PURCHASES_EXCHANGE_NAME, \
     RESERVATIONS_EXCHANGE_NAME, RESERVATIONS_PUBLISH_QUEUE_NAME, \
     PURCHASES_PUBLISH_QUEUE_NAME, PAYMENTS_PUBLISH_QUEUE_NAME, PAYMENTS_EXCHANGE_NAME
 from service.expiration_handler import start_measuring_reservation_time
+from service.trip_offers_handler import check_if_trip_offer_exists, check_if_connection_exists
 
 router = APIRouter(prefix="/api/v1/reservation")
 
@@ -35,28 +36,25 @@ async def make_reservation(trip_offer_id: str, payload: TripReservationData):
     """
     Create a trip reservation
     """
-
-    current_time_response = requests.get(url="https://timeapi.io/api/Time/current/zone?timeZone=Europe/Warsaw")
-    current_datetime = json.loads(current_time_response.text)["dateTime"][:-1]
-    init_doc = {
-        "trip_offer_id": trip_offer_id,
-        "reservation_status": "temporary",
-        "reservation_creation_time": current_datetime,
-        "uid": "example_uid"
-    }
+    current_os_time = datetime.now()
+    current_datetime = current_os_time.strftime("%Y-%m-%dT%H:%M:%S.%f")
     try:
-        trips_document = MongoDBClient.trips_collection.find_one({"_id": TRIPS_DOCUMENT_ID})
-        if trips_document is None:
-            logger.info(f"Trips database is empty")
+        if not check_if_trip_offer_exists(trip_offer_id=trip_offer_id):
             return Response(status_code=status.HTTP_404_NOT_FOUND,
                             content=f"Trip with ID {trip_offer_id} does not exist",
                             media_type="text/plain")
-        if trip_offer_id not in trips_document["trips"]:
-            logger.info(f"From available trip offers {trips_document} there is no value {trip_offer_id}")
+        if not check_if_connection_exists(connection_id=payload.connection_id):
             return Response(status_code=status.HTTP_404_NOT_FOUND,
-                            content=f"Trip with ID {trip_offer_id} does not exist",
+                            content=f"Connection with ID {payload.connection_id} does not exist",
                             media_type="text/plain")
 
+        logger.info(f"Reservation creation process for offer {trip_offer_id} started at {current_datetime}")
+        init_doc = {
+            "trip_offer_id": trip_offer_id,
+            "reservation_status": "temporary",
+            "reservation_creation_time": current_datetime,
+            "uid": "example_uid"
+        }
         insert_result = MongoDBClient.reservations_collection.insert_one(document=init_doc)
         reservation_id = str(insert_result.inserted_id)
 
@@ -78,6 +76,7 @@ async def make_reservation(trip_offer_id: str, payload: TripReservationData):
                                   payload=json.dumps({
                                       "title": "reservation_status_update",
                                       "trip_offer_id": trip_offer_id,
+                                      "reservation_id": reservation_id,
                                       "reservation_status": "created",
                                       "hotel_id": payload.hotel_id,
                                       "room_type": payload.room_type,
