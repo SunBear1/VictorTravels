@@ -173,21 +173,21 @@
     "to": {
       "Katowice": {
         "plane": {
-          "id": "KTK-GCB-PLANE-001",
+          "id": "GCB-KTK-PLANE-001",
           "cost": 75,
           "seatsLeft": 4
         }
       },
       "Kraków": {
         "plane": {
-          "id": "KRK-GCB-PLANE-001",
+          "id": "GCB-KRK-PLANE-001",
           "cost": 90,
           "seatsLeft": 8
         }
       },
       "Gdańsk": {
         "plane": {
-          "id": "GDN-GCB-PLANE-001",
+          "id": "GCB-GDN-PLANE-001",
           "cost": 112,
           "seatsLeft": 32
         }
@@ -260,7 +260,7 @@
         "plane": {
           "id": "KRK-KGS-PLANE-001",
           "cost": 103,
-          "seatsLeft": 4
+          "seatsLeft": 15
         }
       },
       "Gdańsk": {
