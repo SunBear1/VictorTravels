@@ -1,17 +1,18 @@
 import logging
+from typing import List
 
 from sql.postgresql_client import PostgreSQLClient
 
 logger = logging.getLogger("transports")
 
 
-def get_offers_for_transport(connection_id: str):
+def get_offers_for_transport(connection_id: str) -> List:
     trip_offer_id_query = f"SELECT TripOfferID FROM Offers WHERE ConnectionID = '{connection_id}';"
 
     pg_client = PostgreSQLClient()
     offers_query = pg_client.execute_query_for_database(query=trip_offer_id_query)
 
-    return [offer[0] for offer in offers_query]
+    return list(set([offer[0] for offer in offers_query]))
 
 
 def update_left_seats_in_transport(connection_id: str, operation: str):
