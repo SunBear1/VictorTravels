@@ -77,7 +77,6 @@ services:
     image: mongo-express
     environment:
         ME_CONFIG_MONGODB_SERVER: mongodb
-        ME_CONFIG_MONGODB_SERVER: mongodb
         ME_CONFIG_MONGODB_PORT: 27017
         ME_CONFIG_MONGODB_AUTH_USERNAME: admin
         ME_CONFIG_MONGODB_AUTH_PASSWORD: admin
@@ -167,6 +166,7 @@ services:
       rabbitmq:
         condition: service_healthy
       mongodb:
+        condition: service_healthy
   hotels:
     container_name: hotel-ms
     image: ${HOTEL_IMAGE}

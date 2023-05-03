@@ -43,7 +43,6 @@ run:
 
 
 clean:
-	@docker image rm ${GATEWAY_IMAGE_NAME} ${RABBIT_IMAGE_NAME} ${RESERVATIONS_IMAGE_NAME} ${PURCHASE_IMAGE_NAME} ${PAYMENT_IMAGE_NAME} ${TRIPS_IMAGE_NAME} ${DATA_INIT_IMAGE_NAME} --force
 	@echo "Removing stopped containers..."
 	@docker container prune -f
 	@echo "Removing old images..."
