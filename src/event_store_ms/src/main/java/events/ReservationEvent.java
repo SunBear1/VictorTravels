@@ -2,18 +2,20 @@ package events;
 
 public class ReservationEvent {
     private String title;
-    private Integer trip_offer_id;
+    private String trip_offer_id;
     private String reservation_id;
     private String reservation_status;
     private String hotel_id;
     private String room_type;
     private String connection_id;
 
+    public ReservationEvent() {}
+
     public String getTitle() {
         return title;
     }
 
-    public Integer getTrip_offer_id() {
+    public String getTrip_offer_id() {
         return trip_offer_id;
     }
 

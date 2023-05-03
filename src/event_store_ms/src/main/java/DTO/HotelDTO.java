@@ -2,14 +2,12 @@ package DTO;
 
 public class HotelDTO {
     private String title;
-    private Integer trip_offer_id;
+    private String trip_offer_id;
     private String operation_type;
     private String hotel_id;
     private String room_type;
 
-    public HotelDTO() {}
-
-    public HotelDTO(String title, Integer trip_offer_id, String operation_type, String hotel_id, String room_type) {
+    public HotelDTO(String title, String trip_offer_id, String operation_type, String hotel_id, String room_type) {
         this.title = title;
         this.trip_offer_id = trip_offer_id;
         this.operation_type = operation_type;
@@ -21,7 +19,7 @@ public class HotelDTO {
         return title;
     }
 
-    public Integer getTrip_offer_id() {
+    public String getTrip_offer_id() {
         return trip_offer_id;
     }
 

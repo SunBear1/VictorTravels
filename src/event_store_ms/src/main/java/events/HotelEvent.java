@@ -1,21 +1,23 @@
-/*package events;
+package events;
 
 import java.util.List;
 
 public class HotelEvent {
-    private String operation;
-    private List<Integer> trip_offers_id;
+    private String title;
+    private List<String> trip_offers_id;
+    private Boolean is_hotel_booked_up;
 
-    public HotelEvent(String operation, List<Integer> trip_offers_id) {
-        this.operation = operation;
-        this.trip_offers_id = trip_offers_id;
+    public HotelEvent() {}
+
+    public String getTitle() {
+        return title;
     }
 
-    public String getOperation() {
-        return operation;
-    }
-
-    public List<Integer> getTrip_offers_id() {
+    public List<String> getTrip_offers_id() {
         return trip_offers_id;
     }
-}*/
+
+    public Boolean getIs_hotel_booked_up() {
+        return is_hotel_booked_up;
+    }
+}

@@ -5,34 +5,15 @@
     <value-preview-text-wrapping value="false" />
     <value-preview-pinned value="false" />
   </component>
-  <component name="DBNavigator.Project.DataExportManager">
-    <export-instructions>
-      <create-header value="true" />
-      <friendly-headers value="false" />
-      <quote-values-containing-separator value="true" />
-      <quote-all-values value="false" />
-      <value-separator value="" />
-      <file-name value="" />
-      <file-location value="" />
-      <scope value="GLOBAL" />
-      <destination value="FILE" />
-      <format value="EXCEL" />
-      <charset value="windows-1250" />
-    </export-instructions>
-  </component>
   <component name="DBNavigator.Project.DatabaseBrowserManager">
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
     <show-object-properties value="true" />
-    <loaded-nodes>
-      <connection connection-id="38328645-3fd6-49a2-a8d5-70aea1cf591d">
-        <schema name="public" object-types="table, view, sequence, function, index" />
-      </connection>
-    </loaded-nodes>
+    <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
-    <connection id="38328645-3fd6-49a2-a8d5-70aea1cf591d">
-      <console name="Connection" type="STANDARD" schema="public" session="Main"><![CDATA[select * from "public".eventslog]]></console>
+    <connection id="e8ce1e1e-2324-4f5e-bcde-ba0ba428b449">
+      <console name="Connection" type="STANDARD" schema="events" session="Main"><![CDATA[select * from "public".eventslog]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
@@ -41,43 +22,16 @@
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files />
   </component>
-  <component name="DBNavigator.Project.DatabaseSessionManager">
-    <connection id="38328645-3fd6-49a2-a8d5-70aea1cf591d" />
-  </component>
-  <component name="DBNavigator.Project.DatasetFilterManager">
-    <filter-actions connection-id="38328645-3fd6-49a2-a8d5-70aea1cf591d" dataset="public.users" active-filter-id="c10f4eb6-9885-450e-a66f-eaf5a837271e">
-      <filter id="c10f4eb6-9885-450e-a66f-eaf5a837271e" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
-        <condition column="id" operator="=" value="" active="true" />
-      </filter>
-    </filter-actions>
-  </component>
-  <component name="DBNavigator.Project.EditorStateManager">
-    <last-used-providers />
-  </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />
-  </component>
-  <component name="DBNavigator.Project.MethodExecutionManager">
-    <method-browser />
-    <execution-history>
-      <group-entries value="true" />
-      <execution-inputs />
-    </execution-history>
-    <argument-values-cache />
-  </component>
-  <component name="DBNavigator.Project.ObjectDependencyManager">
-    <last-used-dependency-type value="INCOMING" />
   </component>
   <component name="DBNavigator.Project.ObjectQuickFilterManager">
     <last-used-operator value="EQUAL" />
     <filters />
   </component>
-  <component name="DBNavigator.Project.ScriptExecutionManager" clear-outputs="true">
-    <recently-used-interfaces />
-  </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
-      <connection id="38328645-3fd6-49a2-a8d5-70aea1cf591d" active="true" signed="true">
+      <connection id="e8ce1e1e-2324-4f5e-bcde-ba0ba428b449" active="true" signed="true">
         <database>
           <name value="Connection" />
           <description value="" />
@@ -118,12 +72,12 @@
           <charset value="UTF-8" />
           <session-management value="true" />
           <ddl-file-binding value="true" />
-          <database-logging value="false" />
+          <database-logging value="true" />
           <connect-automatically value="true" />
           <restore-workspace value="true" />
-          <restore-workspace-deep value="true" />
+          <restore-workspace-deep value="false" />
           <environment-type value="default" />
-          <connectivity-timeout value="5" />
+          <connectivity-timeout value="10" />
           <idle-time-to-disconnect value="30" />
           <idle-time-to-disconnect-pool value="5" />
           <credential-expiry-time value="10" />
