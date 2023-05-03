@@ -11,7 +11,8 @@ DB_NAME = os.getenv("MONGODB_DB", "reservations_db")
 
 TRIPS_COLLECTION_NAME = "trip-offers"
 RESERVATIONS_COLLECTION_NAME = "reservations"
-TRIPS_DOCUMENT_ID = "trip-offers-list"
+TRIP_OFFERS_DOCUMENT_ID = "available_trip_offers"
+CONNECTIONS_DOCUMENT_ID = "available_connections"
 
 logger = logging.getLogger("reservations")
 
