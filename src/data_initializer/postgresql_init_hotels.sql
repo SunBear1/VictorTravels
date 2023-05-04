@@ -7,10 +7,12 @@ CREATE TABLE Offers
 );
 
 INSERT INTO Offers (TripOfferID, TripID, HotelID)
-VALUES ('1234', '1', 'OSV-XYZ'),
-       ('4212', '2', 'OSV-XYZ'),
-       ('9124', '3', 'BTV-XYZ'),
-       ('1235', '1', 'OSV-TCV');
+VALUES ('0001', '1', 'HFP-1'),
+       ('0002', '2', 'HAB-1'),
+       ('0003', '3', 'HGR-1'),
+       ('0004', '4', 'HSMKB-1'),
+       ('0005', '5', 'HHINER-1'),
+       ('0006', '5', 'HHINER-2');
 
 CREATE TABLE RoomsLeft
 (
@@ -24,7 +26,10 @@ CREATE TABLE RoomsLeft
 );
 
 INSERT INTO RoomsLeft (HotelID, SmallRoomsLeft, MediumRoomsLeft, LargeRoomsLeft, ApartmentRoomsLeft, StudioRoomsLeft)
-VALUES ('OSV-XYZ', 2, 10, 0, 15, 1),
-       ('OSV-TCV', 0, 2, 6, 3, 0),
-       ('BTV-XYZ', 5, 1, 2, 0, 2);
+VALUES ('HHINER-2', 12, 6, 10, 3, 1),
+       ('HHINER-1', 12, 6, 10, 3, 1),
+       ('HSMKB-1', 15, 5, 0, 2, 5),
+       ('HGR-1', 2, 10, 20, 0, 0),
+       ('HAB-1', 3, 9, 20, 5, 15),
+       ('HFP-1', 20, 1, 3, 0, 1);
 

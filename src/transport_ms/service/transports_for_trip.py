@@ -1,29 +1,18 @@
 import logging
+from typing import List
 
-from service.errors import UnprocessableEntityError
 from sql.postgresql_client import PostgreSQLClient
 
 logger = logging.getLogger("transports")
 
 
-def get_transport_for_offer(trip_offer_id: str) -> str:
-    connection_id_query = f"SELECT ConnectionID FROM Offers WHERE TripOfferID='{trip_offer_id}';"
-
-    pg_client = PostgreSQLClient()
-    transport_query = pg_client.execute_query_for_database(query=connection_id_query)
-
-    if not transport_query:
-        raise UnprocessableEntityError(f"Trip offer with ID {trip_offer_id} does not exist.")
-    return transport_query[0][0]
-
-
-def get_offers_for_transport(connection_id: str):
+def get_offers_for_transport(connection_id: str) -> List:
     trip_offer_id_query = f"SELECT TripOfferID FROM Offers WHERE ConnectionID = '{connection_id}';"
 
     pg_client = PostgreSQLClient()
     offers_query = pg_client.execute_query_for_database(query=trip_offer_id_query)
 
-    return [offer[0] for offer in offers_query]
+    return list(set([offer[0] for offer in offers_query]))
 
 
 def update_left_seats_in_transport(connection_id: str, operation: str):

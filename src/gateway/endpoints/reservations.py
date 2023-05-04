@@ -53,7 +53,7 @@ async def make_reservation(trip_offer_id: str, payload: TripReservationData, tok
                                 media_type="application/json")
         if response.status_code == status.HTTP_404_NOT_FOUND:
             return Response(status_code=status.HTTP_404_NOT_FOUND,
-                            content=f"Trip with ID {trip_offer_id} does not exist",
+                            content=response.content,
                             media_type="text/plain")
         if response.status_code == status.HTTP_500_INTERNAL_SERVER_ERRO:
             return Response(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content="Reservation service crashed :-)",
