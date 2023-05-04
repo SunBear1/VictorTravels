@@ -1,12 +1,12 @@
 import asyncio
 import json
 import logging
+from service.transports_for_trip import get_offers_for_transport, check_if_transport_booked_up, \
+    get_number_of_seats_left, update_left_seats_in_transport
 
 from rabbitmq.rabbitmq_client import RabbitMQClient, TRIP_RESEARCHER_EXCHANGE_NAME, TRIP_RESEARCHER_PUBLISH_QUEUE_NAME, \
     EVENT_HUB_PUBLISH_QUEUE_NAME, EVENT_HUB_EXCHANGE_NAME
 from service.errors import UnprocessableEntityError
-from service.transports_for_trip import get_offers_for_transport, check_if_transport_booked_up, \
-    get_number_of_seats_left, update_left_seats_in_transport
 
 logger = logging.getLogger("transports")
 
@@ -45,6 +45,8 @@ def consume_eventhub_ms_event(ch, method, properties, body):
                                             "connection_id": connection_id,
                                         }, ensure_ascii=False).encode('utf-8'))
 
+    was_transport_booked_up = check_if_transport_booked_up(connection_id=connection_id)
+
     update_left_seats_in_transport(connection_id=connection_id,
                                    operation=operation_type)
 
@@ -59,13 +61,15 @@ def consume_eventhub_ms_event(ch, method, properties, body):
         "is_transport_booked_up": is_transport_booked_up,
     }
 
-    transport_client.send_data_to_queue(queue_name=TRIP_RESEARCHER_PUBLISH_QUEUE_NAME,
-                                        exchange_name=TRIP_RESEARCHER_EXCHANGE_NAME,
-                                        payload=json.dumps(transport_booking_status_msg, ensure_ascii=False).encode(
-                                            'utf-8'))
+    if (was_transport_booked_up and not is_transport_booked_up) or (
+            not was_transport_booked_up and is_transport_booked_up):
+        transport_client.send_data_to_queue(queue_name=TRIP_RESEARCHER_PUBLISH_QUEUE_NAME,
+                                            exchange_name=TRIP_RESEARCHER_EXCHANGE_NAME,
+                                            payload=json.dumps(transport_booking_status_msg, ensure_ascii=False).encode(
+                                                'utf-8'))
 
-    transport_client.send_data_to_queue(queue_name=EVENT_HUB_PUBLISH_QUEUE_NAME,
-                                        exchange_name=EVENT_HUB_EXCHANGE_NAME,
-                                        payload=json.dumps(transport_booking_status_msg, ensure_ascii=False).encode(
-                                            'utf-8'))
+        transport_client.send_data_to_queue(queue_name=EVENT_HUB_PUBLISH_QUEUE_NAME,
+                                            exchange_name=EVENT_HUB_EXCHANGE_NAME,
+                                            payload=json.dumps(transport_booking_status_msg, ensure_ascii=False).encode(
+                                                'utf-8'))
     transport_client.close_connection()

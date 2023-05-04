@@ -2,12 +2,11 @@ import asyncio
 import json
 import logging
 
+from rabbitmq.rabbitmq_client import RabbitMQClient, TRIP_RESEARCHER_EXCHANGE_NAME, TRIP_RESEARCHER_PUBLISH_QUEUE_NAME, \
+    EVENT_HUB_PUBLISH_QUEUE_NAME, EVENT_HUB_EXCHANGE_NAME
 from service.errors import UnprocessableEntityError
 from service.hotels_for_trip import get_offers_for_hotel, get_hotel_for_offer, check_if_hotel_booked_up, \
     update_left_rooms_in_hotel, get_number_of_rooms_left
-
-from rabbitmq.rabbitmq_client import RabbitMQClient, TRIP_RESEARCHER_EXCHANGE_NAME, TRIP_RESEARCHER_PUBLISH_QUEUE_NAME, \
-    EVENT_HUB_PUBLISH_QUEUE_NAME, EVENT_HUB_EXCHANGE_NAME
 
 logger = logging.getLogger("hotels")
 
@@ -48,6 +47,8 @@ def consume_eventhub_ms_event(ch, method, properties, body):
                                          "room_type": received_msg["room_type"],
                                      }, ensure_ascii=False).encode('utf-8'))
 
+    was_hotel_booked_up = check_if_hotel_booked_up(hotel_id=hotel_id)
+
     update_left_rooms_in_hotel(hotel_id=hotel_id, room_type=received_msg["room_type"],
                                operation=received_msg["operation_type"])
 
@@ -61,11 +62,14 @@ def consume_eventhub_ms_event(ch, method, properties, body):
         "is_hotel_booked_up": is_hotel_booked_up,
     }
 
-    hotels_client.send_data_to_queue(queue_name=TRIP_RESEARCHER_PUBLISH_QUEUE_NAME,
-                                     exchange_name=TRIP_RESEARCHER_EXCHANGE_NAME,
-                                     payload=json.dumps(hotel_booking_status_msg, ensure_ascii=False).encode('utf-8'))
+    if (was_hotel_booked_up and not is_hotel_booked_up) or (not was_hotel_booked_up and is_hotel_booked_up):
+        hotels_client.send_data_to_queue(queue_name=TRIP_RESEARCHER_PUBLISH_QUEUE_NAME,
+                                         exchange_name=TRIP_RESEARCHER_EXCHANGE_NAME,
+                                         payload=json.dumps(hotel_booking_status_msg, ensure_ascii=False).encode(
+                                             'utf-8'))
 
-    hotels_client.send_data_to_queue(queue_name=EVENT_HUB_PUBLISH_QUEUE_NAME,
-                                     exchange_name=EVENT_HUB_EXCHANGE_NAME,
-                                     payload=json.dumps(hotel_booking_status_msg, ensure_ascii=False).encode('utf-8'))
+        hotels_client.send_data_to_queue(queue_name=EVENT_HUB_PUBLISH_QUEUE_NAME,
+                                         exchange_name=EVENT_HUB_EXCHANGE_NAME,
+                                         payload=json.dumps(hotel_booking_status_msg, ensure_ascii=False).encode(
+                                             'utf-8'))
     hotels_client.close_connection()

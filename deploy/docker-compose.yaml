@@ -199,3 +199,19 @@ services:
         condition: service_healthy
       postgresql:
         condition: service_healthy
+  event-hub:
+    container_name: eventhub-ms
+    image: ${EVENTHUB_IMAGE}
+    restart: always
+    environment:
+      RABBITMQ_ADDRESS: rabbitmq
+      POSTGRES_PORT: 5432
+      POSTGRES_ADDRESS: postgresql
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      PG_DB_EVENTHUB_NAME: events
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgresql:
+        condition: service_healthy

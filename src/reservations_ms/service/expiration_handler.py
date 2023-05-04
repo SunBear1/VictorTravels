@@ -1,15 +1,14 @@
 import asyncio
 import json
 import logging
-
 from bson import ObjectId
-
 from mongodb.mongodb_client import MongoDBClient
+
 from rabbitmq.rabbitmq_client import RabbitMQClient, RESERVATIONS_PUBLISH_QUEUE_NAME, RESERVATIONS_EXCHANGE_NAME
 
 logger = logging.getLogger("reservations")
 
-RESERVATION_EXPIRE_TIME = 180
+RESERVATION_EXPIRE_TIME = 60
 
 
 async def start_measuring_reservation_time(reservation_id: str, reservation_creation_time: str):
@@ -24,6 +23,7 @@ async def start_measuring_reservation_time(reservation_id: str, reservation_crea
         reservations_client.send_data_to_queue(queue_name=RESERVATIONS_PUBLISH_QUEUE_NAME,
                                                exchange_name=RESERVATIONS_EXCHANGE_NAME,
                                                payload=json.dumps({
+                                                   "title": "reservation_status_update",
                                                    "trip_offer_id": reservation_doc["trip_offer_id"],
                                                    "reservation_id": reservation_id,
                                                    "reservation_status": "expired",

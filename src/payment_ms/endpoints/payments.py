@@ -1,21 +1,20 @@
+import bson.errors
 import json
 import logging
 import random
-from datetime import datetime
-
-import bson.errors
 from bson import ObjectId
+from datetime import datetime
 from fastapi import APIRouter, status
+from mongodb.mongodb_client import MongoDBClient
 from starlette.responses import JSONResponse, Response
 
-from mongodb.mongodb_client import MongoDBClient
 from rabbitmq.rabbitmq_client import RabbitMQClient, PURCHASES_PUBLISH_QUEUE_NAME, PURCHASES_EXCHANGE_NAME
 
 router = APIRouter(prefix="/api/v1/payment")
 
 logger = logging.getLogger("payments")
 
-RESERVATION_EXPIRE_TIME = 180
+RESERVATION_EXPIRE_TIME = 60
 CHANCE_OF_FAILING_PAYMENT = 4
 
 
