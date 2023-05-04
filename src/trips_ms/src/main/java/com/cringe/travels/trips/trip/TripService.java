@@ -18,8 +18,7 @@ public class TripService {
     }
 
 
-    List<Trip> getbyId(int id) {
-      System.out.println(id);
+    List<Trip> getbyId(String id) {
       return repository.findByTripID(id);
   }
 }
