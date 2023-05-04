@@ -1,5 +1,7 @@
 package com.cringe.travels.trips;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,7 +21,8 @@ public class TripsApplication implements CommandLineRunner {
 	}
 
 	public void run(String... args) {
-		System.out.println("DEBUG: Trips APP Started");
+		Logger logger = LoggerFactory.getLogger(TripsApplication.class);
+        logger.info("Trips microservice has been started");
 		
 	}
 }
