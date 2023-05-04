@@ -1,10 +1,13 @@
 package com.cringe.travels.trips.trip;
 
-import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.core.mapping.Document;
+import java.util.HashMap;
 
-import com.cringe.travels.trips.hotel.Hotel;
-import com.cringe.travels.trips.localisation.Localisation;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
+import com.cringe.travels.trips.trip.entity.Hotel;
+import com.cringe.travels.trips.trip.entity.Localisation;
+import com.cringe.travels.trips.trip.entity.Transport;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,8 +16,22 @@ import lombok.Data;
 @AllArgsConstructor
 @Document("trips")
 public class Trip {
-    private ObjectId id;
-    private int tripID;
+    private String id;
+
+    @Field("trip_id")
+    private String tripID;
+
+    @Field("date_from")
+    private String dateFrom;
+
+    @Field("date_to")
+    private String dateTo;
+
     private Hotel hotel;
+
     private Localisation localisation;
+
+    private HashMap<String,Transport> from;
+
+    private HashMap<String,Transport> to;
 }

@@ -45,7 +45,8 @@
       "country": "Wyspy Kanaryjskie",
       "region": "Fuerteventura"
     },
-    "date": "01-08-2023:08-08-2023",
+    "date_from":"01-08-2023",
+    "date_to":"08-08-2023",
     "from": {
       "Łódź": {
         "plane": {
@@ -139,7 +140,8 @@
       "country": "Hiszpania",
       "region": "Costa Brava"
     },
-    "date": "05-07-2023:15-07-2023",
+    "date_from":"05-07-2023",
+    "date_to":"15-07-2023",
     "from": {
       "Katowice": {
         "plane": {
@@ -247,7 +249,8 @@
       "country": "Grecja",
       "region": "Kos"
     },
-    "date": "05-07-2023:12-07-2023",
+    "date_from":"05-07-2023",
+    "date_to":"12-07-2023",
     "from": {
       "Katowice": {
         "plane": {
@@ -369,7 +372,8 @@
       "country": "Grecja",
       "region": "Kos"
     },
-    "date": "05-07-2023:15-07-2023",
+    "date_from":"05-07-2023",
+    "date_to":"15-07-2023",
     "from": {
       "Katowice": {
         "plane": {
@@ -477,7 +481,8 @@
       "country": "Polska",
       "region": "Rzeszów"
     },
-    "date": "01-07-2023:02-07-2023",
+    "date_from":"01-07-2023",
+    "date_to":"02-07-2023",
     "from": {
       "Katowice": {
         "plane": {
@@ -625,7 +630,8 @@
       "country": "Polska",
       "region": "Rzeszów"
     },
-    "date": "07-07-2023:09-07-2023",
+    "date_from":"07-07-2023",
+    "date_to":"09-07-2023",
     "from": {
       "Katowice": {
         "plane": {

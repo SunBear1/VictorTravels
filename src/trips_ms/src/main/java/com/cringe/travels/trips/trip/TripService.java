@@ -2,6 +2,9 @@ package com.cringe.travels.trips.trip;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class TripService {
 
     private final TripRepository repository;

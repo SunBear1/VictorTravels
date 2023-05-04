@@ -1,4 +1,4 @@
-package com.cringe.travels.trips.localisation;
+package com.cringe.travels.trips.trip.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Localisation {
-    String country;
-    String region;
+    private String country;
+    private String region;
 }

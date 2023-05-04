@@ -20,10 +20,6 @@ public class TripsApplication implements CommandLineRunner {
 
 	public void run(String... args) {
 		System.out.println("DEBUG: Trips APP Started");
-		var itemList = tripRepository.findAll();
-		itemList.forEach((item) -> {
-			System.out.println(item.getHotel().getName());
-			item.getHotel().getDiet().forEach((k,v)->System.out.println(k+':'+v));
-		});
+		
 	}
 }
