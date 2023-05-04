@@ -12,7 +12,7 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: users
-      TRIPS_MS_ADDRESS: trips:8000
+      TRIP_RESEARCHER_ADDRESS: trips:8000
       RESERVATIONS_MS_ADDRESS: reservations:8001
       PURCHASE_MS_ADDRESS: purchases:8002
       PAYMENT_MS_ADDRESS: payments:8003
@@ -83,7 +83,7 @@ services:
     depends_on:
         - mongodb
     ports:
-      - "27000:27000"
+      - "8081:8081"
   rabbitmq:
     container_name: rabbitmq
     image: ${RABBIT_IMAGE}
