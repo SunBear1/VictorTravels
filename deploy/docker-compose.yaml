@@ -83,7 +83,7 @@ services:
     depends_on:
         - mongodb
     ports:
-      - "27000:8081"
+      - "27000:27000"
   rabbitmq:
     container_name: rabbitmq
     image: ${RABBIT_IMAGE}
@@ -160,7 +160,7 @@ services:
       MONGODB_ADDRESS: mongodb
       MONGODB_USER: admin
       MONGODB_PASSWORD: admin
-      MONGODB_DB: trips
+      MONGODB_DB: trips_db
       RABBITMQ_ADDRESS: rabbitmq
     depends_on:
       rabbitmq:
