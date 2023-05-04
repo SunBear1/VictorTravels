@@ -30,9 +30,10 @@ public class Config {
             String dbAddress = getEnvironmentVariable("POSTGRES_ADDRESS", "localhost");
             String dbUser = getEnvironmentVariable("POSTGRES_USER", "admin");
             String dbPassword = getEnvironmentVariable("POSTGRES_PASSWORD", "admin");
-            String dbName = getEnvironmentVariable("POSTGRES_DB", "events");
+            String dbName = getEnvironmentVariable("PG_DB_EVENTHUB_NAME", "events");
+            String dbPort = getEnvironmentVariable("POSTGRES_PORT", "5432");
 
-            conn = DriverManager.getConnection("jdbc:postgresql://" + dbAddress + ":5432/" + dbName, dbUser, dbPassword);
+            conn = DriverManager.getConnection("jdbc:postgresql://" + dbAddress + ":" + dbPort + "/" + dbName, dbUser, dbPassword);
             return conn;
         }
         catch (ClassNotFoundException | SQLException e) {
