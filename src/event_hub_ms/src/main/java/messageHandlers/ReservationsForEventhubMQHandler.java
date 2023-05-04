@@ -1,6 +1,5 @@
 package messageHandlers;
 
-import DTO.HotelDTO;
 import DTO.ReservationDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -46,8 +45,8 @@ public class ReservationsForEventhubMQHandler implements Runnable{
                 @Override
                 public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                     String message = new String(body, "UTF-8");
-                    System.out.println(" [x] Received '" + message + "'" + " from " + QUEUE_NAME_TO_CONSUME);
-                    processMessage(message);
+                    System.out.println("[MQ CONSUME] Received message from reservationMS queue " + QUEUE_NAME_TO_CONSUME + " with payload: " + message);
+                    consumeMessageFromReservations(message);
                     channel.basicAck(envelope.getDeliveryTag(), false);
                 }
             };
@@ -63,9 +62,8 @@ public class ReservationsForEventhubMQHandler implements Runnable{
         }
     }
 
-    public void processMessage(String json) {
+    public void consumeMessageFromReservations(String json) {
         try {
-            System.out.println("Message from " + QUEUE_NAME_TO_CONSUME + " to consume by reservation...");
             ObjectMapper mapper = new ObjectMapper();
             ReservationEvent reservationEvent = mapper.readValue(json, ReservationEvent.class);
             databaseHandler.saveReservationEvent(reservationEvent);
@@ -88,8 +86,6 @@ public class ReservationsForEventhubMQHandler implements Runnable{
     }
 
     public void sendMessageFromHotel(HotelEvent hotelEvent) {
-        System.out.println("Message to produce in " + ROUTING_KEY + " by reservations from hotel...");
-
         String title = hotelEvent.getTitle();
         List<String> trip_offers_affected = hotelEvent.getTrip_offers_id();
         String operation_type = (hotelEvent.getIs_hotel_booked_up() ? "delete" : "add");
@@ -102,15 +98,14 @@ public class ReservationsForEventhubMQHandler implements Runnable{
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             String json = objectMapper.writeValueAsString(reservationDTO);
             channel.basicPublish(EXCHANGE, ROUTING_KEY, null, json.getBytes());
-            System.out.println("Message " + json + " to " + ROUTING_KEY + " published!");
+            System.out.println("[MQ PUBLISH] Published hotel message to reservationMS exchange " +
+                    ROUTING_KEY + " with payload: " + json);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void sendMessageFromTransport(TransportEvent transportEvent) {
-        System.out.println("Message to produce in " + ROUTING_KEY + " by reservations from transport...");
-
         String title = transportEvent.getTitle();
         List<String> trip_offers_affected = transportEvent.getTrip_offers_id();
         String operation_type = (transportEvent.getIs_transport_booked_up() ? "delete" : "add");
@@ -120,9 +115,11 @@ public class ReservationsForEventhubMQHandler implements Runnable{
         databaseHandler.saveReservationDTO(reservationDTO);
         ObjectMapper objectMapper = new ObjectMapper();
         try {
+            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             String json = objectMapper.writeValueAsString(reservationDTO);
             channel.basicPublish(EXCHANGE, ROUTING_KEY, null, json.getBytes());
-            System.out.println("Message " + json + " to " + ROUTING_KEY + " published!");
+            System.out.println("[MQ PUBLISH] Published transport message to reservationMS exchange " +
+                    ROUTING_KEY + " with payload: " + json);
         } catch (IOException e) {
             e.printStackTrace();
         }

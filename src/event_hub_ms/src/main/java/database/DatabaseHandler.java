@@ -29,20 +29,24 @@ public class DatabaseHandler {
             String json = objectMapper.writeValueAsString(reservationEvent);
 
             String type = reservationEvent.getTitle();
-            String operation = reservationEvent.getReservation_status();
+            String operation = reservationEvent.getReservation_status().equals("created") ? "delete" : "add";
             String from = "ReservationMS";
+            String to = "EventhubMS";
             Timestamp receiveDate = new Timestamp(System.currentTimeMillis());
 
-            String sql = "INSERT INTO eventslog (Type, Operation, \"From\", ReceiveDate, Body) VALUES (?, ?, ?, ?, ?::json)";
+            String sql = "INSERT INTO eventslog (Type, Operation, \"From\", \"To\", ReceiveDate, Body) VALUES (?, ?, ?, ?, ?, ?::json)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, type);
             stmt.setString(2, operation);
             stmt.setString(3, from);
-            stmt.setTimestamp(4, receiveDate);
-            stmt.setString(5, json);
+            stmt.setString(4, to);
+            stmt.setTimestamp(5, receiveDate);
+            stmt.setString(6, json);
 
             int rowsAffected = stmt.executeUpdate();
-            System.out.println(rowsAffected + " rows inserted");
+            System.out.println("[DATABASE] " + stmt.toString());
+            System.out.println("[DATABASE] " + rowsAffected + " rows inserted");
+
             stmt.close();
 
             return true;
@@ -63,18 +67,21 @@ public class DatabaseHandler {
             String type = hotelEvent.getTitle();
             String operation = (hotelEvent.getIs_hotel_booked_up() ? "delete" : "add");
             String from = "HotelMS";
+            String to = "EventhubMS";
             Timestamp receiveDate = new Timestamp(System.currentTimeMillis());
 
-            String sql = "INSERT INTO eventslog (Type, Operation, \"From\", ReceiveDate, Body) VALUES (?, ?, ?, ?, ?::json)";
+            String sql = "INSERT INTO eventslog (Type, Operation, \"From\", \"To\", ReceiveDate, Body) VALUES (?, ?, ?, ?, ?, ?::json)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, type);
             stmt.setString(2, operation);
             stmt.setString(3, from);
-            stmt.setTimestamp(4, receiveDate);
-            stmt.setString(5, json);
+            stmt.setString(4, to);
+            stmt.setTimestamp(5, receiveDate);
+            stmt.setString(6, json);
 
             int rowsAffected = stmt.executeUpdate();
-            System.out.println(rowsAffected + " rows inserted");
+            System.out.println("[DATABASE] " + stmt.toString());
+            System.out.println("[DATABASE] " + rowsAffected + " rows inserted");
             stmt.close();
 
             return true;
@@ -95,18 +102,21 @@ public class DatabaseHandler {
             String type = transportEvent.getTitle();
             String operation = (transportEvent.getIs_transport_booked_up() ? "delete" : "add");
             String from = "TransportMS";
+            String to = "EventhubMS";
             Timestamp receiveDate = new Timestamp(System.currentTimeMillis());
 
-            String sql = "INSERT INTO eventslog (Type, Operation, \"From\", ReceiveDate, Body) VALUES (?, ?, ?, ?, ?::json)";
+            String sql = "INSERT INTO eventslog (Type, Operation, \"From\", \"To\", ReceiveDate, Body) VALUES (?, ?, ?, ?, ?, ?::json)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, type);
             stmt.setString(2, operation);
             stmt.setString(3, from);
-            stmt.setTimestamp(4, receiveDate);
-            stmt.setString(5, json);
+            stmt.setString(4, to);
+            stmt.setTimestamp(5, receiveDate);
+            stmt.setString(6, json);
 
             int rowsAffected = stmt.executeUpdate();
-            System.out.println(rowsAffected + " rows inserted");
+            System.out.println("[DATABASE] " + stmt.toString());
+            System.out.println("[DATABASE] " + rowsAffected + " rows inserted");
             stmt.close();
 
             return true;
@@ -121,23 +131,27 @@ public class DatabaseHandler {
     public boolean saveHotelDTO(HotelDTO hotelDTO) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             String json = objectMapper.writeValueAsString(hotelDTO);
 
             String type = hotelDTO.getTitle();
             String operation = hotelDTO.getOperation_type();
             String from = "EventhubMS";
+            String to = "HotelMS";
             Timestamp receiveDate = new Timestamp(System.currentTimeMillis());
 
-            String sql = "INSERT INTO eventslog (Type, Operation, \"From\", ReceiveDate, Body) VALUES (?, ?, ?, ?, ?::json)";
+            String sql = "INSERT INTO eventslog (Type, Operation, \"From\", \"To\", ReceiveDate, Body) VALUES (?, ?, ?, ?, ?, ?::json)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, type);
             stmt.setString(2, operation);
             stmt.setString(3, from);
-            stmt.setTimestamp(4, receiveDate);
-            stmt.setString(5, json);
+            stmt.setString(4, to);
+            stmt.setTimestamp(5, receiveDate);
+            stmt.setString(6, json);
 
             int rowsAffected = stmt.executeUpdate();
-            System.out.println(rowsAffected + " rows inserted");
+            System.out.println("[DATABASE] " + stmt.toString());
+            System.out.println("[DATABASE] " + rowsAffected + " rows inserted");
             stmt.close();
 
             return true;
@@ -151,23 +165,27 @@ public class DatabaseHandler {
     public boolean saveTransportDTO(TransportDTO transportDTO) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             String json = objectMapper.writeValueAsString(transportDTO);
 
             String type = transportDTO.getTitle();
             String operation = transportDTO.getOperation_type();
             String from = "EventhubMS";
+            String to = "TransportMS";
             Timestamp receiveDate = new Timestamp(System.currentTimeMillis());
 
-            String sql = "INSERT INTO eventslog (Type, Operation, \"From\", ReceiveDate, Body) VALUES (?, ?, ?, ?, ?::json)";
+            String sql = "INSERT INTO eventslog (Type, Operation, \"From\", \"To\", ReceiveDate, Body) VALUES (?, ?, ?, ?, ?, ?::json)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, type);
             stmt.setString(2, operation);
             stmt.setString(3, from);
-            stmt.setTimestamp(4, receiveDate);
-            stmt.setString(5, json);
+            stmt.setString(4, to);
+            stmt.setTimestamp(5, receiveDate);
+            stmt.setString(6, json);
 
             int rowsAffected = stmt.executeUpdate();
-            System.out.println(rowsAffected + " rows inserted");
+            System.out.println("[DATABASE] " + stmt.toString());
+            System.out.println("[DATABASE] " + rowsAffected + " rows inserted");
             stmt.close();
 
             return true;
@@ -187,18 +205,21 @@ public class DatabaseHandler {
             String type = reservationDTO.getTitle();
             String operation = reservationDTO.getOperation_type();
             String from = "EventhubMS";
+            String to = "ReservationMS";
             Timestamp receiveDate = new Timestamp(System.currentTimeMillis());
 
-            String sql = "INSERT INTO eventslog (Type, Operation, \"From\", ReceiveDate, Body) VALUES (?, ?, ?, ?, ?::json)";
+            String sql = "INSERT INTO eventslog (Type, Operation, \"From\", \"To\", ReceiveDate, Body) VALUES (?, ?, ?, ?, ?, ?::json)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, type);
             stmt.setString(2, operation);
             stmt.setString(3, from);
-            stmt.setTimestamp(4, receiveDate);
-            stmt.setString(5, json);
+            stmt.setString(4, to);
+            stmt.setTimestamp(5, receiveDate);
+            stmt.setString(6, json);
 
             int rowsAffected = stmt.executeUpdate();
-            System.out.println(rowsAffected + " rows inserted");
+            System.out.println("[DATABASE] " + stmt.toString());
+            System.out.println("[DATABASE] " + rowsAffected + " rows inserted");
             stmt.close();
 
             return true;
@@ -224,8 +245,16 @@ public class DatabaseHandler {
                 System.out.println(rs.getString("type"));
                 System.out.println(rs.getString("operation"));
                 System.out.println(rs.getString("From"));
+                System.out.println(rs.getString("To"));
                 System.out.println(rs.getTimestamp("receivedate"));
                 System.out.println(rs.getString("body"));
+
+                System.out.println("[DATABASE] " + stmt.toString());
+                System.out.println("[DATABASE] 1 row selected");
+                System.out.println("[DATABASE] id: " + rs.getInt("id") + ", type: " + rs.getString("type") + ", " +
+                        "operation: " + rs.getString("operation") + ", From: " + rs.getString("From") + ", " +
+                        "To: " + rs.getString("To") + ", receivedate: " + rs.getTimestamp("receivedate") + "," +
+                                "body: " + rs.getString("body"));
 
                 ObjectMapper objectMapper = new ObjectMapper();
                 ReservationEvent reservationEventTmp = objectMapper.readValue(rs.getString("body"), ReservationEvent.class);
