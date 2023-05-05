@@ -9,11 +9,12 @@ const TripDetail = () => {
     const isReserved = itemInCart();
     const { id } = useParams();
     //const [trip, setTrip] = useState(null);
-
-    useEffect(() => {
-
-    }, [id]);
-
+    
+    // TO DO USE EFFECT FOR TRIP FETCH
+    const handleResravation = () => {
+        addToCart(id);
+        // POST TO BACKEND
+    }; 
 
     const trip = {
         image: 'https://via.placeholder.com/400x300',
@@ -56,7 +57,7 @@ const TripDetail = () => {
                     <p>{trip.totalCost} zł</p>
                     <h3>Cena za osobę:</h3>
                     <p>{trip.pricePerPerson} zł</p>
-                    {!isReserved ? <button className="reserve-button" onClick={addToCart(id)}>Rezerwuj teraz</button> : <p>Zarezerwowany</p>}
+                    {!isReserved ? <button className="reserve-button" onClick={handleResravation}>Rezerwuj teraz</button>:<p>Zarezerwowany</p>}
                 </div>
                 <div className="details-column">
                     <h3>Opis hotelu:</h3>
