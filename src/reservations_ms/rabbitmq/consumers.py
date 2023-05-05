@@ -1,10 +1,10 @@
 import asyncio
 import json
 import logging
-from bson import ObjectId
-from mongodb.mongodb_client import MongoDBClient, TRIP_OFFERS_DOCUMENT_ID, CONNECTIONS_DOCUMENT_ID
-from service.trip_offers_handler import update_list_in_database
 
+from bson import ObjectId
+
+from mongodb.mongodb_client import MongoDBClient
 from rabbitmq.rabbitmq_client import RabbitMQClient, RESERVATIONS_PUBLISH_QUEUE_NAME, RESERVATIONS_EXCHANGE_NAME
 
 logger = logging.getLogger("reservations")
@@ -42,13 +42,4 @@ def consume_purchase_ms_event(ch, method, properties, body):
 
 def consume_eventhub_ms_event(ch, method, properties, body):
     received_msg = json.loads(body.decode('utf-8'))
-    logger.info(msg=f"Received a message from EventHub MS: {received_msg}")
-
-    if "trip_offers_affected" in received_msg and received_msg["trip_offers_affected"]:
-        update_list_in_database(doc_id=TRIP_OFFERS_DOCUMENT_ID, key_in_doc="offers",
-                                operation_type=received_msg["operation_type"],
-                                received_values=received_msg["trip_offers_affected"])
-    if "connection_affected" in received_msg and received_msg["connection_affected"]:
-        update_list_in_database(doc_id=CONNECTIONS_DOCUMENT_ID, key_in_doc="connections",
-                                operation_type=received_msg["operation_type"],
-                                received_values=received_msg["connection_affected"])
+    logger.info(msg=f"Received a message from EventHub MS: {received_msg}. Processing message not yet implemented.")
