@@ -4,6 +4,9 @@ import MyNavigation from './MyNavigation';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 import TripList from './TripList';
+import TripDetail from './TripDetail';
+import PrivateRoute from './PrivateRoute';
+import Cart from './Cart';
 
 const App = () => {
   return (
@@ -14,7 +17,12 @@ const App = () => {
             <Route path="search" element={<SearchComp/>} />
             <Route path="trips" element={<TripList/>}/>
             <Route path="login" element={<LoginForm/>}/>
+            <Route path="trips/trip/:id" element={<TripDetail/>} />
             <Route path="register" element={<RegisterForm/>}/>
+            
+            <Route exact path='/cart' element={<PrivateRoute/>}>
+              <Route exact path='/cart' element={<Cart/>}/>
+            </Route>
           </Routes>
     </div>
   );

@@ -70,6 +70,10 @@ function SearchComp() {
     </label>
   ));
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+  }
+
   return (
     <div className="Search">
 
@@ -102,6 +106,7 @@ function SearchComp() {
         ))}
       </ul>
       </div>
+      <button onClick={handleSubmit}>Szukaj</button>
     </div>
   );
 }
