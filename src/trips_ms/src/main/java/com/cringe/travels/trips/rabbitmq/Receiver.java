@@ -25,6 +25,8 @@ public class Receiver {
 
         if (messageTitle.equals(MsgTypes.HOTEL_ROOMS_UPDATE.label)){
           this.service.updateHotelsRooms(jsonObject);
+        }else if(messageTitle.equals(MsgTypes.HOTEL_BOOKINGS_STATUS.label)){
+          this.service.updateTripStatus(jsonObject);
         }
       }
 }

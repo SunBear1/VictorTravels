@@ -21,6 +21,9 @@ public class Trip {
     @Field("trip_id")
     private String tripID;
 
+    @Field("is_booked_up")
+    private boolean bookedUp;
+
     @Field("date_from")
     private String dateFrom;
 

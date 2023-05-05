@@ -47,6 +47,22 @@ public class TripService {
       } 
     }
 
+    public void updateTripStatus(JSONObject jsonObject){
+
+      JSONArray listIds = jsonObject.getJSONArray("trip_offers_id");
+      boolean isHotelBookedUp =  jsonObject.getBoolean("is_hotel_booked_up");
+
+      for (int i=0; i < listIds.length(); i++) {
+        String id = listIds.getString(i);
+        Optional<Trip> tripOpt = repository.findById(id);
+        if (tripOpt.isPresent()){
+          Trip trip = tripOpt.get();
+          trip.setBookedUp(isHotelBookedUp);
+          repository.save(trip);
+        }
+      } 
+    }
+
     Trip getbyId(String id) {
       return repository.findByTripID(id);
   }
