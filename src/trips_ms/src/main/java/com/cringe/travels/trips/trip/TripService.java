@@ -28,8 +28,10 @@ public class TripService {
 
       for (int i=0; i < listIds.length(); i++) {
         String id = listIds.getString(i);
-        Trip trip = repository.findByTripID(id);
-        int freeSeats = trip.getHotel().getRooms().get(roomType).getAvailable();
+        Optional<Trip> tripOpt = repository.findById(id);
+        if (tripOpt.isPresent()){
+          Trip trip = tripOpt.get();
+          int freeSeats = trip.getHotel().getRooms().get(roomType).getAvailable();
         if (operationType.equals("add")){
           freeSeats++;
         }else{
@@ -37,6 +39,7 @@ public class TripService {
         }
         trip.getHotel().getRooms().get(roomType).setAvailable(freeSeats);
         repository.save(trip);
+        }
       } 
     }
 
