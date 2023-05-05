@@ -8,7 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-import com.cringe.travels.trips.rabbitmq.HotelReceiver;
+import com.cringe.travels.trips.rabbitmq.Receiver;
 import com.cringe.travels.trips.trip.TripRepository;
 
 
@@ -36,7 +36,7 @@ public class TripsApplication implements CommandLineRunner {
 	}
   
 	@Bean
-	MessageListenerAdapter listenerAdapter(HotelReceiver receiver) {
+	MessageListenerAdapter listenerAdapter(Receiver receiver) {
 	  return new MessageListenerAdapter(receiver, "receiveMessage");
 	}
   

@@ -9,6 +9,6 @@ public interface TripRepository extends MongoRepository<Trip, String>  {
     List<Trip> findAll();
 
     @Query("{ 'trip_id' : ?0 }")
-    List<Trip> findByTripID(String tripID);
+    Trip findByTripID(String tripID);
 
 }

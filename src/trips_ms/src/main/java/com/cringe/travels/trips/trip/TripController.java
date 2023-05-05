@@ -31,7 +31,7 @@ public class TripController {
 
     @GetMapping("/{id}")
     @ResponseBody
-    List<Trip> getbyId(@PathVariable String id) {
+    Trip getbyId(@PathVariable String id) {
         logger.info("GET REQUEST api/v1/trips/"+id);
         return service.getbyId(id);
   }
