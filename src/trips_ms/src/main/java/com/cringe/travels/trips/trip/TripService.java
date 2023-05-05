@@ -20,11 +20,11 @@ public class TripService {
         this.repository = repository;
     }
 
-    List<Trip> getAll() {
+    public List<Trip> getAll() {
         return repository.findAll();
     }
 
-    List<Trip> getAllActive() {
+    public List<Trip> getAllActive() {
         return repository.findAllActiveTrips();
     }
 
@@ -40,6 +40,7 @@ public class TripService {
             if (tripOpt.isPresent()) {
                 Trip trip = tripOpt.get();
                 int freeSeats = trip.getHotel().getRooms().get(roomType).getAvailable();
+                logger.info("BEFORE: TRIP: " + trip.getId() + "\n Room type:" + roomType + "\n seats left:" + freeSeats);
                 if (operationType.equals("add")) {
                     freeSeats++;
                 } else {
@@ -47,7 +48,9 @@ public class TripService {
                 }
                 trip.getHotel().getRooms().get(roomType).setAvailable(freeSeats);
                 repository.save(trip);
-                logger.info("UPDATED HOTEL ROOMS IN TRIP: " + trip.getId());
+                logger.info("NOW: TRIP: " + trip.getId() + "\n Room type:" + roomType + "\n seats left:" + freeSeats);
+            } else {
+                logger.info("NO TRIP IN DB WITH ID:" + id);
             }
         }
     }
@@ -64,8 +67,10 @@ public class TripService {
                 Trip trip = tripOpt.get();
                 trip.setBookedUp(isHotelBookedUp);
                 repository.save(trip);
-                logger.info("UPDATED TRIP STATUS IN TRIP: " + trip.getId());
+                logger.info("UPDATED TRIP STATUS IN TRIP: " + trip.getId() + "\n bookedUp:" + isHotelBookedUp);
 
+            } else {
+                logger.info("NO TRIP IN DB WITH ID:" + id);
             }
         }
     }
@@ -84,9 +89,10 @@ public class TripService {
             if (tripOpt.isPresent()) {
                 Trip trip = tripOpt.get();
                 trip.getFrom().forEach((key, transport) -> {
-                    try {
+                    if (transport.getPlane() != null) {
                         if (transport.getPlane().getId().equals(connectionId)) {
                             int seatsLeft = transport.getPlane().getSeatsLeft();
+                            logger.info("BEFORE: TRIP: " + trip.getId() + "\n Connection ID:" + connectionId + "\n seats left:" + seatsLeft);
                             if (operationType.equals("add")) {
                                 seatsLeft = seatsLeft + headCount;
                             } else {
@@ -94,15 +100,14 @@ public class TripService {
                             }
                             transport.getPlane().setSeatsLeft(seatsLeft);
                             repository.save(trip);
-                            logger.info("UPDATED TRANSPORT IN TRIP: " + trip.getId());
-
+                            logger.info("NOW: TRIP: " + trip.getId() + "\n Connection ID:" + connectionId + "\n seats left:" + seatsLeft);
                         }
-                    } catch (Exception e) {
                     }
 
-                    try {
+                    if (transport.getTrain() != null) {
                         if (transport.getTrain().getId().equals(connectionId)) {
                             int seatsLeft = transport.getTrain().getSeatsLeft();
+                            logger.info("BEFORE: TRIP: " + trip.getId() + "\n Connection ID:" + connectionId + "\n seats left:" + seatsLeft);
                             if (operationType.equals("add")) {
                                 seatsLeft = seatsLeft + headCount;
                             } else {
@@ -110,13 +115,12 @@ public class TripService {
                             }
                             transport.getTrain().setSeatsLeft(seatsLeft);
                             repository.save(trip);
-                            logger.info("UPDATED TRANSPORT IN TRIP: " + trip.getId());
+                            logger.info("NOW: TRIP: " + trip.getId() + "\n Connection ID:" + connectionId + "\n seats left:" + seatsLeft);
                         }
-                    } catch (Exception e) {
                     }
-
-
                 });
+            } else {
+                logger.info("NO TRIP IN DB WITH ID:" + id);
             }
         }
     }
@@ -134,30 +138,30 @@ public class TripService {
             if (tripOpt.isPresent()) {
                 Trip trip = tripOpt.get();
                 trip.getFrom().forEach((key, transport) -> {
-                    try {
+                    if (transport.getPlane() != null) {
                         if (transport.getPlane().getId().equals(connectionId)) {
                             transport.getPlane().setTransportBookedUp(transportBookedUp);
                             repository.save(trip);
-                            logger.info("UPDATED TRANSPORT STATUS IN TRIP: " + trip.getId());
+                            logger.info("UPDATED TRANSPORT STATUS IN TRIP: " + trip.getId() + "\n connection id: " + connectionId + "\n bookedUp:" + transportBookedUp);
                         }
-                    } catch (Exception e) {
                     }
 
-                    try {
+                    if (transport.getTrain() != null) {
                         if (transport.getTrain().getId().equals(connectionId)) {
                             transport.getTrain().setTransportBookedUp(transportBookedUp);
                             repository.save(trip);
                             logger.info("UPDATED TRANSPORT STATUS IN TRIP: " + trip.getId());
                         }
-                    } catch (Exception e) {
                     }
 
                 });
+            } else {
+                logger.info("NO TRIP IN DB WITH ID:" + id);
             }
         }
     }
 
-    Trip getbyId(String id) {
+    public Trip getbyId(String id) {
         return repository.findByTripID(id);
     }
 }
