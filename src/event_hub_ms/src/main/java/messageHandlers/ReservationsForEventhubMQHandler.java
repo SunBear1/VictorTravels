@@ -92,7 +92,7 @@ public class ReservationsForEventhubMQHandler implements Runnable{
         List<String> trip_offers_affected = hotelEvent.getTrip_offers_id();
         String operation_type = (hotelEvent.getIs_hotel_booked_up() ? "delete" : "add");
 
-        ReservationDTO reservationDTO = new ReservationDTO(title, operation_type, trip_offers_affected, null, null);
+        ReservationDTO reservationDTO = new ReservationDTO(title, operation_type, trip_offers_affected, null);
         databaseHandler.saveReservationDTO(reservationDTO);
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -110,10 +110,9 @@ public class ReservationsForEventhubMQHandler implements Runnable{
         String title = transportEvent.getTitle();
         List<String> trip_offers_affected = transportEvent.getTrip_offers_id();
         String operation_type = (transportEvent.getIs_transport_booked_up() ? "delete" : "add");
-        String connection_id_to = transportEvent.getConnection_id_to();
-        String connection_id_from = transportEvent.getConnection_id_from();
+        String connection_id = transportEvent.getConnection_id();
 
-        ReservationDTO reservationDTO = new ReservationDTO(title, operation_type, trip_offers_affected, connection_id_to, connection_id_from);
+        ReservationDTO reservationDTO = new ReservationDTO(title, operation_type, trip_offers_affected, connection_id);
         databaseHandler.saveReservationDTO(reservationDTO);
         ObjectMapper objectMapper = new ObjectMapper();
         try {
