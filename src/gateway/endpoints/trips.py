@@ -1,13 +1,12 @@
 import json
 import logging
-from datetime import date
-from typing import Optional, List
-
 import requests
 from common.authentication import oauth2_scheme, verify_jwt_token
 from common.constants import TRIP_RESEARCHER_SERVICE_ADDRESS
+from datetime import date
 from fastapi import APIRouter, Response, Depends, status, Query
 from starlette.responses import JSONResponse
+from typing import Optional, List
 from users.service import verify_user_identify
 
 router = APIRouter(prefix="/api/v1/trips")
@@ -107,7 +106,7 @@ async def get_trips(
         if response.status_code == status.HTTP_400_BAD_REQUEST:
             return Response(status_code=status.HTTP_400_BAD_REQUEST, content="Query for tour researcher is invalid",
                             media_type="text/plain")
-        if response.status_code == status.HTTP_500_INTERNAL_SERVER_ERRO:
+        if response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR:
             return Response(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content="Tour researcher crashed :-)",
                             media_type="text/plain")
 

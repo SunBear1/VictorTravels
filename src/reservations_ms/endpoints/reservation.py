@@ -2,7 +2,6 @@ import asyncio
 import json
 import logging
 from datetime import datetime
-
 from fastapi import APIRouter, status
 from pydantic import BaseModel
 from starlette.responses import JSONResponse, Response
@@ -23,6 +22,8 @@ class TripReservationData(BaseModel):
     hotel_id: str
     room_type: str
     connection_id: str
+    head_count: int
+    price: float
 
 
 @router.post("/{trip_offer_id}",
@@ -53,7 +54,8 @@ async def make_reservation(trip_offer_id: str, payload: TripReservationData):
             "trip_offer_id": trip_offer_id,
             "reservation_status": "temporary",
             "reservation_creation_time": current_datetime,
-            "uid": "example_uid"
+            "uid": "example_uid",
+            "head_count": payload.head_count
         }
         insert_result = MongoDBClient.reservations_collection.insert_one(document=init_doc)
         reservation_id = str(insert_result.inserted_id)
@@ -69,6 +71,7 @@ async def make_reservation(trip_offer_id: str, payload: TripReservationData):
                                       "title": "reservation_creation",
                                       "_id": reservation_id,
                                       "trip_offer_id": trip_offer_id,
+                                      "price": payload.price
                                   }, ensure_ascii=False).encode('utf-8'))
 
         client.send_data_to_queue(queue_name=RESERVATIONS_PUBLISH_QUEUE_NAME,
@@ -81,13 +84,15 @@ async def make_reservation(trip_offer_id: str, payload: TripReservationData):
                                       "hotel_id": payload.hotel_id,
                                       "room_type": payload.room_type,
                                       "connection_id": payload.connection_id,
+                                      "head_count": payload.head_count
                                   }, ensure_ascii=False).encode('utf-8'))
 
         client.send_data_to_queue(queue_name=PAYMENTS_PUBLISH_QUEUE_NAME, exchange_name=PAYMENTS_EXCHANGE_NAME,
                                   payload=json.dumps({
                                       "title": "reservation_creation_time",
                                       "_id": reservation_id,
-                                      "reservation_creation_time": current_datetime
+                                      "reservation_creation_time": current_datetime,
+                                      "price": payload.price
                                   }, ensure_ascii=False).encode('utf-8'))
         client.close_connection()
 

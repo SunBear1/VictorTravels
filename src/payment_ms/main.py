@@ -1,11 +1,10 @@
 import logging
 import threading
-
 import uvicorn
 from fastapi import FastAPI, APIRouter
 
 from endpoints.payments import router as payment_router
-from rabbitmq.consumers import start_consuming, consume_purchase_ms_event
+from rabbitmq.consumers import start_consuming, consume_reservations_ms_event
 from rabbitmq.rabbitmq_client import PAYMENTS_CONSUME_QUEUE_NAME
 
 app = FastAPI()
@@ -26,7 +25,7 @@ logger.addHandler(handler)
 @app.on_event("startup")
 async def startup_event():
     payments_consumer = threading.Thread(target=start_consuming,
-                                         args=(PAYMENTS_CONSUME_QUEUE_NAME, consume_purchase_ms_event))
+                                         args=(PAYMENTS_CONSUME_QUEUE_NAME, consume_reservations_ms_event))
     payments_consumer.start()
 
 

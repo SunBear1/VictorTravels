@@ -75,6 +75,7 @@ public class ReservationsForEventhubMQHandler implements Runnable{
                     reservationEvent.setHotel_id(tmp.getHotel_id());
                     reservationEvent.setRoom_type(tmp.getRoom_type());
                     reservationEvent.setConnection_id(tmp.getConnection_id());
+                    reservationEvent.setHead_count(tmp.getHead_count());
                 }
                 hotelMQ.sendMessage(reservationEvent);
                 transportMQ.sendMessage(reservationEvent);
