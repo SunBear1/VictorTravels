@@ -8,7 +8,8 @@ public class TransportEvent {
     private String connection_id;
     private Boolean is_transport_booked_up;
 
-    public TransportEvent() {}
+    public TransportEvent() {
+    }
 
     public String getTitle() {
         return title;

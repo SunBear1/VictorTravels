@@ -6,13 +6,13 @@ public class ReservationDTO {
     private String title;
     private String operation_type;
     private List<String> trip_offers_affected;
-    private List<String> connection_affected;
+    private String connection_id;
 
-    public ReservationDTO(String title, String operation_type, List<String> trip_offers_affected, List<String> connection_affected){
+    public ReservationDTO(String title, String operation_type, List<String> trip_offers_affected, String connection_id) {
         this.title = title;
         this.operation_type = operation_type;
         this.trip_offers_affected = trip_offers_affected;
-        this.connection_affected = connection_affected;
+        this.connection_id = connection_id;
     }
 
     public String getTitle() {
@@ -27,7 +27,7 @@ public class ReservationDTO {
         return trip_offers_affected;
     }
 
-    public List<String> getConnection_affected() {
-        return connection_affected;
+    public String getConnection_id() {
+        return connection_id;
     }
 }

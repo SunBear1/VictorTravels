@@ -7,10 +7,12 @@ public class ReservationEvent {
     private String reservation_status;
     private String hotel_id;
     private String room_type;
-    private String connection_id;
+    private String connection_id_to;
+    private String connection_id_from;
     private int head_count;
 
-    public ReservationEvent() {}
+    public ReservationEvent() {
+    }
 
     public String getTitle() {
         return title;
@@ -36,11 +38,15 @@ public class ReservationEvent {
         return room_type;
     }
 
-    public String getConnection_id() {
-        return connection_id;
+    public String getConnection_id_to() {
+        return connection_id_to;
     }
 
-    public int getHead_count(){
+    public String getConnection_id_from() {
+        return connection_id_from;
+    }
+
+    public int getHead_count() {
         return head_count;
     }
 
@@ -52,11 +58,15 @@ public class ReservationEvent {
         this.room_type = room_type;
     }
 
-    public void setConnection_id(String connection_id) {
-        this.connection_id = connection_id;
+    public void setConnection_id_to(String connection_id_to) {
+        this.connection_id_to = connection_id_to;
     }
 
-     public void setHead_count(int head_count) {
+    public void setConnection_id_from(String connection_id_from) {
+        this.connection_id_from = connection_id_from;
+    }
+
+    public void setHead_count(int head_count) {
         this.head_count = head_count;
     }
 }

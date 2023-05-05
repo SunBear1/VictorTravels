@@ -17,7 +17,8 @@ logger = logging.getLogger("gateway")
 class TripReservationData(BaseModel):
     hotel_id: str
     room_type: str
-    connection_id: str
+    connection_id_to: str
+    connection_id_from: str
     head_count: int
     price: float
 
@@ -43,7 +44,8 @@ async def make_reservation(trip_offer_id: str, payload: TripReservationData, tok
         request_body = {
             "hotel_id": payload.hotel_id,
             "room_type": payload.room_type,
-            "connection_id": payload.connection_id,
+            "connection_id_to": payload.connection_id_to,
+            "connection_id_from": payload.connection_id_from,
             "head_count": payload.head_count,
             "price": payload.price
         }
