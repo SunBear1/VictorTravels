@@ -1,11 +1,20 @@
 import React from 'react';
 import { useContext, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { UserContext } from './UserProvider';
 import "./TripDetail.css"
 
 const TripDetail = () => {
-    const { itemInCart } = useContext(UserContext);
+    const { itemInCart, addToCart } = useContext(UserContext);
     const isReserved = itemInCart();
+    const { id } = useParams();
+    //const [trip, setTrip] = useState(null);
+
+    useEffect(() => {
+
+    }, [id]);
+
+
     const trip = {
         image: 'https://via.placeholder.com/400x300',
         name: 'Hotel A',
@@ -47,7 +56,7 @@ const TripDetail = () => {
                     <p>{trip.totalCost} zł</p>
                     <h3>Cena za osobę:</h3>
                     <p>{trip.pricePerPerson} zł</p>
-                    {!isReserved ? <button className="reserve-button">Rezerwuj teraz</button>:<p>Zarezerwowany</p>}
+                    {!isReserved ? <button className="reserve-button" onClick={addToCart(id)}>Rezerwuj teraz</button> : <p>Zarezerwowany</p>}
                 </div>
                 <div className="details-column">
                     <h3>Opis hotelu:</h3>

@@ -7,6 +7,7 @@ import TripList from './TripList';
 import TripDetail from './TripDetail';
 import PrivateRoute from './PrivateRoute';
 import Cart from './Cart';
+import Buy from './Buy';
 
 const App = () => {
   return (
@@ -22,6 +23,10 @@ const App = () => {
             
             <Route exact path='/cart' element={<PrivateRoute/>}>
               <Route exact path='/cart' element={<Cart/>}/>
+            </Route>
+
+            <Route exact path='/:id/buy' element={<PrivateRoute/>}>
+              <Route exact path='/:id/buy' element={<Buy/>}/>
             </Route>
           </Routes>
     </div>
