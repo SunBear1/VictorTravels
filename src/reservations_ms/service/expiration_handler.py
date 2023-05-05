@@ -1,7 +1,6 @@
 import asyncio
 import json
 import logging
-
 from bson import ObjectId
 
 from mongodb.mongodb_client import MongoDBClient
@@ -18,7 +17,7 @@ async def start_measuring_reservation_time(
         reservation_creation_time: str,
         hotel_id: str,
         room_type: str,
-        connection_id: str,
+        connections_id: tuple,
         head_count: int
 ):
     logger.info(f"Reservation {reservation_id} created at {reservation_creation_time}. Expiration timer started.")
@@ -30,7 +29,8 @@ async def start_measuring_reservation_time(
             "$set": {"reservation_status": "expired"}})
 
         update_rooms_available(hotel_id=hotel_id, room_type=room_type, value=1)
-        update_seats_available(connection_id=connection_id, value=head_count)
+        update_seats_available(connection_id=connections_id[0], value=head_count)
+        update_seats_available(connection_id=connections_id[1], value=head_count)
 
         reservations_client = RabbitMQClient()
         reservations_client.send_data_to_queue(queue_name=RESERVATIONS_PUBLISH_QUEUE_NAME,

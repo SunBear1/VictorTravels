@@ -2,7 +2,6 @@ import asyncio
 import json
 import logging
 from datetime import datetime
-
 from fastapi import APIRouter, status
 from pydantic import BaseModel
 from starlette.responses import JSONResponse, Response
@@ -23,7 +22,8 @@ logger = logging.getLogger("reservations")
 class TripReservationData(BaseModel):
     hotel_id: str
     room_type: str
-    connection_id: str
+    connection_id_to: str
+    connection_id_from: str
     head_count: int
     price: float
 
@@ -46,17 +46,25 @@ async def make_reservation(trip_offer_id: str, payload: TripReservationData):
             return Response(status_code=status.HTTP_404_NOT_FOUND,
                             content=f"Hotel with ID {payload.hotel_id} does not exist",
                             media_type="text/plain")
-        if not check_if_connection_exists(connection_id=payload.connection_id):
+        if not check_if_connection_exists(connection_id=payload.connection_id_to):
             return Response(status_code=status.HTTP_404_NOT_FOUND,
-                            content=f"Connection with ID {payload.connection_id} does not exist",
+                            content=f"Connection with ID {payload.connection_id_to} does not exist",
+                            media_type="text/plain")
+        if not check_if_connection_exists(connection_id=payload.connection_id_from):
+            return Response(status_code=status.HTTP_404_NOT_FOUND,
+                            content=f"Connection with ID {payload.connection_id_from} does not exist",
                             media_type="text/plain")
         if not check_if_rooms_available(hotel_id=payload.hotel_id, room_type=payload.room_type, rooms=1):
             return Response(status_code=status.HTTP_400_BAD_REQUEST,
                             content=f"Hotel with ID {payload.hotel_id} has not enough {payload.room_type} rooms left",
                             media_type="text/plain")
-        if not check_if_connection_available(connection_id=payload.connection_id, seats=payload.head_count):
+        if not check_if_connection_available(connection_id=payload.connection_id_to, seats=payload.head_count):
             return Response(status_code=status.HTTP_400_BAD_REQUEST,
-                            content=f"Connection with ID {payload.connection_id} has not enough seats left",
+                            content=f"Connection with ID {payload.connection_id_to} has not enough seats left",
+                            media_type="text/plain")
+        if not check_if_connection_available(connection_id=payload.connection_id_from, seats=payload.head_count):
+            return Response(status_code=status.HTTP_400_BAD_REQUEST,
+                            content=f"Connection with ID {payload.connection_id_from} has not enough seats left",
                             media_type="text/plain")
 
         logger.info(f"Reservation creation process for offer {trip_offer_id} started at {current_datetime}")
@@ -74,14 +82,15 @@ async def make_reservation(trip_offer_id: str, payload: TripReservationData):
         update_rooms_available(hotel_id=payload.hotel_id, room_type=payload.room_type, value=number_of_rooms_to_update)
 
         number_of_seats_to_update = -payload.head_count
-        update_seats_available(connection_id=payload.connection_id, value=number_of_seats_to_update)
+        update_seats_available(connection_id=payload.connection_id_to, value=number_of_seats_to_update)
+        update_seats_available(connection_id=payload.connection_id_from, value=number_of_seats_to_update)
 
         expiration_timer_task = asyncio.create_task(start_measuring_reservation_time(
             reservation_id=reservation_id,
             reservation_creation_time=current_datetime,
             hotel_id=payload.hotel_id,
             room_type=payload.room_type,
-            connection_id=payload.connection_id,
+            connections_id=(payload.connection_id_to, payload.connection_id_from),
             head_count=payload.head_count
         ))
 
@@ -104,7 +113,8 @@ async def make_reservation(trip_offer_id: str, payload: TripReservationData):
                                       "reservation_status": "created",
                                       "hotel_id": payload.hotel_id,
                                       "room_type": payload.room_type,
-                                      "connection_id": payload.connection_id,
+                                      "connection_id_to": payload.connection_id_to,
+                                      "connection_id_from": payload.connection_id_from,
                                       "head_count": payload.head_count
                                   }, ensure_ascii=False).encode('utf-8'))
 
