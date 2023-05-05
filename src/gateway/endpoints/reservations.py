@@ -26,6 +26,7 @@ class TripReservationData(BaseModel):
              responses={
                  201: {"description": "Reservation successfully created"},
                  403: {"description": "User does not have permission to use this service"},
+                 400: {"description": "Trip with provided ID does not have enough places left"},
                  404: {"description": "Trip with provided ID does not exist"},
                  422: {"description": "Unknown error occurred"}
              },
@@ -55,8 +56,8 @@ async def make_reservation(trip_offer_id: str, payload: TripReservationData, tok
             return JSONResponse(status_code=status.HTTP_201_CREATED,
                                 content=json.loads(response.content.decode("utf-8")),
                                 media_type="application/json")
-        if response.status_code == status.HTTP_404_NOT_FOUND:
-            return Response(status_code=status.HTTP_404_NOT_FOUND,
+        if response.status_code == status.HTTP_404_NOT_FOUND or status.HTTP_400_BAD_REQUEST:
+            return Response(status_code=response.status_code,
                             content=response.content,
                             media_type="text/plain")
         if response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR:
