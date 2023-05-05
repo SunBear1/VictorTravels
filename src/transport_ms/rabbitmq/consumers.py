@@ -58,20 +58,21 @@ def consume_eventhub_ms_event(ch, method, properties, body):
 
     transport_booking_status_msg = {
         "title": "transport_booking_status",
-        "trip_offers_id": offers,
         "connection_id": connection_id,
+        "trip_offers_id": [],
         "is_transport_booked_up": is_transport_booked_up,
     }
 
     if (was_transport_booked_up and not is_transport_booked_up) or (
             not was_transport_booked_up and is_transport_booked_up):
-        transport_client.send_data_to_queue(queue_name=TRIP_RESEARCHER_PUBLISH_QUEUE_NAME,
-                                            exchange_name=TRIP_RESEARCHER_EXCHANGE_NAME,
+        transport_client.send_data_to_queue(queue_name=EVENT_HUB_PUBLISH_QUEUE_NAME,
+                                            exchange_name=EVENT_HUB_EXCHANGE_NAME,
                                             payload=json.dumps(transport_booking_status_msg, ensure_ascii=False).encode(
                                                 'utf-8'))
 
-        transport_client.send_data_to_queue(queue_name=EVENT_HUB_PUBLISH_QUEUE_NAME,
-                                            exchange_name=EVENT_HUB_EXCHANGE_NAME,
+        transport_booking_status_msg["trip_offers_id"] = offers
+        transport_client.send_data_to_queue(queue_name=TRIP_RESEARCHER_PUBLISH_QUEUE_NAME,
+                                            exchange_name=TRIP_RESEARCHER_EXCHANGE_NAME,
                                             payload=json.dumps(transport_booking_status_msg, ensure_ascii=False).encode(
                                                 'utf-8'))
     transport_client.close_connection()

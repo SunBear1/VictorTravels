@@ -44,7 +44,8 @@ wogule.
   "title": "trip_offer_transport_update",
   "trip_offer_id": "1234",
   "operation_type": "add|delete",
-  "connection_id": "PRS-WAW-TRAIN-XYZ"
+  "connection_id": "PRS-WAW-TRAIN-XYZ",
+  "head_count": 2
 }
 ```
 
@@ -60,7 +61,8 @@ wogule.
   "reservation_status": "created|canceled|expired|finalized",
   "hotel_id": "(ten klucz-wartość jest opcjonalny) OSV-1",
   "room_type": "(ten klucz-wartość jest opcjonalny) small",
-  "connection_id": "(ten klucz-wartość jest opcjonalny) PRS-WAW-TRAIN-XYZ"
+  "connection_id": "(ten klucz-wartość jest opcjonalny) PRS-WAW-TRAIN-XYZ",
+  "head_count": 2
 }
 ```
 
@@ -70,7 +72,8 @@ wogule.
 {
   "title": "reservation_creation",
   "_id": "example_reservation_id",
-  "trip_offer_id": "1234"
+  "trip_offer_id": "1234",
+  "price": 2137.21
 }
 ```
 
@@ -80,7 +83,8 @@ wogule.
 {
   "title": "reservation_creation_time",
   "_id": "example_reservation_id",
-  "reservation_creation_time": "2023-04-27T17:22:10.936561"
+  "reservation_creation_time": "2023-04-27T17:22:10.936561",
+  "price": 2137.21
 }
 ```
 
