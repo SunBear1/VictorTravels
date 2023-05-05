@@ -16,7 +16,7 @@ public class Hotel {
     private String name;
     private String image;
     private ArrayList<String> description;
-    private HashMap<String,Integer> diet;
-    private HashMap<String,RoomDetails> rooms;
+    private HashMap<String, Integer> diet;
+    private HashMap<String, RoomDetails> rooms;
 
 }

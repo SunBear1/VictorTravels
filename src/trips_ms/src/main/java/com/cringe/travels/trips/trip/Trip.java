@@ -34,7 +34,7 @@ public class Trip {
 
     private Localisation localisation;
 
-    private HashMap<String,Transport> from;
+    private HashMap<String, Transport> from;
 
-    private HashMap<String,Transport> to;
+    private HashMap<String, Transport> to;
 }

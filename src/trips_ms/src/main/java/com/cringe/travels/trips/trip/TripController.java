@@ -18,7 +18,7 @@ public class TripController {
     Logger logger = LoggerFactory.getLogger(TripController.class);
 
 
-    TripController(TripService service){
+    TripController(TripService service) {
         this.service = service;
     }
 
@@ -32,7 +32,7 @@ public class TripController {
     @GetMapping("/{id}")
     @ResponseBody
     Trip getbyId(@PathVariable String id) {
-        logger.info("GET REQUEST api/v1/trips/"+id);
+        logger.info("GET REQUEST api/v1/trips/" + id);
         return service.getbyId(id);
-  }
+    }
 }
