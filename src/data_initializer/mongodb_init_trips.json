@@ -2,6 +2,7 @@
   {
     "_id": "0001",
     "trip_id": "1",
+    "is_booked_up": false,
     "hotel": {
       "hotel_id": "HFP-1",
       "name": "Hotel Fuerteventura Princess",
@@ -97,6 +98,7 @@
   {
     "_id": "0002",
     "trip_id": "2",
+    "is_booked_up": false,
     "hotel": {
       "hotel_id": "HAB-1",
       "name": "Hotel Alhambra",
@@ -206,6 +208,7 @@
   {
     "_id": "0003",
     "trip_id": "3",
+    "is_booked_up": false,
     "hotel": {
       "hotel_id": "HGR-1",
       "name": "Hotel Gaia Royal",
@@ -329,6 +332,7 @@
   {
     "_id": "0004",
     "trip_id": "4",
+    "is_booked_up": false,
     "hotel": {
       "hotel_id": "HSMKB-1",
       "name": "Hotel Smy Kos Beach & Splash",
@@ -438,6 +442,7 @@
   {
     "_id": "0005",
     "trip_id": "5",
+    "is_booked_up": false,
     "hotel": {
       "hotel_id": "HHINER-1",
       "name": "Hotel Holiday Inn Express Rzeszów Airport",
@@ -587,6 +592,7 @@
   {
     "_id": "0006",
     "trip_id": "5",
+    "is_booked_up": false,
     "hotel": {
       "hotel_id": "HHINER-2",
       "name": "Hotel Holiday Inn Express Rzeszów Airport",
