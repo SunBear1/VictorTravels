@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 from datetime import datetime
+
 from fastapi import APIRouter, status
 from pydantic import BaseModel
 from starlette.responses import JSONResponse, Response
@@ -11,7 +12,8 @@ from rabbitmq.rabbitmq_client import RabbitMQClient, PURCHASES_EXCHANGE_NAME, \
     RESERVATIONS_EXCHANGE_NAME, RESERVATIONS_PUBLISH_QUEUE_NAME, \
     PURCHASES_PUBLISH_QUEUE_NAME, PAYMENTS_PUBLISH_QUEUE_NAME, PAYMENTS_EXCHANGE_NAME
 from service.expiration_handler import start_measuring_reservation_time
-from service.trip_offers_handler import check_if_trip_offer_exists, check_if_connection_exists
+from service.trip_offers_handler import check_if_hotel_exists, check_if_connection_exists, check_if_rooms_available, \
+    check_if_connection_available, update_rooms_available, update_seats_available
 
 router = APIRouter(prefix="/api/v1/reservation")
 
@@ -40,13 +42,21 @@ async def make_reservation(trip_offer_id: str, payload: TripReservationData):
     current_os_time = datetime.now()
     current_datetime = current_os_time.strftime("%Y-%m-%dT%H:%M:%S.%f")
     try:
-        if not check_if_trip_offer_exists(trip_offer_id=trip_offer_id):
+        if not check_if_hotel_exists(hotel_id=payload.hotel_id):
             return Response(status_code=status.HTTP_404_NOT_FOUND,
-                            content=f"Trip with ID {trip_offer_id} does not exist",
+                            content=f"Hotel with ID {payload.hotel_id} does not exist",
                             media_type="text/plain")
         if not check_if_connection_exists(connection_id=payload.connection_id):
             return Response(status_code=status.HTTP_404_NOT_FOUND,
                             content=f"Connection with ID {payload.connection_id} does not exist",
+                            media_type="text/plain")
+        if not check_if_rooms_available(hotel_id=payload.hotel_id, room_type=payload.room_type, rooms=1):
+            return Response(status_code=status.HTTP_400_BAD_REQUEST,
+                            content=f"Hotel with ID {payload.hotel_id} has not enough {payload.room_type} rooms left",
+                            media_type="text/plain")
+        if not check_if_connection_available(connection_id=payload.connection_id, seats=payload.head_count):
+            return Response(status_code=status.HTTP_400_BAD_REQUEST,
+                            content=f"Connection with ID {payload.connection_id} has not enough seats left",
                             media_type="text/plain")
 
         logger.info(f"Reservation creation process for offer {trip_offer_id} started at {current_datetime}")
@@ -60,9 +70,20 @@ async def make_reservation(trip_offer_id: str, payload: TripReservationData):
         insert_result = MongoDBClient.reservations_collection.insert_one(document=init_doc)
         reservation_id = str(insert_result.inserted_id)
 
+        number_of_rooms_to_update = -1
+        update_rooms_available(hotel_id=payload.hotel_id, room_type=payload.room_type, value=number_of_rooms_to_update)
+
+        number_of_seats_to_update = -payload.head_count
+        update_seats_available(connection_id=payload.connection_id, value=number_of_seats_to_update)
+
         expiration_timer_task = asyncio.create_task(start_measuring_reservation_time(
             reservation_id=reservation_id,
-            reservation_creation_time=current_datetime))
+            reservation_creation_time=current_datetime,
+            hotel_id=payload.hotel_id,
+            room_type=payload.room_type,
+            connection_id=payload.connection_id,
+            head_count=payload.head_count
+        ))
 
         client = RabbitMQClient()
         client.send_data_to_queue(queue_name=PURCHASES_PUBLISH_QUEUE_NAME,
