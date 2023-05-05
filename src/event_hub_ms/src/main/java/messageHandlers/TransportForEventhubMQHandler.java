@@ -65,8 +65,9 @@ public class TransportForEventhubMQHandler implements Runnable{
         String trip_offer_id = reservationEvent.getTrip_offer_id();
         String operation_type = (reservationEvent.getReservation_status().equals("created") ? "delete" : "add");
         String connection_id = reservationEvent.getConnection_id();
+        int head_count = reservationEvent.getHead_count();
 
-        TransportDTO transportDTO = new TransportDTO(title, trip_offer_id, operation_type, connection_id);
+        TransportDTO transportDTO = new TransportDTO(title, trip_offer_id, operation_type, connection_id, head_count);
         databaseHandler.saveTransportDTO(transportDTO);
 
         ObjectMapper objectMapper = new ObjectMapper();

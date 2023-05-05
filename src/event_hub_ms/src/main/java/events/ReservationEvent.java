@@ -8,6 +8,7 @@ public class ReservationEvent {
     private String hotel_id;
     private String room_type;
     private String connection_id;
+    private int head_count;
 
     public ReservationEvent() {}
 
@@ -39,6 +40,10 @@ public class ReservationEvent {
         return connection_id;
     }
 
+    public int getHead_count(){
+        return head_count;
+    }
+
     public void setHotel_id(String hotel_id) {
         this.hotel_id = hotel_id;
     }
@@ -49,5 +54,9 @@ public class ReservationEvent {
 
     public void setConnection_id(String connection_id) {
         this.connection_id = connection_id;
+    }
+
+     public void setHead_count(int head_count) {
+        this.head_count = head_count;
     }
 }

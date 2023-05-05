@@ -18,6 +18,8 @@ class TripReservationData(BaseModel):
     hotel_id: str
     room_type: str
     connection_id: str
+    head_count: int
+    price: float
 
 
 @router.post("/{trip_offer_id}",
@@ -40,7 +42,9 @@ async def make_reservation(trip_offer_id: str, payload: TripReservationData, tok
         request_body = {
             "hotel_id": payload.hotel_id,
             "room_type": payload.room_type,
-            "connection_id": payload.connection_id
+            "connection_id": payload.connection_id,
+            "head_count": payload.head_count,
+            "price": payload.price
         }
         response = requests.post(f"http://{RESERVATIONS_MS_ADDRESS}/api/v1/reservation/{trip_offer_id}",
                                  timeout=3.00,
@@ -55,7 +59,7 @@ async def make_reservation(trip_offer_id: str, payload: TripReservationData, tok
             return Response(status_code=status.HTTP_404_NOT_FOUND,
                             content=response.content,
                             media_type="text/plain")
-        if response.status_code == status.HTTP_500_INTERNAL_SERVER_ERRO:
+        if response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR:
             return Response(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content="Reservation service crashed :-)",
                             media_type="text/plain")
 
