@@ -3,6 +3,8 @@ package com.cringe.travels.trips.rabbitmq;
 import java.nio.charset.StandardCharsets;
 
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.cringe.travels.trips.trip.TripService;
@@ -12,6 +14,8 @@ public class Receiver {
 
 
     private final TripService service;
+    Logger logger = LoggerFactory.getLogger(Receiver.class);
+
 
     Receiver(TripService service){
         this.service = service;
@@ -19,6 +23,7 @@ public class Receiver {
 
     public void receiveMessage(byte[] message) {
         String stringMessage = new String(message, StandardCharsets.UTF_8);
+        logger.info("GET MESSAGE: "+stringMessage);
         JSONObject jsonObject = new JSONObject(stringMessage);
 
         String messageTitle = jsonObject.getString("title");

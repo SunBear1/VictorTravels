@@ -5,12 +5,16 @@ import java.util.Optional;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TripService {
 
     private final TripRepository repository;
+    Logger logger = LoggerFactory.getLogger(TripService.class);
+
 
     TripService(TripRepository repository){
         this.repository = repository;
@@ -43,6 +47,7 @@ public class TripService {
         }
         trip.getHotel().getRooms().get(roomType).setAvailable(freeSeats);
         repository.save(trip);
+        logger.info("UPDATED HOTEL ROOMS IN TRIP: "+trip.getId());
         }
       } 
     }
@@ -59,6 +64,8 @@ public class TripService {
           Trip trip = tripOpt.get();
           trip.setBookedUp(isHotelBookedUp);
           repository.save(trip);
+          logger.info("UPDATED TRIP STATUS IN TRIP: "+trip.getId());
+
         }
       } 
     }
@@ -88,6 +95,7 @@ public class TripService {
                 }
                 transport.getPlane().setSeatsLeft(seatsLeft);
                 repository.save(trip);
+                logger.info("UPDATED TRANSPORT IN TRIP: "+trip.getId());
 
               }
             } catch (Exception e) {}
@@ -102,6 +110,7 @@ public class TripService {
                 }
                 transport.getTrain().setSeatsLeft(seatsLeft);
                 repository.save(trip);
+                logger.info("UPDATED TRANSPORT IN TRIP: "+trip.getId());
               }
             } catch (Exception e) {}
             
@@ -128,7 +137,7 @@ public class TripService {
               if (transport.getPlane().getId().equals(connectionId)){
                 transport.getPlane().setTransportBookedUp(transportBookedUp);
                 repository.save(trip);
-
+                logger.info("UPDATED TRANSPORT STATUS IN TRIP: "+trip.getId());
               }
             } catch (Exception e) {}
             
@@ -136,6 +145,7 @@ public class TripService {
               if (transport.getTrain().getId().equals(connectionId)){
                 transport.getTrain().setTransportBookedUp(transportBookedUp);
                 repository.save(trip);
+                logger.info("UPDATED TRANSPORT STATUS IN TRIP: "+trip.getId());
               }
             } catch (Exception e) {}
             
