@@ -15,10 +15,10 @@ def get_offers_for_transport(connection_id: str) -> List:
     return list(set([offer[0] for offer in offers_query]))
 
 
-def update_left_seats_in_transport(connection_id: str, operation: str):
-    math_operator = " - 1"
+def update_left_seats_in_transport(connection_id: str, operation: str, number_of_seats: int):
+    math_operator = f" - {number_of_seats}"
     if operation == "add":
-        math_operator = " + 1"
+        math_operator = f" + {number_of_seats}"
 
     update_seats_query = f"UPDATE SeatsLeft SET seatsleft = seatsleft{math_operator} WHERE ConnectionID='{connection_id}';"
 

@@ -1,7 +1,6 @@
 import asyncio
 import json
 import logging
-
 from bson import ObjectId
 
 from mongodb.mongodb_client import MongoDBClient
@@ -26,7 +25,8 @@ def consume_reservation_ms_event(ch, method, properties, body):
         "trip_offer_id": received_msg["trip_offer_id"],
         "purchase_status": "pending",
         "payment_status": "pending",
-        "uid": "example_uid"
+        "uid": "example_uid",
+        "price": received_msg["price"]
     }
     MongoDBClient.purchases_collection.insert_one(document=init_document)
     logger.info(f"Purchase entry for reservation {received_msg['_id']} successfully CREATED.")
