@@ -27,6 +27,10 @@ public class Receiver {
           this.service.updateHotelsRooms(jsonObject);
         }else if(messageTitle.equals(MsgTypes.HOTEL_BOOKINGS_STATUS.label)){
           this.service.updateTripStatus(jsonObject);
+        }else if(messageTitle.equals(MsgTypes.TRANSPORT_UPDATE.label)){
+          this.service.updateTransport(jsonObject);
+        }else if (messageTitle.equals(MsgTypes.TRANSPORT_BOOKING_STATUS.label)){
+          this.service.updateTransportStatus(jsonObject);
         }
       }
 }

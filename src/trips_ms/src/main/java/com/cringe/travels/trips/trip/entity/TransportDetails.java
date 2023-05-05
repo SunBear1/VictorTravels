@@ -12,4 +12,5 @@ public class TransportDetails {
     private String id;
     private int cost;
     private int seatsLeft;
+    private boolean transportBookedUp;
 }

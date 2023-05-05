@@ -63,6 +63,87 @@ public class TripService {
       } 
     }
 
+    public void updateTransport(JSONObject jsonObject){
+
+      JSONArray listIds = jsonObject.getJSONArray("trip_offers_id");
+      String connectionId = jsonObject.getString("connection_id");
+      String operationType = jsonObject.getString("operation_type");
+      int headCount = jsonObject.getInt("head_count");
+
+      
+
+      for (int i=0; i < listIds.length(); i++) {
+        String id = listIds.getString(i);
+        Optional<Trip> tripOpt = repository.findById(id);
+        if (tripOpt.isPresent()){
+          Trip trip = tripOpt.get();
+          trip.getFrom().forEach((key,transport)->{
+            try {
+              if (transport.getPlane().getId().equals(connectionId)){
+                int seatsLeft = transport.getPlane().getSeatsLeft();
+                if (operationType.equals("add")){
+                  seatsLeft= seatsLeft + headCount;
+                }else{
+                  seatsLeft = seatsLeft - headCount;
+                }
+                transport.getPlane().setSeatsLeft(seatsLeft);
+                repository.save(trip);
+
+              }
+            } catch (Exception e) {}
+            
+            try {
+              if (transport.getTrain().getId().equals(connectionId)){
+                int seatsLeft = transport.getTrain().getSeatsLeft();
+                if (operationType.equals("add")){
+                  seatsLeft= seatsLeft + headCount;
+                }else{
+                  seatsLeft = seatsLeft - headCount;
+                }
+                transport.getTrain().setSeatsLeft(seatsLeft);
+                repository.save(trip);
+              }
+            } catch (Exception e) {}
+            
+            
+          });
+        }
+      } 
+    }
+
+    public void updateTransportStatus(JSONObject jsonObject){
+
+      JSONArray listIds = jsonObject.getJSONArray("trip_offers_id");
+      String connectionId = jsonObject.getString("connection_id");
+      boolean transportBookedUp = jsonObject.getBoolean("is_transport_booked_up");
+      
+
+      for (int i=0; i < listIds.length(); i++) {
+        String id = listIds.getString(i);
+        Optional<Trip> tripOpt = repository.findById(id);
+        if (tripOpt.isPresent()){
+          Trip trip = tripOpt.get();
+          trip.getFrom().forEach((key,transport)->{
+            try {
+              if (transport.getPlane().getId().equals(connectionId)){
+                transport.getPlane().setTransportBookedUp(transportBookedUp);
+                repository.save(trip);
+
+              }
+            } catch (Exception e) {}
+            
+            try {
+              if (transport.getTrain().getId().equals(connectionId)){
+                transport.getTrain().setTransportBookedUp(transportBookedUp);
+                repository.save(trip);
+              }
+            } catch (Exception e) {}
+            
+          });
+        }
+      } 
+    }
+
     Trip getbyId(String id) {
       return repository.findByTripID(id);
   }
