@@ -19,11 +19,13 @@
     font-size: 36px;
     font-weight: bold;
     margin: 20px 0;
+    margin-left: 100px;
 }
 
 .details-header p {
     font-size: 20px;
     margin: 10px 0;
+    margin-left: 100px;
 }
 
 .details-header button {
@@ -37,10 +39,11 @@
 }
 
 .details-body {
-    display: flex;
+    
+    float: left;
     flex-direction: column;
     align-items:flex-end;
-    margin-right: 100px;
+    margin-left: 100px;
     padding-top: 100px;
     margin-bottom: 40px;
 }
