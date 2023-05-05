@@ -11,4 +11,7 @@ public interface TripRepository extends MongoRepository<Trip, String>  {
     @Query("{ 'trip_id' : ?0 }")
     Trip findByTripID(String tripID);
 
+    @Query("{ 'is_booked_up' : false }")
+    List<Trip> findAllActiveTrips();
+
 }

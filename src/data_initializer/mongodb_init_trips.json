@@ -2,7 +2,7 @@
   {
     "_id": "0001",
     "trip_id": "1",
-    "is_booked_up": false,
+    "is_booked_up": true,
     "hotel": {
       "hotel_id": "HFP-1",
       "name": "Hotel Fuerteventura Princess",

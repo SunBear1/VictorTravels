@@ -20,6 +20,10 @@ public class TripService {
       return repository.findAll();
     }
 
+    List<Trip> getAllActive() {
+      return repository.findAllActiveTrips();
+    }
+
     public void updateHotelsRooms(JSONObject jsonObject){
 
       JSONArray listIds = jsonObject.getJSONArray("trip_offers_id");

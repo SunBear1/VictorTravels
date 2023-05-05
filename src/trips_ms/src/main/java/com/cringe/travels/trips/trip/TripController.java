@@ -26,7 +26,7 @@ public class TripController {
     @ResponseBody
     List<Trip> getAll() {
         logger.info("GET REQUEST api/v1/trips");
-        return service.getAll();
+        return service.getAllActive();
     }
 
     @GetMapping("/{id}")
