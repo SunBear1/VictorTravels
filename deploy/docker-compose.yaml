@@ -43,6 +43,8 @@ services:
       MONGODB_RESERVATIONS_COLL: trip-offers
       MONGODB_TRIPS_DB: rsww_17998_trips_db
       MONGODB_TRIPS_COLL: trips
+      MONGODB_PURCHASES_DB: rsww_17998_purchases_db
+      MONGODB_PAYMENTS_DB: rsww_17998_payments_db
     depends_on:
       mongodb:
         condition: service_healthy

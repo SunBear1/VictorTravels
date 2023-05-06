@@ -18,10 +18,12 @@ MONGO_PORT = os.getenv("MONGODB_PORT", 27017)
 MONGO_HOST = os.getenv("MONGODB_ADDRESS", "localhost")
 MONGO_USER = os.getenv("MONGODB_USER", "admin")
 MONGO_PASSWD = os.getenv("MONGODB_PASSWORD", "admin")
-MONGO_DB_RESERVATIONS_NAME = os.getenv("MONGODB_RESERVATIONS_DB", "reservations_db")
-MONGO_TRIPS_COLLECTION_NAME = os.getenv("MONGODB_TRIPS_COLL", "trips")
-MONGO_DB_TRIPS_NAME = os.getenv("MONGODB_TRIPS_DB", "trips_db")
 MONGO_RESERVATIONS_COLLECTION_NAME = os.getenv("MONGODB_RESERVATIONS_COLL", "trip-offers")
+MONGO_DB_RESERVATIONS_NAME = os.getenv("MONGODB_RESERVATIONS_DB", "reservations_db")
+MONGO_DB_TRIPS_NAME = os.getenv("MONGODB_TRIPS_DB", "trips_db")
+MONGO_TRIPS_COLLECTION_NAME = os.getenv("MONGODB_TRIPS_COLL", "trips")
+MONGO_DB_PURCHASES_NAME = os.getenv("MONGODB_PURCHASES_DB", "purchases_db")
+MONGO_DB_PAYMENTS_NAME = os.getenv("MONGODB_PAYMENTS_DB", "payments_db")
 
 logger = logging.getLogger("data-init")
 
@@ -47,6 +49,11 @@ class MongoDBClient:
 
         except Exception as e:
             logger.info("Unable to connect to MongoDB:", e)
+
+    @classmethod
+    def drop_database(cls, db_name: str):
+        cls.client.drop_database(db_name)
+        logger.info(f"Database {db_name} dropped (if it exists).")
 
 
 class PostgreSQLClient:
@@ -97,5 +104,38 @@ class PostgreSQLClient:
             conn.cursor().execute(f"CREATE DATABASE {db_name};")
         except psycopg2.errors.DuplicateDatabase:
             logger.info(f"Database {db_name} already exists")
+        finally:
+            conn.close()
+
+    def create_database(self, db_name: str):
+        conn = psycopg2.connect(
+            user=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port,
+        )
+
+        try:
+            conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+            conn.cursor().execute(f"CREATE DATABASE {db_name};")
+        except psycopg2.errors.DuplicateDatabase:
+            logger.info(f"Database {db_name} already exists")
+        finally:
+            conn.close()
+
+    def remove_database(self, db_name: str):
+        conn = psycopg2.connect(
+            user=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port,
+        )
+
+        try:
+            conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+            conn.cursor().execute(f"DROP DATABASE IF EXISTS {db_name};")
+            logger.info(f"Database {db_name} dropped.")
+        except psycopg2.errors.InvalidCatalogName:
+            logger.info(f"Database {db_name} does not exist.")
         finally:
             conn.close()
