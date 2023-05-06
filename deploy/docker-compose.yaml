@@ -5,13 +5,13 @@ services:
     image: ${GATEWAY_IMAGE}
     restart: always
     ports:
-      - "8080:8080"
+      - "18000:8080"
     environment:
       POSTGRES_PORT: 5432
       POSTGRES_ADDRESS: postgresql
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: users
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: student
+      POSTGRES_DB: rsww_17998_users
       TRIP_RESEARCHER_ADDRESS: trips:8000
       RESERVATIONS_MS_ADDRESS: reservations:8001
       PURCHASE_MS_ADDRESS: purchases:8002
@@ -29,17 +29,20 @@ services:
     environment:
       POSTGRES_PORT: 5432
       POSTGRES_ADDRESS: postgresql
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      PG_DB_USERS_NAME: users
-      PG_DB_EVENTS_NAME: events
-      PG_DB_HOTELS_NAME: hotels
-      PG_DB_TRANSPORTS_NAME: transports
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: student
+      PG_DB_USERS_NAME: rsww_17998_users
+      PG_DB_EVENTS_NAME: rsww_17998_events
+      PG_DB_HOTELS_NAME: rsww_17998_hotels
+      PG_DB_TRANSPORTS_NAME: rsww_17998_transports
       MONGODB_PORT: 27017
       MONGODB_ADDRESS: mongodb
-      MONGODB_USER: admin
-      MONGODB_PASSWORD: admin
-      MONGODB_DB: trips
+      MONGODB_USER: root
+      MONGODB_PASSWORD: student
+      MONGODB_RESERVATIONS_DB: rsww_17998_reservations_db
+      MONGODB_RESERVATIONS_COLL: trip-offers
+      MONGODB_TRIPS_DB: rsww_17998_trips_db
+      MONGODB_TRIPS_COLL: trips
     depends_on:
       mongodb:
         condition: service_healthy
@@ -47,13 +50,13 @@ services:
         condition: service_healthy
   postgresql:
     container_name: postgresql
-    image: postgres:alpine3.17
+    image: postgres:13
     restart: always
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: student
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U admin"]
       interval: 5s
@@ -61,36 +64,25 @@ services:
       retries: 10
   mongodb:
     container_name: mongodb
-    image: mongo:4.4.18
+    image: mongo:4.4.9
     restart: always
     ports:
       - "27017:27017"
     environment:
-        MONGO_INITDB_ROOT_USERNAME: admin
-        MONGO_INITDB_ROOT_PASSWORD: admin
+        MONGO_INITDB_ROOT_USERNAME: root
+        MONGO_INITDB_ROOT_PASSWORD: student
     healthcheck:
       test: [ "CMD", "mongo", "--eval", "\"db.adminCommand('ping')\"" ]
       interval: 5s
       timeout: 1s
       retries: 10
-  mongo-express:
-    image: mongo-express
-    environment:
-        ME_CONFIG_MONGODB_SERVER: mongodb
-        ME_CONFIG_MONGODB_PORT: 27017
-        ME_CONFIG_MONGODB_AUTH_USERNAME: admin
-        ME_CONFIG_MONGODB_AUTH_PASSWORD: admin
-    depends_on:
-        - mongodb
-    ports:
-      - "8081:8081"
   rabbitmq:
     container_name: rabbitmq
     image: ${RABBIT_IMAGE}
     restart: always
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "17998:5672"
+      - "18004:15672"
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
       interval: 5s
@@ -101,13 +93,13 @@ services:
     image: ${RESERVATIONS_IMAGE}
     restart: always
     ports:
-      - "8001:8001"
+      - "18001:8001"
     environment:
       MONGODB_PORT: 27017
       MONGODB_ADDRESS: mongodb
-      MONGODB_USER: admin
-      MONGODB_PASSWORD: admin
-      MONGODB_DB: reservations_db
+      MONGODB_USER: root
+      MONGODB_PASSWORD: student
+      MONGODB_DB: rsww_17998_reservations_db
       RABBITMQ_ADDRESS: rabbitmq
     depends_on:
       rabbitmq:
@@ -119,13 +111,13 @@ services:
     image: ${PURCHASE_IMAGE}
     restart: always
     ports:
-      - "8002:8002"
+      - "18002:8002"
     environment:
       MONGODB_PORT: 27017
       MONGODB_ADDRESS: mongodb
-      MONGODB_USER: admin
-      MONGODB_PASSWORD: admin
-      MONGODB_DB: purchases_db
+      MONGODB_USER: root
+      MONGODB_PASSWORD: student
+      MONGODB_DB: rsww_17998_purchases_db
       RABBITMQ_ADDRESS: rabbitmq
     depends_on:
       rabbitmq:
@@ -137,13 +129,13 @@ services:
     image: ${PAYMENT_IMAGE}
     restart: always
     ports:
-      - "8003:8003"
+      - "18003:8003"
     environment:
       MONGODB_PORT: 27017
       MONGODB_ADDRESS: mongodb
-      MONGODB_USER: admin
-      MONGODB_PASSWORD: admin
-      MONGODB_DB: payments_db
+      MONGODB_USER: root
+      MONGODB_PASSWORD: student
+      MONGODB_DB: rsww_17998_payments_db
       RABBITMQ_ADDRESS: rabbitmq
     depends_on:
       rabbitmq:
@@ -154,13 +146,13 @@ services:
     container_name: trips-ms
     image: ${TRIPS_IMAGE}
     ports:
-      - "8000:8000"
+      - "17999:8000"
     environment:
       MONGODB_PORT: 27017
       MONGODB_ADDRESS: mongodb
-      MONGODB_USER: admin
-      MONGODB_PASSWORD: admin
-      MONGODB_DB: trips_db
+      MONGODB_USER: root
+      MONGODB_PASSWORD: student
+      MONGODB_DB: rsww_17998_trips_db
       RABBITMQ_ADDRESS: rabbitmq
     depends_on:
       rabbitmq:
@@ -175,9 +167,9 @@ services:
       RABBITMQ_ADDRESS: rabbitmq
       POSTGRES_PORT: 5432
       POSTGRES_ADDRESS: postgresql
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      PG_DB_HOTELS_NAME: hotels
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: student
+      PG_DB_HOTELS_NAME: rsww_17998_hotels
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -191,9 +183,9 @@ services:
       RABBITMQ_ADDRESS: rabbitmq
       POSTGRES_PORT: 5432
       POSTGRES_ADDRESS: postgresql
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      PG_DB_TRANSPORTS_NAME: transports
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: student
+      PG_DB_TRANSPORTS_NAME: rsww_17998_transports
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -207,9 +199,9 @@ services:
       RABBITMQ_ADDRESS: rabbitmq
       POSTGRES_PORT: 5432
       POSTGRES_ADDRESS: postgresql
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      PG_DB_EVENTHUB_NAME: events
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: student
+      PG_DB_EVENTHUB_NAME: rsww_17998_events
     depends_on:
       rabbitmq:
         condition: service_healthy

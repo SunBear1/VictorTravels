@@ -46,15 +46,15 @@
       "country": "Wyspy Kanaryjskie",
       "region": "Fuerteventura"
     },
-    "date_from":"01-08-2023",
-    "date_to":"08-08-2023",
+    "date_from": "01-08-2023",
+    "date_to": "08-08-2023",
     "from": {
       "Łódź": {
         "plane": {
           "id": "LDZ-KNR-PLANE-001",
           "cost": 100,
           "seatsLeft": 21,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Kraków": {
@@ -62,7 +62,7 @@
           "id": "KRK-KNR-PLANE-001",
           "cost": 105,
           "seatsLeft": 20,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Gdańsk": {
@@ -70,7 +70,7 @@
           "id": "GDN-KNR-PLANE-001",
           "cost": 110,
           "seatsLeft": 20,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       }
     },
@@ -80,7 +80,7 @@
           "id": "KNR-LDZ-PLANE-001",
           "cost": 70,
           "seatsLeft": 5,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Kraków": {
@@ -88,7 +88,7 @@
           "id": "KNR-KRK-PLANE-001",
           "cost": 90,
           "seatsLeft": 6,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Gdańsk": {
@@ -96,7 +96,7 @@
           "id": "KNR-GDN-PLANE-001",
           "cost": 120,
           "seatsLeft": 30,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       }
     }
@@ -148,15 +148,15 @@
       "country": "Hiszpania",
       "region": "Costa Brava"
     },
-    "date_from":"05-07-2023",
-    "date_to":"15-07-2023",
+    "date_from": "05-07-2023",
+    "date_to": "15-07-2023",
     "from": {
       "Katowice": {
         "plane": {
           "id": "KTK-GCB-PLANE-001",
           "cost": 90,
           "seatsLeft": 15,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Kraków": {
@@ -164,7 +164,7 @@
           "id": "KRK-GCB-PLANE-001",
           "cost": 86,
           "seatsLeft": 5,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Gdańsk": {
@@ -172,7 +172,7 @@
           "id": "GDN-GCB-PLANE-001",
           "cost": 78,
           "seatsLeft": 1,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Warszawa": {
@@ -180,7 +180,7 @@
           "id": "WAW-GCB-PLANE-001",
           "cost": 115,
           "seatsLeft": 22,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       }
     },
@@ -190,7 +190,7 @@
           "id": "GCB-KTK-PLANE-001",
           "cost": 75,
           "seatsLeft": 4,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Kraków": {
@@ -198,7 +198,7 @@
           "id": "GCB-KRK-PLANE-001",
           "cost": 90,
           "seatsLeft": 8,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Gdańsk": {
@@ -206,7 +206,7 @@
           "id": "GCB-GDN-PLANE-001",
           "cost": 112,
           "seatsLeft": 32,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Warszawa": {
@@ -214,7 +214,7 @@
           "id": "GCB-WAW-PLANE-001",
           "cost": 95,
           "seatsLeft": 15,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       }
     }
@@ -266,15 +266,15 @@
       "country": "Grecja",
       "region": "Kos"
     },
-    "date_from":"05-07-2023",
-    "date_to":"12-07-2023",
+    "date_from": "05-07-2023",
+    "date_to": "12-07-2023",
     "from": {
       "Katowice": {
         "plane": {
           "id": "KTK-KGS-PLANE-001",
           "cost": 105,
           "seatsLeft": 10,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Kraków": {
@@ -282,7 +282,7 @@
           "id": "KRK-KGS-PLANE-001",
           "cost": 103,
           "seatsLeft": 15,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Gdańsk": {
@@ -290,7 +290,7 @@
           "id": "GDN-KGS-PLANE-001",
           "cost": 121,
           "seatsLeft": 3,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Warszawa": {
@@ -298,7 +298,7 @@
           "id": "WAW-KGS-PLANE-001",
           "cost": 102,
           "seatsLeft": 6,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Poznań": {
@@ -306,7 +306,7 @@
           "id": "PZN-KGS-PLANE-001",
           "cost": 98,
           "seatsLeft": 10,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       }
     },
@@ -316,7 +316,7 @@
           "id": "KGS-KTK-PLANE-001",
           "cost": 150,
           "seatsLeft": 2,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Kraków": {
@@ -324,7 +324,7 @@
           "id": "KGS-KRK-PLANE-001",
           "cost": 150,
           "seatsLeft": 4,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Gdańsk": {
@@ -332,7 +332,7 @@
           "id": "KGS-GDN-PLANE-001",
           "cost": 115,
           "seatsLeft": 32,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Warszawa": {
@@ -340,7 +340,7 @@
           "id": "KGS-WAW-PLANE-001",
           "cost": 110,
           "seatsLeft": 6,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Poznań": {
@@ -348,7 +348,7 @@
           "id": "KGS-PZN-PLANE-001",
           "cost": 120,
           "seatsLeft": 12,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       }
     }
@@ -400,15 +400,15 @@
       "country": "Grecja",
       "region": "Kos"
     },
-    "date_from":"05-07-2023",
-    "date_to":"15-07-2023",
+    "date_from": "05-07-2023",
+    "date_to": "15-07-2023",
     "from": {
       "Katowice": {
         "plane": {
           "id": "KTK-KGS-PLANE-001",
           "cost": 105,
           "seatsLeft": 10,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Gdańsk": {
@@ -416,7 +416,7 @@
           "id": "GDN-KGS-PLANE-001",
           "cost": 121,
           "seatsLeft": 3,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Warszawa": {
@@ -424,7 +424,7 @@
           "id": "WAW-KGS-PLANE-001",
           "cost": 102,
           "seatsLeft": 6,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Poznań": {
@@ -432,7 +432,7 @@
           "id": "PZN-KGS-PLANE-001",
           "cost": 98,
           "seatsLeft": 10,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       }
     },
@@ -442,7 +442,7 @@
           "id": "KGS-KTK-PLANE-002",
           "cost": 190,
           "seatsLeft": 5,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Kraków": {
@@ -450,7 +450,7 @@
           "id": "KGS-KRK-PLANE-002",
           "cost": 210,
           "seatsLeft": 4,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Gdańsk": {
@@ -458,7 +458,7 @@
           "id": "KGS-GDN-PLANE-002",
           "cost": 200,
           "seatsLeft": 21,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Poznań": {
@@ -466,7 +466,7 @@
           "id": "KGS-PZN-PLANE-002",
           "cost": 130,
           "seatsLeft": 11,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       }
     }
@@ -518,21 +518,21 @@
       "country": "Polska",
       "region": "Rzeszów"
     },
-    "date_from":"01-07-2023",
-    "date_to":"02-07-2023",
+    "date_from": "01-07-2023",
+    "date_to": "02-07-2023",
     "from": {
       "Katowice": {
         "plane": {
           "id": "KTK-RZE-PLANE-001",
           "cost": 40,
           "seatsLeft": 12,
-          "transportBookedUp":false
+          "transportBookedUp": false
         },
         "train": {
           "id": "KTK-RZE-TRAIN-001",
           "cost": 25,
           "seatsLeft": 12,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Gdańsk": {
@@ -540,13 +540,13 @@
           "id": "GDN-RZE-PLANE-001",
           "cost": 141,
           "seatsLeft": 3,
-          "transportBookedUp":false
+          "transportBookedUp": false
         },
         "train": {
           "id": "GDN-RZE-TRAIN-001",
           "cost": 80,
           "seatsLeft": 40,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Warszawa": {
@@ -554,13 +554,13 @@
           "id": "WAW-RZE-PLANE-001",
           "cost": 70,
           "seatsLeft": 16,
-          "transportBookedUp":false
+          "transportBookedUp": false
         },
         "train": {
           "id": "WAW-RZE-TRAIN-001",
           "cost": 60,
           "seatsLeft": 42,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Poznań": {
@@ -568,13 +568,13 @@
           "id": "PZN-RZE-PLANE-001",
           "cost": 98,
           "seatsLeft": 10,
-          "transportBookedUp":false
+          "transportBookedUp": false
         },
         "train": {
           "id": "PZN-RZE-TRAIN-001",
           "cost": 65,
           "seatsLeft": 24,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       }
     },
@@ -584,13 +584,13 @@
           "id": "RZE-KTK-PLANE-001",
           "cost": 40,
           "seatsLeft": 12,
-          "transportBookedUp":false
+          "transportBookedUp": false
         },
         "train": {
           "id": "RZE-KTK-TRAIN-001",
           "cost": 25,
           "seatsLeft": 12,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Gdańsk": {
@@ -598,13 +598,13 @@
           "id": "RZE-GDN-PLANE-001",
           "cost": 141,
           "seatsLeft": 3,
-          "transportBookedUp":false
+          "transportBookedUp": false
         },
         "train": {
           "id": "RZE-GDN-TRAIN-001",
           "cost": 80,
           "seatsLeft": 40,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Warszawa": {
@@ -612,13 +612,13 @@
           "id": "RZE-WAW-PLANE-001",
           "cost": 70,
           "seatsLeft": 16,
-          "transportBookedUp":false
+          "transportBookedUp": false
         },
         "train": {
           "id": "RZE-WAW-TRAIN-001",
           "cost": 60,
           "seatsLeft": 42,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Poznań": {
@@ -626,13 +626,13 @@
           "id": "RZE-PZN-PLANE-001",
           "cost": 98,
           "seatsLeft": 10,
-          "transportBookedUp":false
+          "transportBookedUp": false
         },
         "train": {
           "id": "RZE-PZN-TRAIN-001",
           "cost": 65,
           "seatsLeft": 24,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       }
     }
@@ -684,21 +684,21 @@
       "country": "Polska",
       "region": "Rzeszów"
     },
-    "date_from":"07-07-2023",
-    "date_to":"09-07-2023",
+    "date_from": "07-07-2023",
+    "date_to": "09-07-2023",
     "from": {
       "Katowice": {
         "plane": {
           "id": "KTK-RZE-PLANE-002",
           "cost": 40,
           "seatsLeft": 12,
-          "transportBookedUp":false
+          "transportBookedUp": false
         },
         "train": {
           "id": "KTK-RZE-TRAIN-002",
           "cost": 25,
           "seatsLeft": 12,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Gdańsk": {
@@ -706,13 +706,13 @@
           "id": "GDN-RZE-PLANE-002",
           "cost": 141,
           "seatsLeft": 3,
-          "transportBookedUp":false
+          "transportBookedUp": false
         },
         "train": {
           "id": "GDN-RZE-TRAIN-002",
           "cost": 80,
           "seatsLeft": 40,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Warszawa": {
@@ -720,13 +720,13 @@
           "id": "WAW-RZE-PLANE-002",
           "cost": 70,
           "seatsLeft": 16,
-          "transportBookedUp":false
+          "transportBookedUp": false
         },
         "train": {
           "id": "WAW-RZE-TRAIN-002",
           "cost": 60,
           "seatsLeft": 42,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Poznań": {
@@ -734,13 +734,13 @@
           "id": "PZN-RZE-PLANE-002",
           "cost": 98,
           "seatsLeft": 10,
-          "transportBookedUp":false
+          "transportBookedUp": false
         },
         "train": {
           "id": "PZN-RZE-TRAIN-002",
           "cost": 65,
           "seatsLeft": 24,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       }
     },
@@ -750,13 +750,13 @@
           "id": "RZE-KTK-PLANE-002",
           "cost": 40,
           "seatsLeft": 12,
-          "transportBookedUp":false
+          "transportBookedUp": false
         },
         "train": {
           "id": "RZE-KTK-TRAIN-002",
           "cost": 25,
           "seatsLeft": 12,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Gdańsk": {
@@ -764,13 +764,13 @@
           "id": "RZE-GDN-PLANE-002",
           "cost": 141,
           "seatsLeft": 3,
-          "transportBookedUp":false
+          "transportBookedUp": false
         },
         "train": {
           "id": "RZE-GDN-TRAIN-002",
           "cost": 80,
           "seatsLeft": 40,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Warszawa": {
@@ -778,13 +778,13 @@
           "id": "RZE-WAW-PLANE-002",
           "cost": 70,
           "seatsLeft": 16,
-          "transportBookedUp":false
+          "transportBookedUp": false
         },
         "train": {
           "id": "RZE-WAW-TRAIN-002",
           "cost": 60,
           "seatsLeft": 42,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       },
       "Poznań": {
@@ -792,13 +792,13 @@
           "id": "RZE-PZN-PLANE-002",
           "cost": 98,
           "seatsLeft": 10,
-          "transportBookedUp":false
+          "transportBookedUp": false
         },
         "train": {
           "id": "RZE-PZN-TRAIN-002",
           "cost": 65,
           "seatsLeft": 24,
-          "transportBookedUp":false
+          "transportBookedUp": false
         }
       }
     }

@@ -14,6 +14,7 @@ logger.addHandler(handler)
 
 if __name__ == "__main__":
     logger.info("Data initializer started")
+    MongoDBClient.connect_to_database()
 
     postgres_init_data = [(PG_DB_USERS_NAME, "postgresql_init_users.sql"),
                           (PG_DB_EVENTS_NAME, "postgresql_init_events.sql"),
