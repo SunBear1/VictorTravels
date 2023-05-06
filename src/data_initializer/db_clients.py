@@ -27,13 +27,26 @@ logger = logging.getLogger("data-init")
 
 
 class MongoDBClient:
-    client = MongoClient(f"mongodb://{MONGO_USER}:{MONGO_PASSWD}@{MONGO_HOST}:{MONGO_PORT}/?authSource=admin",
+    client = MongoClient(f"mongodb://{MONGO_USER}:{MONGO_PASSWD}@{MONGO_HOST}:{MONGO_PORT}",
                          connectTimeoutMS=10000)
     trips_db = client[MONGO_DB_TRIPS_NAME]
     trips_collection = trips_db[MONGO_TRIPS_COLLECTION_NAME]
 
     reservations_db = client[MONGO_DB_RESERVATIONS_NAME]
     reservations_collection = reservations_db[MONGO_RESERVATIONS_COLLECTION_NAME]
+
+    @classmethod
+    def connect_to_database(cls):
+        try:
+            cls.trips_db.command('ping')
+            logger.info(
+                f"Connection to mongoDB at {MONGO_HOST}:{MONGO_PORT} as user {MONGO_USER} for DB {MONGO_DB_TRIPS_NAME} established.")
+            cls.reservations_db.command('ping')
+            logger.info(
+                f"Connection to mongoDB at {MONGO_HOST}:{MONGO_PORT} as user {MONGO_USER} for DB {MONGO_DB_RESERVATIONS_NAME} established.")
+
+        except Exception as e:
+            logger.info("Unable to connect to MongoDB:", e)
 
 
 class PostgreSQLClient:

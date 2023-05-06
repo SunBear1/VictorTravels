@@ -18,8 +18,16 @@ logger = logging.getLogger("reservations")
 
 
 class MongoDBClient:
-    client = MongoClient(f"mongodb://{USER}:{PASSWD}@{HOST}:{PORT}/?authSource=admin", connectTimeoutMS=10000)
+    client = MongoClient(f"mongodb://{USER}:{PASSWD}@{HOST}:{PORT}", connectTimeoutMS=10000)
     db = client[DB_NAME]
     trips_collection = db[TRIPS_COLLECTION_NAME]
     reservations_collection = db[RESERVATIONS_COLLECTION_NAME]
-    logger.info(f"Connection to mongoDB at {HOST}:{PORT} established.")
+
+    @classmethod
+    def connect_to_database(cls):
+        try:
+            cls.db.command('ping')
+            logger.info(
+                f"Connection to mongoDB at {HOST}:{PORT} as user {USER} for DB {DB_NAME} established.")
+        except Exception as e:
+            logger.info("Unable to connect to MongoDB:", e)
