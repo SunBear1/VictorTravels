@@ -78,7 +78,8 @@ public class TripService {
     public void updateTransport(JSONObject jsonObject) {
 
         JSONArray listIds = jsonObject.getJSONArray("trip_offers_id");
-        String connectionId = jsonObject.getString("connection_id");
+        String connectionIdTO = jsonObject.getString("connection_id_to");
+        String connectionIdFrom = jsonObject.getString("connection_id_from");
         String operationType = jsonObject.getString("operation_type");
         int headCount = jsonObject.getInt("head_count");
 
@@ -90,9 +91,9 @@ public class TripService {
                 Trip trip = tripOpt.get();
                 trip.getFrom().forEach((key, transport) -> {
                     if (transport.getPlane() != null) {
-                        if (transport.getPlane().getId().equals(connectionId)) {
+                        if (transport.getPlane().getId().equals(connectionIdFrom)) {
                             int seatsLeft = transport.getPlane().getSeatsLeft();
-                            logger.info("BEFORE: TRIP: " + trip.getId() + "\n Connection ID:" + connectionId + "\n seats left:" + seatsLeft);
+                            logger.info("BEFORE: TRIP: " + trip.getId() + "\n Connection ID:" + connectionIdFrom + "\n seats left:" + seatsLeft);
                             if (operationType.equals("add")) {
                                 seatsLeft = seatsLeft + headCount;
                             } else {
@@ -100,14 +101,14 @@ public class TripService {
                             }
                             transport.getPlane().setSeatsLeft(seatsLeft);
                             repository.save(trip);
-                            logger.info("NOW: TRIP: " + trip.getId() + "\n Connection ID:" + connectionId + "\n seats left:" + seatsLeft);
+                            logger.info("NOW: TRIP: " + trip.getId() + "\n Connection ID:" + connectionIdFrom + "\n seats left:" + seatsLeft);
                         }
                     }
 
                     if (transport.getTrain() != null) {
-                        if (transport.getTrain().getId().equals(connectionId)) {
+                        if (transport.getTrain().getId().equals(connectionIdFrom)) {
                             int seatsLeft = transport.getTrain().getSeatsLeft();
-                            logger.info("BEFORE: TRIP: " + trip.getId() + "\n Connection ID:" + connectionId + "\n seats left:" + seatsLeft);
+                            logger.info("BEFORE: TRIP: " + trip.getId() + "\n Connection ID:" + connectionIdFrom + "\n seats left:" + seatsLeft);
                             if (operationType.equals("add")) {
                                 seatsLeft = seatsLeft + headCount;
                             } else {
@@ -115,7 +116,40 @@ public class TripService {
                             }
                             transport.getTrain().setSeatsLeft(seatsLeft);
                             repository.save(trip);
-                            logger.info("NOW: TRIP: " + trip.getId() + "\n Connection ID:" + connectionId + "\n seats left:" + seatsLeft);
+                            logger.info("NOW: TRIP: " + trip.getId() + "\n Connection ID:" + connectionIdFrom + "\n seats left:" + seatsLeft);
+                        }
+                    }
+                });
+
+
+                trip.getTo().forEach((key, transport) -> {
+                    if (transport.getPlane() != null) {
+                        if (transport.getPlane().getId().equals(connectionIdTO)) {
+                            int seatsLeft = transport.getPlane().getSeatsLeft();
+                            logger.info("BEFORE: TRIP: " + trip.getId() + "\n Connection ID:" + connectionIdTO + "\n seats left:" + seatsLeft);
+                            if (operationType.equals("add")) {
+                                seatsLeft = seatsLeft + headCount;
+                            } else {
+                                seatsLeft = seatsLeft - headCount;
+                            }
+                            transport.getPlane().setSeatsLeft(seatsLeft);
+                            repository.save(trip);
+                            logger.info("NOW: TRIP: " + trip.getId() + "\n Connection ID:" + connectionIdTO + "\n seats left:" + seatsLeft);
+                        }
+                    }
+
+                    if (transport.getTrain() != null) {
+                        if (transport.getTrain().getId().equals(connectionIdTO)) {
+                            int seatsLeft = transport.getTrain().getSeatsLeft();
+                            logger.info("BEFORE: TRIP: " + trip.getId() + "\n Connection ID:" + connectionIdTO + "\n seats left:" + seatsLeft);
+                            if (operationType.equals("add")) {
+                                seatsLeft = seatsLeft + headCount;
+                            } else {
+                                seatsLeft = seatsLeft - headCount;
+                            }
+                            transport.getTrain().setSeatsLeft(seatsLeft);
+                            repository.save(trip);
+                            logger.info("NOW: TRIP: " + trip.getId() + "\n Connection ID:" + connectionIdTO + "\n seats left:" + seatsLeft);
                         }
                     }
                 });
@@ -138,6 +172,25 @@ public class TripService {
             if (tripOpt.isPresent()) {
                 Trip trip = tripOpt.get();
                 trip.getFrom().forEach((key, transport) -> {
+                    if (transport.getPlane() != null) {
+                        if (transport.getPlane().getId().equals(connectionId)) {
+                            transport.getPlane().setTransportBookedUp(transportBookedUp);
+                            repository.save(trip);
+                            logger.info("UPDATED TRANSPORT STATUS IN TRIP: " + trip.getId() + "\n connection id: " + connectionId + "\n bookedUp:" + transportBookedUp);
+                        }
+                    }
+
+                    if (transport.getTrain() != null) {
+                        if (transport.getTrain().getId().equals(connectionId)) {
+                            transport.getTrain().setTransportBookedUp(transportBookedUp);
+                            repository.save(trip);
+                            logger.info("UPDATED TRANSPORT STATUS IN TRIP: " + trip.getId());
+                        }
+                    }
+
+                });
+
+                trip.getTo().forEach((key, transport) -> {
                     if (transport.getPlane() != null) {
                         if (transport.getPlane().getId().equals(connectionId)) {
                             transport.getPlane().setTransportBookedUp(transportBookedUp);
