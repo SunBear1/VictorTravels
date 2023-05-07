@@ -6,23 +6,17 @@
 
 trips_affected: ID konkretnej wycieczki, czyli turnusu
 
-Klucze "trip_offers_affected" oraz "connection_affected" są opcjonalne. Mogą istnieć oba naraz, tylko jeden naraz, albo
+Klucze "hotel_id" oraz "connection_id" są opcjonalne. Mogą istnieć oba naraz, tylko jeden naraz, albo
 wogule.
+
+**Narazie ta wiadomość nie jest używana i zostanie przerobiona dla etapu 2**
 
 ```json
 {
   "title": "update_reservations_available",
   "operation_type": "add|delete",
-  "trip_offers_affected": [
-    "1234",
-    "325325",
-    "43534",
-    "08453"
-  ],
-  "connection_affected": [
-    "ORD-GDN-PLANE-XYZ",
-    "WAW-GDN-PLANE-XYZ"
-  ]
+  "hotel_id": "HTB-1",
+  "connection_id": "ORD-GDN-PLANE-XYZ"
 }
 ```
 
@@ -44,7 +38,8 @@ wogule.
   "title": "trip_offer_transport_update",
   "trip_offer_id": "1234",
   "operation_type": "add|delete",
-  "connection_id": "PRS-WAW-TRAIN-XYZ",
+  "connection_id_to": "WAW-PRS-TRAIN-XYZ",
+  "connection_id_from": "PRS-WAW-TRAIN-XYZ",
   "head_count": 2
 }
 ```
@@ -61,7 +56,8 @@ wogule.
   "reservation_status": "created|canceled|expired|finalized",
   "hotel_id": "(ten klucz-wartość jest opcjonalny) OSV-1",
   "room_type": "(ten klucz-wartość jest opcjonalny) small",
-  "connection_id": "(ten klucz-wartość jest opcjonalny) PRS-WAW-TRAIN-XYZ",
+  "connection_id_to": "(ten klucz-wartość jest opcjonalny) WAW-PRS-TRAIN-XYZ",
+  "connection_id_from": "(ten klucz-wartość jest opcjonalny) PRS-WAW-TRAIN-XYZ",
   "head_count": 2
 }
 ```
@@ -167,7 +163,9 @@ Ta wiadomość jest wysyłana za każdym razem jak miejsce w wycieczce ulegną z
     "4212"
   ],
   "operation_type": "add|delete",
-  "connection_id": "PRS-WAW-TRAIN-XYZ"
+  "connection_id_to": "WAW-PRS-TRAIN-XYZ",
+  "connection_id_from": "PRS-WAW-TRAIN-XYZ",
+  "head_count": 3
 }
 ```
 
