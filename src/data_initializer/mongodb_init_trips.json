@@ -1,0 +1,807 @@
+[
+  {
+    "_id": "0001",
+    "trip_id": "1",
+    "is_booked_up": false,
+    "hotel": {
+      "hotel_id": "HFP-1",
+      "name": "Hotel Fuerteventura Princess",
+      "image": "https://i.content4travel.com/cms/img/u/desktop/seres/fueprin_0.jpg?version=1",
+      "description": [
+        "Zabawa dla całej rodziny",
+        "Wyremontowane pokoje i hotelowa infrastruktura",
+        "Zadbane baseny z bezpłatnymi leżakami",
+        "Strefa wellness tylko dla dorosłych"
+      ],
+      "diet": {
+        "AllInclusive": 900,
+        "Breakfast": 200,
+        "TwoMeals": 600,
+        "None": 0
+      },
+      "rooms": {
+        "small": {
+          "cost": 600,
+          "available": 20
+        },
+        "medium": {
+          "cost": 200,
+          "available": 1
+        },
+        "large": {
+          "cost": 500,
+          "available": 3
+        },
+        "apartment": {
+          "cost": 800,
+          "available": 0
+        },
+        "studio": {
+          "cost": 1800,
+          "available": 1
+        }
+      }
+    },
+    "localisation": {
+      "country": "Wyspy Kanaryjskie",
+      "region": "Fuerteventura"
+    },
+    "date_from": "01-08-2023",
+    "date_to": "08-08-2023",
+    "from": {
+      "Łódź": {
+        "plane": {
+          "id": "LDZ-KNR-PLANE-001",
+          "cost": 100,
+          "seatsLeft": 21,
+          "transportBookedUp": false
+        }
+      },
+      "Kraków": {
+        "plane": {
+          "id": "KRK-KNR-PLANE-001",
+          "cost": 105,
+          "seatsLeft": 20,
+          "transportBookedUp": false
+        }
+      },
+      "Gdańsk": {
+        "plane": {
+          "id": "GDN-KNR-PLANE-001",
+          "cost": 110,
+          "seatsLeft": 20,
+          "transportBookedUp": false
+        }
+      }
+    },
+    "to": {
+      "Łódź": {
+        "plane": {
+          "id": "KNR-LDZ-PLANE-001",
+          "cost": 70,
+          "seatsLeft": 5,
+          "transportBookedUp": false
+        }
+      },
+      "Kraków": {
+        "plane": {
+          "id": "KNR-KRK-PLANE-001",
+          "cost": 90,
+          "seatsLeft": 6,
+          "transportBookedUp": false
+        }
+      },
+      "Gdańsk": {
+        "plane": {
+          "id": "KNR-GDN-PLANE-001",
+          "cost": 120,
+          "seatsLeft": 30,
+          "transportBookedUp": false
+        }
+      }
+    }
+  },
+  {
+    "_id": "0002",
+    "trip_id": "2",
+    "is_booked_up": false,
+    "hotel": {
+      "hotel_id": "HAB-1",
+      "name": "Hotel Alhambra",
+      "image": "https://i.content4travel.com/cms/img/u/desktop/seres/bcnalha_0.jpg?version=221018-10",
+      "description": [
+        "Wypoczynek z rodziną",
+        "Blisko piaszczystej plaży",
+        "Przy promenadzie",
+        "Programy rozrywkowe z muzyką i tańcami"
+      ],
+      "diet": {
+        "AllInclusive": 850,
+        "Breakfast": 300,
+        "TwoMeals": 500,
+        "None": 0
+      },
+      "rooms": {
+        "small": {
+          "cost": 300,
+          "available": 3
+        },
+        "medium": {
+          "cost": 400,
+          "available": 9
+        },
+        "large": {
+          "cost": 500,
+          "available": 20
+        },
+        "apartment": {
+          "cost": 385,
+          "available": 5
+        },
+        "studio": {
+          "cost": 350,
+          "available": 15
+        }
+      }
+    },
+    "localisation": {
+      "country": "Hiszpania",
+      "region": "Costa Brava"
+    },
+    "date_from": "05-07-2023",
+    "date_to": "15-07-2023",
+    "from": {
+      "Katowice": {
+        "plane": {
+          "id": "KTK-GCB-PLANE-001",
+          "cost": 90,
+          "seatsLeft": 15,
+          "transportBookedUp": false
+        }
+      },
+      "Kraków": {
+        "plane": {
+          "id": "KRK-GCB-PLANE-001",
+          "cost": 86,
+          "seatsLeft": 5,
+          "transportBookedUp": false
+        }
+      },
+      "Gdańsk": {
+        "plane": {
+          "id": "GDN-GCB-PLANE-001",
+          "cost": 78,
+          "seatsLeft": 1,
+          "transportBookedUp": false
+        }
+      },
+      "Warszawa": {
+        "plane": {
+          "id": "WAW-GCB-PLANE-001",
+          "cost": 115,
+          "seatsLeft": 22,
+          "transportBookedUp": false
+        }
+      }
+    },
+    "to": {
+      "Katowice": {
+        "plane": {
+          "id": "GCB-KTK-PLANE-001",
+          "cost": 75,
+          "seatsLeft": 4,
+          "transportBookedUp": false
+        }
+      },
+      "Kraków": {
+        "plane": {
+          "id": "GCB-KRK-PLANE-001",
+          "cost": 90,
+          "seatsLeft": 8,
+          "transportBookedUp": false
+        }
+      },
+      "Gdańsk": {
+        "plane": {
+          "id": "GCB-GDN-PLANE-001",
+          "cost": 112,
+          "seatsLeft": 32,
+          "transportBookedUp": false
+        }
+      },
+      "Warszawa": {
+        "plane": {
+          "id": "GCB-WAW-PLANE-001",
+          "cost": 95,
+          "seatsLeft": 15,
+          "transportBookedUp": false
+        }
+      }
+    }
+  },
+  {
+    "_id": "0003",
+    "trip_id": "3",
+    "is_booked_up": false,
+    "hotel": {
+      "hotel_id": "HGR-1",
+      "name": "Hotel Gaia Royal",
+      "image": "https://i.content4travel.com/cms/img/u/desktop/seres/kgsgaro_0.jpg?version=220903-08",
+      "description": [
+        "Wakacje z dziećmi",
+        "Pokoje rodzinne 5os.",
+        "Blisko pięknej plaży",
+        "Kort tenisowy"
+      ],
+      "diet": {
+        "AllInclusive": 1000,
+        "Breakfast": 870,
+        "TwoMeals": 960,
+        "None": 0
+      },
+      "rooms": {
+        "small": {
+          "cost": 350,
+          "available": 2
+        },
+        "medium": {
+          "cost": 450,
+          "available": 10
+        },
+        "large": {
+          "cost": 700,
+          "available": 20
+        },
+        "apartment": {
+          "cost": 385,
+          "available": 0
+        },
+        "studio": {
+          "cost": 350,
+          "available": 0
+        }
+      }
+    },
+    "localisation": {
+      "country": "Grecja",
+      "region": "Kos"
+    },
+    "date_from": "05-07-2023",
+    "date_to": "12-07-2023",
+    "from": {
+      "Katowice": {
+        "plane": {
+          "id": "KTK-KGS-PLANE-001",
+          "cost": 105,
+          "seatsLeft": 10,
+          "transportBookedUp": false
+        }
+      },
+      "Kraków": {
+        "plane": {
+          "id": "KRK-KGS-PLANE-001",
+          "cost": 103,
+          "seatsLeft": 15,
+          "transportBookedUp": false
+        }
+      },
+      "Gdańsk": {
+        "plane": {
+          "id": "GDN-KGS-PLANE-001",
+          "cost": 121,
+          "seatsLeft": 3,
+          "transportBookedUp": false
+        }
+      },
+      "Warszawa": {
+        "plane": {
+          "id": "WAW-KGS-PLANE-001",
+          "cost": 102,
+          "seatsLeft": 6,
+          "transportBookedUp": false
+        }
+      },
+      "Poznań": {
+        "plane": {
+          "id": "PZN-KGS-PLANE-001",
+          "cost": 98,
+          "seatsLeft": 10,
+          "transportBookedUp": false
+        }
+      }
+    },
+    "to": {
+      "Katowice": {
+        "plane": {
+          "id": "KGS-KTK-PLANE-001",
+          "cost": 150,
+          "seatsLeft": 2,
+          "transportBookedUp": false
+        }
+      },
+      "Kraków": {
+        "plane": {
+          "id": "KGS-KRK-PLANE-001",
+          "cost": 150,
+          "seatsLeft": 4,
+          "transportBookedUp": false
+        }
+      },
+      "Gdańsk": {
+        "plane": {
+          "id": "KGS-GDN-PLANE-001",
+          "cost": 115,
+          "seatsLeft": 32,
+          "transportBookedUp": false
+        }
+      },
+      "Warszawa": {
+        "plane": {
+          "id": "KGS-WAW-PLANE-001",
+          "cost": 110,
+          "seatsLeft": 6,
+          "transportBookedUp": false
+        }
+      },
+      "Poznań": {
+        "plane": {
+          "id": "KGS-PZN-PLANE-001",
+          "cost": 120,
+          "seatsLeft": 12,
+          "transportBookedUp": false
+        }
+      }
+    }
+  },
+  {
+    "_id": "0004",
+    "trip_id": "4",
+    "is_booked_up": false,
+    "hotel": {
+      "hotel_id": "HSMKB-1",
+      "name": "Hotel Smy Kos Beach & Splash",
+      "image": "https://i.content4travel.com/cms/img/u/desktop/seres/kgsprin_0.jpg?version=220929-10",
+      "description": [
+        "Aktywny, rodzinny wypoczynek",
+        "2 baseny i brodzik dla dzieci",
+        "Bezpośrednio przy piaszczystej plaży",
+        "Pyszna kuchnia"
+      ],
+      "diet": {
+        "AllInclusive": 1200,
+        "Breakfast": 970,
+        "TwoMeals": 1060,
+        "None": 0
+      },
+      "rooms": {
+        "small": {
+          "cost": 450,
+          "available": 15
+        },
+        "medium": {
+          "cost": 550,
+          "available": 5
+        },
+        "large": {
+          "cost": 700,
+          "available": 0
+        },
+        "apartment": {
+          "cost": 410,
+          "available": 2
+        },
+        "studio": {
+          "cost": 400,
+          "available": 5
+        }
+      }
+    },
+    "localisation": {
+      "country": "Grecja",
+      "region": "Kos"
+    },
+    "date_from": "05-07-2023",
+    "date_to": "15-07-2023",
+    "from": {
+      "Katowice": {
+        "plane": {
+          "id": "KTK-KGS-PLANE-001",
+          "cost": 105,
+          "seatsLeft": 10,
+          "transportBookedUp": false
+        }
+      },
+      "Gdańsk": {
+        "plane": {
+          "id": "GDN-KGS-PLANE-001",
+          "cost": 121,
+          "seatsLeft": 3,
+          "transportBookedUp": false
+        }
+      },
+      "Warszawa": {
+        "plane": {
+          "id": "WAW-KGS-PLANE-001",
+          "cost": 102,
+          "seatsLeft": 6,
+          "transportBookedUp": false
+        }
+      },
+      "Poznań": {
+        "plane": {
+          "id": "PZN-KGS-PLANE-001",
+          "cost": 98,
+          "seatsLeft": 10,
+          "transportBookedUp": false
+        }
+      }
+    },
+    "to": {
+      "Katowice": {
+        "plane": {
+          "id": "KGS-KTK-PLANE-002",
+          "cost": 190,
+          "seatsLeft": 5,
+          "transportBookedUp": false
+        }
+      },
+      "Kraków": {
+        "plane": {
+          "id": "KGS-KRK-PLANE-002",
+          "cost": 210,
+          "seatsLeft": 4,
+          "transportBookedUp": false
+        }
+      },
+      "Gdańsk": {
+        "plane": {
+          "id": "KGS-GDN-PLANE-002",
+          "cost": 200,
+          "seatsLeft": 21,
+          "transportBookedUp": false
+        }
+      },
+      "Poznań": {
+        "plane": {
+          "id": "KGS-PZN-PLANE-002",
+          "cost": 130,
+          "seatsLeft": 11,
+          "transportBookedUp": false
+        }
+      }
+    }
+  },
+  {
+    "_id": "0005",
+    "trip_id": "5",
+    "is_booked_up": false,
+    "hotel": {
+      "hotel_id": "HHINER-1",
+      "name": "Hotel Holiday Inn Express Rzeszów Airport",
+      "image": "https://i.content4travel.com/cms/img/u/desktop/seres/splholi_0.jpg?version=1",
+      "description": [
+        "Hotel przy lotnisku – idealny na nocleg przed i po podróży",
+        "Blisko lotniska i G2A Arena",
+        "Popularna sieć",
+        "Nowoczesny sty"
+      ],
+      "diet": {
+        "AllInclusive": 0,
+        "Breakfast": 300,
+        "TwoMeals": 0,
+        "None": 0
+      },
+      "rooms": {
+        "small": {
+          "cost": 300,
+          "available": 12
+        },
+        "medium": {
+          "cost": 350,
+          "available": 6
+        },
+        "large": {
+          "cost": 400,
+          "available": 10
+        },
+        "apartment": {
+          "cost": 360,
+          "available": 3
+        },
+        "studio": {
+          "cost": 310,
+          "available": 1
+        }
+      }
+    },
+    "localisation": {
+      "country": "Polska",
+      "region": "Rzeszów"
+    },
+    "date_from": "01-07-2023",
+    "date_to": "02-07-2023",
+    "from": {
+      "Katowice": {
+        "plane": {
+          "id": "KTK-RZE-PLANE-001",
+          "cost": 40,
+          "seatsLeft": 12,
+          "transportBookedUp": false
+        },
+        "train": {
+          "id": "KTK-RZE-TRAIN-001",
+          "cost": 25,
+          "seatsLeft": 12,
+          "transportBookedUp": false
+        }
+      },
+      "Gdańsk": {
+        "plane": {
+          "id": "GDN-RZE-PLANE-001",
+          "cost": 141,
+          "seatsLeft": 3,
+          "transportBookedUp": false
+        },
+        "train": {
+          "id": "GDN-RZE-TRAIN-001",
+          "cost": 80,
+          "seatsLeft": 40,
+          "transportBookedUp": false
+        }
+      },
+      "Warszawa": {
+        "plane": {
+          "id": "WAW-RZE-PLANE-001",
+          "cost": 70,
+          "seatsLeft": 16,
+          "transportBookedUp": false
+        },
+        "train": {
+          "id": "WAW-RZE-TRAIN-001",
+          "cost": 60,
+          "seatsLeft": 42,
+          "transportBookedUp": false
+        }
+      },
+      "Poznań": {
+        "plane": {
+          "id": "PZN-RZE-PLANE-001",
+          "cost": 98,
+          "seatsLeft": 10,
+          "transportBookedUp": false
+        },
+        "train": {
+          "id": "PZN-RZE-TRAIN-001",
+          "cost": 65,
+          "seatsLeft": 24,
+          "transportBookedUp": false
+        }
+      }
+    },
+    "to": {
+      "Katowice": {
+        "plane": {
+          "id": "RZE-KTK-PLANE-001",
+          "cost": 40,
+          "seatsLeft": 12,
+          "transportBookedUp": false
+        },
+        "train": {
+          "id": "RZE-KTK-TRAIN-001",
+          "cost": 25,
+          "seatsLeft": 12,
+          "transportBookedUp": false
+        }
+      },
+      "Gdańsk": {
+        "plane": {
+          "id": "RZE-GDN-PLANE-001",
+          "cost": 141,
+          "seatsLeft": 3,
+          "transportBookedUp": false
+        },
+        "train": {
+          "id": "RZE-GDN-TRAIN-001",
+          "cost": 80,
+          "seatsLeft": 40,
+          "transportBookedUp": false
+        }
+      },
+      "Warszawa": {
+        "plane": {
+          "id": "RZE-WAW-PLANE-001",
+          "cost": 70,
+          "seatsLeft": 16,
+          "transportBookedUp": false
+        },
+        "train": {
+          "id": "RZE-WAW-TRAIN-001",
+          "cost": 60,
+          "seatsLeft": 42,
+          "transportBookedUp": false
+        }
+      },
+      "Poznań": {
+        "plane": {
+          "id": "RZE-PZN-PLANE-001",
+          "cost": 98,
+          "seatsLeft": 10,
+          "transportBookedUp": false
+        },
+        "train": {
+          "id": "RZE-PZN-TRAIN-001",
+          "cost": 65,
+          "seatsLeft": 24,
+          "transportBookedUp": false
+        }
+      }
+    }
+  },
+  {
+    "_id": "0006",
+    "trip_id": "5",
+    "is_booked_up": false,
+    "hotel": {
+      "hotel_id": "HHINER-2",
+      "name": "Hotel Holiday Inn Express Rzeszów Airport",
+      "image": "https://i.content4travel.com/cms/img/u/desktop/seres/splholi_0.jpg?version=1",
+      "description": [
+        "Hotel przy lotnisku – idealny na nocleg przed i po podróży",
+        "Blisko lotniska i G2A Arena",
+        "Popularna sieć",
+        "Nowoczesny sty"
+      ],
+      "diet": {
+        "AllInclusive": 0,
+        "Breakfast": 300,
+        "TwoMeals": 0,
+        "None": 0
+      },
+      "rooms": {
+        "small": {
+          "cost": 300,
+          "available": 12
+        },
+        "medium": {
+          "cost": 350,
+          "available": 6
+        },
+        "large": {
+          "cost": 400,
+          "available": 10
+        },
+        "apartment": {
+          "cost": 360,
+          "available": 3
+        },
+        "studio": {
+          "cost": 310,
+          "available": 1
+        }
+      }
+    },
+    "localisation": {
+      "country": "Polska",
+      "region": "Rzeszów"
+    },
+    "date_from": "07-07-2023",
+    "date_to": "09-07-2023",
+    "from": {
+      "Katowice": {
+        "plane": {
+          "id": "KTK-RZE-PLANE-002",
+          "cost": 40,
+          "seatsLeft": 12,
+          "transportBookedUp": false
+        },
+        "train": {
+          "id": "KTK-RZE-TRAIN-002",
+          "cost": 25,
+          "seatsLeft": 12,
+          "transportBookedUp": false
+        }
+      },
+      "Gdańsk": {
+        "plane": {
+          "id": "GDN-RZE-PLANE-002",
+          "cost": 141,
+          "seatsLeft": 3,
+          "transportBookedUp": false
+        },
+        "train": {
+          "id": "GDN-RZE-TRAIN-002",
+          "cost": 80,
+          "seatsLeft": 40,
+          "transportBookedUp": false
+        }
+      },
+      "Warszawa": {
+        "plane": {
+          "id": "WAW-RZE-PLANE-002",
+          "cost": 70,
+          "seatsLeft": 16,
+          "transportBookedUp": false
+        },
+        "train": {
+          "id": "WAW-RZE-TRAIN-002",
+          "cost": 60,
+          "seatsLeft": 42,
+          "transportBookedUp": false
+        }
+      },
+      "Poznań": {
+        "plane": {
+          "id": "PZN-RZE-PLANE-002",
+          "cost": 98,
+          "seatsLeft": 10,
+          "transportBookedUp": false
+        },
+        "train": {
+          "id": "PZN-RZE-TRAIN-002",
+          "cost": 65,
+          "seatsLeft": 24,
+          "transportBookedUp": false
+        }
+      }
+    },
+    "to": {
+      "Katowice": {
+        "plane": {
+          "id": "RZE-KTK-PLANE-002",
+          "cost": 40,
+          "seatsLeft": 12,
+          "transportBookedUp": false
+        },
+        "train": {
+          "id": "RZE-KTK-TRAIN-002",
+          "cost": 25,
+          "seatsLeft": 12,
+          "transportBookedUp": false
+        }
+      },
+      "Gdańsk": {
+        "plane": {
+          "id": "RZE-GDN-PLANE-002",
+          "cost": 141,
+          "seatsLeft": 3,
+          "transportBookedUp": false
+        },
+        "train": {
+          "id": "RZE-GDN-TRAIN-002",
+          "cost": 80,
+          "seatsLeft": 40,
+          "transportBookedUp": false
+        }
+      },
+      "Warszawa": {
+        "plane": {
+          "id": "RZE-WAW-PLANE-002",
+          "cost": 70,
+          "seatsLeft": 16,
+          "transportBookedUp": false
+        },
+        "train": {
+          "id": "RZE-WAW-TRAIN-002",
+          "cost": 60,
+          "seatsLeft": 42,
+          "transportBookedUp": false
+        }
+      },
+      "Poznań": {
+        "plane": {
+          "id": "RZE-PZN-PLANE-002",
+          "cost": 98,
+          "seatsLeft": 10,
+          "transportBookedUp": false
+        },
+        "train": {
+          "id": "RZE-PZN-TRAIN-002",
+          "cost": 65,
+          "seatsLeft": 24,
+          "transportBookedUp": false
+        }
+      }
+    }
+  }
+]
+

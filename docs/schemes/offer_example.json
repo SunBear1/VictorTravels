@@ -1,8 +1,7 @@
 {
-  "_id": "1234-4",
-  // _id = trip_id + offer_id
+  "_id": "1234",
   "hotel": {
-    "hotel_id": "OSVC",
+    "hotel_id": "OSVC-4",
     "name": "OsovaCourt",
     "image": "URL_to_photo",
     "description": [
@@ -42,6 +41,7 @@
     "country": "France",
     "region": "Paris"
   },
+  "date": "01-06-2023:11-06-2023",
   "from": {
     "Warszawa": {
       "plane": {

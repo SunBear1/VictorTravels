@@ -5,6 +5,7 @@ import uvicorn
 from fastapi import FastAPI, APIRouter
 
 from endpoints.reservation import router as reservations_router
+from mongodb.mongodb_client import MongoDBClient
 from rabbitmq.consumers import consume_purchase_ms_event, consume_eventhub_ms_event, start_consuming
 from rabbitmq.rabbitmq_client import PURCHASES_CONSUME_QUEUE_NAME, RESERVATIONS_CONSUME_QUEUE_NAME
 
@@ -25,6 +26,7 @@ logger.addHandler(handler)
 
 @app.on_event("startup")
 async def startup_event():
+    MongoDBClient.connect_to_database()
     purchases_consumer = threading.Thread(target=start_consuming,
                                           args=(PURCHASES_CONSUME_QUEUE_NAME, consume_purchase_ms_event))
     purchases_consumer.start()

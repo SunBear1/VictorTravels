@@ -5,15 +5,18 @@
 ### Zmiana dostępnych wycieczek do kupienia/rezerwacji
 
 trips_affected: ID konkretnej wycieczki, czyli turnusu
+
+Klucze "hotel_id" oraz "connection_id" są opcjonalne. Mogą istnieć oba naraz, tylko jeden naraz, albo
+wogule.
+
+**Narazie ta wiadomość nie jest używana i zostanie przerobiona dla etapu 2**
+
 ```json
 {
+  "title": "update_reservations_available",
   "operation_type": "add|delete",
-  "trips_affected": [
-    "1234",
-    "325325",
-    "43534",
-    "08453"
-  ]
+  "hotel_id": "HTB-1",
+  "connection_id": "ORD-GDN-PLANE-XYZ"
 }
 ```
 
@@ -21,7 +24,10 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 
 ```json
 {
-  "trip_id": "1234"
+  "title": "trip_offer_hotel_room_update",
+  "trip_offer_id": "1234",
+  "operation_type": "add|delete",
+  "room_type": "small|medium|large|apartment|studio"
 }
 ```
 
@@ -29,7 +35,12 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 
 ```json
 {
-  "trip_id": "1234"
+  "title": "trip_offer_transport_update",
+  "trip_offer_id": "1234",
+  "operation_type": "add|delete",
+  "connection_id_to": "WAW-PRS-TRAIN-XYZ",
+  "connection_id_from": "PRS-WAW-TRAIN-XYZ",
+  "head_count": 2
 }
 ```
 
@@ -39,8 +50,15 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 
 ```json
 {
-  "trip_id": "1234",
-  "reservation_status": "created|canceled|expired|finalized"
+  "title": "reservation_status_update",
+  "trip_offer_id": "1234",
+  "reservation_id": "644f99048fbf8dxzc1f8b618",
+  "reservation_status": "created|canceled|expired|finalized",
+  "hotel_id": "(ten klucz-wartość jest opcjonalny) OSV-1",
+  "room_type": "(ten klucz-wartość jest opcjonalny) small",
+  "connection_id_to": "(ten klucz-wartość jest opcjonalny) WAW-PRS-TRAIN-XYZ",
+  "connection_id_from": "(ten klucz-wartość jest opcjonalny) PRS-WAW-TRAIN-XYZ",
+  "head_count": 2
 }
 ```
 
@@ -48,8 +66,10 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 
 ```json
 {
+  "title": "reservation_creation",
   "_id": "example_reservation_id",
-  "trip_id": "1234"
+  "trip_offer_id": "1234",
+  "price": 2137.21
 }
 ```
 
@@ -57,8 +77,10 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 
 ```json
 {
+  "title": "reservation_creation_time",
   "_id": "example_reservation_id",
-  "reservation_creation_time": "2023-04-27T17:22:10.936561"
+  "reservation_creation_time": "2023-04-27T17:22:10.936561",
+  "price": 2137.21
 }
 ```
 
@@ -66,6 +88,7 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 
 ```json
 {
+  "title": "update_transaction_status",
   "_id": "example_reservation_id",
   "transaction_status": "finalized|canceled|expired"
 }
@@ -75,8 +98,9 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 
 ```json
 {
+  "title": "update_purchase_status",
   "_id": "example_reservation_id",
-  "trip_id": "1234",
+  "offers_id": "1234",
   "purchase_status": "confirmed"
 }
 ```
@@ -87,6 +111,7 @@ trips_affected: ID konkretnej wycieczki, czyli turnusu
 
 ```json
 {
+  "title": "update_payment_status",
   "_id": "example_reservation_id",
   "payment": "rejected|accepted|expired"
 }
@@ -100,11 +125,13 @@ Ta wiadomość jest wysyłana za każdym razem jak miejsce w wycieczce ulegną z
 
 ```json
 {
-  "operation": "add|delete",
-  "trips": [
+  "title": "hotel_rooms_update",
+  "trip_offers_id": [
     "1234",
-    "4312"
-  ]
+    "4212"
+  ],
+  "operation_type": "add|delete",
+  "room_type": "small|medium|large|apartment|studio"
 }
 ```
 
@@ -114,11 +141,11 @@ Ta wiadomość jest wysyłana kiedy miejsca w jakiejś wycieczce są równe zero
 
 ```json
 {
-  "operation": "add|delete",
-  "trips": [
-    "1234",
-    "4312"
-  ]
+  "title": "hotel_booking_status",
+  "trip_offers_id": [
+    "1235"
+  ],
+  "is_hotel_booked_up": "false|true"
 }
 ```
 
@@ -130,11 +157,15 @@ Ta wiadomość jest wysyłana za każdym razem jak miejsce w wycieczce ulegną z
 
 ```json
 {
-  "operation": "add|delete",
-  "trips": [
+  "title": "transport_update",
+  "trip_offers_id": [
     "1234",
-    "4312"
-  ]
+    "4212"
+  ],
+  "operation_type": "add|delete",
+  "connection_id_to": "WAW-PRS-TRAIN-XYZ",
+  "connection_id_from": "PRS-WAW-TRAIN-XYZ",
+  "head_count": 3
 }
 ```
 
@@ -144,10 +175,12 @@ Ta wiadomość jest wysyłana kiedy miejsca w jakiejś wycieczce są równe zero
 
 ```json
 {
-  "operation": "add|delete",
-  "trips": [
+  "title": "transport_booking_status",
+  "trip_offers_id": [
     "1234",
     "4312"
-  ]
+  ],
+  "connection_id": "PRS-WAW-TRAIN-XYZ",
+  "is_transport_booked_up": "false|true"
 }
 ```

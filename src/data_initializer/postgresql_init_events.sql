@@ -1,6 +1,10 @@
-CREATE TABLE Trips
+CREATE TABLE EventsLog
 (
-    id   SERIAL PRIMARY KEY,
-    type varchar(255) NOT NULL,
-    body varchar(255) NOT NULL
+    ID          SERIAL PRIMARY KEY,
+    Type        varchar(50),
+    Operation   varchar(50),
+    "From"      varchar(50),
+    "To"        varchar(50),
+    ReceiveDate timestamp,
+    Body        json
 );
