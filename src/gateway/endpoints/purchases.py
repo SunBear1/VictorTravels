@@ -2,10 +2,11 @@ import json
 import logging
 
 import requests
-from common.authentication import oauth2_scheme, verify_jwt_token
-from common.constants import PURCHASE_MS_ADDRESS
 from fastapi import APIRouter, Response, Depends, status
 from starlette.responses import JSONResponse
+
+from common.authentication import oauth2_scheme, verify_jwt_token
+from common.constants import PURCHASE_MS_ADDRESS
 from users.service import verify_user_identify
 
 router = APIRouter(prefix="/api/v1/purchases")
@@ -19,12 +20,13 @@ logger = logging.getLogger("gateway")
                  200: {"description": "Purchase was already performed"},
                  403: {"description": "User does not have permission to use this service"},
                  404: {"description": "Reservation with provided ID does not exist"},
-                 422: {"description": "Unknown error occurred"}
+                 500: {"description": "Unknown error occurred"},
+                 503: {"description": "Failed to connect to backend service"},
              },
              )
 async def purchase_trip(reservation_id: str, token: str = Depends(oauth2_scheme)):
     """
-    Purchase specific trip
+    Make a purchase of a specific trip reservation
     """
     try:
         users_credentials = verify_jwt_token(token=token)
@@ -46,7 +48,7 @@ async def purchase_trip(reservation_id: str, token: str = Depends(oauth2_scheme)
                             content=f"Reservation with ID {reservation_id} does not exist",
                             media_type="text/plain")
         if response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR:
-            return Response(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content="Purchase service crashed :-)",
+            return Response(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content="Purchase service crashed :-)",
                             media_type="text/plain")
 
     except requests.exceptions.ConnectionError:

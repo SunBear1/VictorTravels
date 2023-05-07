@@ -2,10 +2,11 @@ import json
 import logging
 
 import requests
-from common.authentication import oauth2_scheme, verify_jwt_token
-from common.constants import PAYMENT_MS_ADDRESS
 from fastapi import APIRouter, Response, Depends, status
 from starlette.responses import JSONResponse
+
+from common.authentication import oauth2_scheme, verify_jwt_token
+from common.constants import PAYMENT_MS_ADDRESS
 from users.service import verify_user_identify
 
 router = APIRouter(prefix="/api/v1/payments")
@@ -16,17 +17,18 @@ logger = logging.getLogger("gateway")
 @router.post("/{reservation_id}",
              responses={
                  200: {"description": "Payment performed successfully"},
-                 404: {"description": "Reservation with provided ID does not exist"},
-                 403: {"description": "User does not have permission to use this service"},
                  400: {"description": "Reservation with provided ID has already been paid for"},
-                 410: {"description": "Reservation with ID has expired"},
                  402: {"description": "Payment for reservation have failed"},
-                 500: {"description": "Unknown error occurred"}
+                 403: {"description": "User does not have permission to use this service"},
+                 404: {"description": "Reservation with provided ID does not exist"},
+                 410: {"description": "Reservation with ID has expired"},
+                 500: {"description": "Unknown error occurred"},
+                 503: {"description": "Failed to connect to backend service"},
              },
              )
 async def buy_trip(reservation_id: str, token: str = Depends(oauth2_scheme)):
     """
-    Pay for a specific trip
+    Make a payment for a specific trip reservation
     """
     try:
         users_credentials = verify_jwt_token(token=token)
@@ -49,7 +51,7 @@ async def buy_trip(reservation_id: str, token: str = Depends(oauth2_scheme)):
                             content=response.content,
                             media_type="text/plain")
         if response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR:
-            return Response(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content="Payment service crashed :-)",
+            return Response(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content="Payment service crashed :-)",
                             media_type="text/plain")
 
     except requests.exceptions.ConnectionError:
