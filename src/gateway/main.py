@@ -1,8 +1,10 @@
+import json
 import logging
 import threading
 
 import uvicorn
 from fastapi import FastAPI, APIRouter
+from fastapi.openapi.utils import get_openapi
 
 from common.constants import LIVE_EVENTS_QUEUE_NAME
 from endpoints.events import router as event_router
@@ -41,4 +43,13 @@ async def startup_event():
 
 
 if __name__ == "__main__":
+    openapi_schema = get_openapi(
+        title="Dokumentacja REST API",
+        version="1.0.0",
+        description="Dokumentacja REST API dla wszystkich serwisów platformy VictorTravels",
+        routes=app.routes,
+    )
+    with open("openapi.json", "w") as f:
+        json.dump(openapi_schema, f)
+
     uvicorn.run(app, host="127.0.0.1", port=8080)

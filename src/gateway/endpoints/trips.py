@@ -4,11 +4,10 @@ from datetime import date
 from typing import Optional, List
 
 import requests
-from common.authentication import oauth2_scheme, verify_jwt_token
-from common.constants import TRIP_RESEARCHER_SERVICE_ADDRESS
-from fastapi import APIRouter, Response, Depends, status, Query
+from fastapi import APIRouter, Response, status, Query
 from starlette.responses import JSONResponse
-from users.service import verify_user_identify
+
+from common.constants import TRIP_RESEARCHER_SERVICE_ADDRESS
 
 router = APIRouter(prefix="/api/v1/trips")
 
@@ -18,21 +17,16 @@ logger = logging.getLogger("gateway")
 @router.get("/{trip_id}",
             responses={
                 200: {"description": "Trip's data successfully listed"},
-                403: {"description": "User does not have permission to use this service"},
                 404: {"description": "Trip with provided ID does not exist"},
-                422: {"description": "Unknown error occurred"}
+                500: {"description": "Unknown error occurred"},
+                503: {"description": "Failed to connect to backend service"},
             },
             )
-async def get_trip(trip_id: str, token: str = Depends(oauth2_scheme)):
+async def get_trip(trip_id: str):
     """
     Return information about specific trip
     """
     try:
-        users_credentials = verify_jwt_token(token=token)
-        if not verify_user_identify(login=users_credentials["login"], password=users_credentials["password"]):
-            return Response(status_code=status.HTTP_403_FORBIDDEN,
-                            content="User does not have permission to use this service", media_type="text/plain")
-        print(f"http://{TRIP_RESEARCHER_SERVICE_ADDRESS}/api/v1/trips/{trip_id}")
         response = requests.get(f"http://{TRIP_RESEARCHER_SERVICE_ADDRESS}/api/v1/trips/{trip_id}",
                                 timeout=3.00,
                                 verify=False)
@@ -44,8 +38,8 @@ async def get_trip(trip_id: str, token: str = Depends(oauth2_scheme)):
         if response.status_code == status.HTTP_404_NOT_FOUND:
             return Response(status_code=status.HTTP_404_NOT_FOUND, content=f"Trip with ID {trip_id} does not exist",
                             media_type="text/plain")
-        if response.status_code == status.HTTP_500_INTERNAL_SERVER_ERRO:
-            return Response(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content="Tour researcher crashed :-)",
+        if response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR:
+            return Response(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content="Tour researcher crashed :-)",
                             media_type="text/plain")
 
     except requests.exceptions.ConnectionError:
@@ -59,9 +53,9 @@ async def get_trip(trip_id: str, token: str = Depends(oauth2_scheme)):
 @router.get("/",
             responses={
                 200: {"description": "Trips fetched successfully"},
-                403: {"description": "User does not have permission to use this service"},
                 400: {"description": "Invalid tour researcher query parameters"},
-                422: {"description": "Unknown error occurred"}
+                500: {"description": "Unknown error occurred"},
+                503: {"description": "Failed to connect to backend service"},
             },
             )
 async def get_trips(
@@ -76,15 +70,12 @@ async def get_trips(
         transport: List[Optional[str]] = Query(None),
         order: Optional[str] = Query(None),
         diet: List[Optional[str]] = Query(None),
-        max_price: Optional[int] = Query(None, gt=0),
-        token: str = Depends(oauth2_scheme)
+        max_price: Optional[int] = Query(None, gt=0)
 ):
+    """
+    Return information about trips meeting given query
+    """
     try:
-        users_credentials = verify_jwt_token(token=token)
-        if not verify_user_identify(login=users_credentials["login"], password=users_credentials["password"]):
-            return Response(status_code=status.HTTP_403_FORBIDDEN,
-                            content="User does not have permission to use this service", media_type="text/plain")
-
         query_params = {
             "adults": adults,
             "kidsTo3yo": kids_to_3yo,
@@ -111,9 +102,12 @@ async def get_trips(
             return Response(status_code=status.HTTP_400_BAD_REQUEST, content="Query for tour researcher is invalid",
                             media_type="text/plain")
         if response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR:
-            return Response(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content="Tour researcher crashed :-)",
+            return Response(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content="Tour researcher crashed :-)",
                             media_type="text/plain")
 
+    except requests.exceptions.ConnectionError:
+        return Response(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, content="Can't connect to payment service",
+                        media_type="text/plain")
     except Exception as ex:
         logger.info(f"Exception in gateway occuerd: {ex}")
         return Response(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)

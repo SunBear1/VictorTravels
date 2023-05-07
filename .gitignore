@@ -2,3 +2,4 @@
 /.vscode/
 src/event_store_ms/.idea/
 !/src/event_hub_ms/target/
+/src/gateway/openapi.json
