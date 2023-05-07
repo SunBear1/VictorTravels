@@ -32,6 +32,7 @@ class TripReservationData(BaseModel):
 @router.post("/{trip_offer_id}",
              responses={
                  201: {"description": "Reservation successfully created"},
+                 400: {"description": "Trip with provided ID does not have enough places left"},
                  404: {"description": "Trip with provided ID does not exist"},
                  500: {"description": "Unknown error occurred"}
              },
