@@ -20,7 +20,6 @@ const MyNavigation = () => {
       <ul>
         <li><NavLink exact to="/" activeClassName="active">Home</NavLink></li>
         <li><NavLink to="/search" activeClassName="active">Search</NavLink></li>
-        <li><NavLink to="/trips" activeClassName="active">Trips</NavLink></li>
         {isLoggedIn && <NavLink to="/cart" activeClassName="active">Cart</NavLink>}
         {isLoggedIn ? (<li>{username}<button onClick={LogoutButton}>Logout</button></li>):(<li id='log'><NavLink to="/login" activeClassName="active">LogIn</NavLink></li>)}
       </ul>

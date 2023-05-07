@@ -1,12 +1,23 @@
-import logo from './logo.svg';
 import './App.css';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import LocationEnum from './LocationEnum';
 import CounterComp from './CounterComp';
 import DateRangePicker from './DateRangePicker';
 import "./SearchComp.css"
 
+
+
 function SearchComp() {
+
+  const navigate = useNavigate();
+
+  
+  const [trips, setTrips] = useState([]);
+  const [transportType, setTransportType] = useState('');
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const [selectedCountries, setSelectedCountries] = useState([]);
   const [showCheckboxes, setShowCheckboxes] = useState(true);
@@ -26,6 +37,7 @@ function SearchComp() {
   };
 
   const handleParentInputChange = (value, parentId) => {
+    console.log("asdasd + " + value);
     switch (parentId) {
       case 1:
         setAdultCounter(value);
@@ -44,6 +56,10 @@ function SearchComp() {
     }
   };
 
+  const handleDateInputChange = (startDate, endDate) => {
+      setStartDate(startDate);
+      setEndDate(endDate);
+  }
 
   const changeCheckboxes = (event) => {
     var checkboxes = document.getElementById("checkBoxes");
@@ -72,14 +88,26 @@ function SearchComp() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const options = { month: '2-digit', day: '2-digit', year: 'numeric' };
+    const formattedStartDate = startDate.toLocaleDateString('en-US', options);
+    const formattedEndDate = endDate.toLocaleDateString('en-US', options);
+
+    const encodedList = selectedCountries.join(',');
+    navigate(`/trips?adult=${adultCounter}&child1=${child1Counter}&child2=${child2Counter}&child3=${child3Counter}&date-start=${formattedStartDate}&date-end=${formattedEndDate}&locations=${encodedList}`);
   }
+
+
+  const handleSubmit1 = async (event) => {
+    event.preventDefault();
+
+    }
 
   return (
     <div className="Search">
 
       <div> 
-      <h1>Date Range Picker Examples</h1>
-      <DateRangePicker />
+      <h1>Date Range for Trip</h1>
+      <DateRangePicker getValue={handleDateInputChange}/>
       </div>
       <div id='Osoby'>
         <div><CounterComp getValue={handleParentInputChange} parentId={1} text="Dorośli"/></div>
@@ -106,7 +134,36 @@ function SearchComp() {
         ))}
       </ul>
       </div>
-      <button onClick={handleSubmit}>Szukaj</button>
+
+      <div>
+      <label id="transport">Transport type:</label>
+          <select onChange={(e) => setTransportType(e.target.value)} >
+              <option value="any">Dowolny</option>
+              <option value="own">Własny</option>
+              <option value="train">Pociąg</option>
+              <option value="plane">Samolot</option>
+          </select>
+      </div>
+      <br/>
+      <button onClick={handleSubmit1}>Szukaj</button>
+
+      <ul className="trip-items">
+                {trips.map((trip, index) => (
+                    <Link to={"trip/" + trip.id}>
+                        <li key={index} className="trip-item">
+                            <img src={trip.image} alt={trip.name} className="trip-item__image" />
+                            <div className="trip-item__details">
+                                <h3 className="trip-item__name">{trip.name}</h3>
+                                <p className="trip-item__location">{trip.location}</p>
+                                <p className="trip-item__description">{trip.description}</p>
+                                <p className="trip-item__date">{trip.date}</p>
+                                <p className="trip-item__diets">Diety: {trip.diets.join(', ')}</p>
+                                <p className="trip-item__price">Cena za osobę: {trip.price} zł</p>
+                            </div>
+                        </li>
+                    </Link>
+                ))}
+            </ul>
     </div>
   );
 }

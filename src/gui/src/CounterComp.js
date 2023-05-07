@@ -4,22 +4,23 @@ const CounterComp = (props) =>
 {
     const text = props.text;
     const parentId = props.parentId;
-    const handleInputChange = (event) => {
-        props.getValue(value, parentId);
+    const value_given = props.value ? props.value : 0;
+    const handleInputChange = (value_temp) => {
+        props.getValue(value_temp, parentId);
     };
 
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState(value_given);
     const [disableSubButton, setDisableSubButton] = useState(false);
     const handleAdd = () => {
         var value_temp = value + 1;
         setValue(value_temp);
-        handleInputChange();
+        handleInputChange(value_temp);
     }
 
     const handleSub = () => {
         var value_temp = value - 1;
         setValue(value_temp);
-        handleInputChange();
+        handleInputChange(value_temp);
     }
 
     useEffect(() => {
