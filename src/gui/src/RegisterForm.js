@@ -1,14 +1,36 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import "./RegisterForm.css"
+import axios from 'axios';
+import parseResponse from './useResponse';
 
 const RegisterForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState(null);
+  const [isGood, setIsGood] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // TODO: Implement form submission logic
+    try {
+      const response = await axios.post('http://localhost:18000/api/v1/users/register', {
+        email: email,
+        password: password
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log(response);
+      const [mess, isGood] = parseResponse("register_POST",response);
+      setMessage(mess);
+      setIsGood(isGood);
+    } catch (error) {
+      console.error(error)
+      const [mess, isGood] = parseResponse("register_POST", error.response);
+      setMessage(mess);
+      setIsGood(isGood);
+    }
   };
 
   return (
@@ -25,6 +47,8 @@ const RegisterForm = () => {
         </div>
         <button type="submit">Register</button>
       </form>
+      {isGood && <p className="good">{message}</p>}
+      {!isGood && <p className="error">{message}</p>}
       <p>Already have an account? <Link to="/login">Login</Link></p>
     </div>
   );

@@ -3,14 +3,14 @@ import { Navigate, Outlet } from 'react-router-dom';
 import useAuth from './useAuth';
 import Cookies from 'js-cookie';
 
-function PrivateRoute() {
+function LoginRoute() {
     const token = Cookies.get('token');
 
     if (token) {
-        return <Outlet />;
+        return <Navigate to="/home" />;
     }
-    return <Navigate to="/login" />;
+    return <Outlet/>;
   
 }
 
-export default PrivateRoute;
+export default LoginRoute;

@@ -53,3 +53,11 @@ code {
 #checkBoxes label:hover {
   background-color: #4F615E;
 }
+
+.error{
+  color: #c44545;
+}
+
+.good{
+  color: #5fc93eb6;
+}

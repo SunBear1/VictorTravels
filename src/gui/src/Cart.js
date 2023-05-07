@@ -2,10 +2,15 @@ import { useContext, useEffect, useState } from 'react';
 import { UserContext } from './UserProvider';
 
 const Cart = () => {
-  const { cart, removeFromCart, purchasedTrips } = useContext(UserContext);
+  const { getCart, removeFromCart, getPurchasedTrips } = useContext(UserContext);
+  
+
+
+
   const [trips, setTrips] = useState([]);
-  const [tripsId, setTripsId] = useState(cart);
+  const [tripsId, setTripsId] = useState(getCart());
   const [boughtTrips, setBoughtTrips] = useState([]);
+  const [boughtTripsId, setBoughtTripsId] = useState(getPurchasedTrips());
 
   useEffect(() => {
     const fetchTrips = async () => {
@@ -24,7 +29,7 @@ const Cart = () => {
   useEffect(() => {
     const fetchBought = async () => {
       const tripsData = await Promise.all(
-        purchasedTrips.map(async (id) => {
+        boughtTripsId.map(async (id) => {
           const response = await fetch(`https://example.com/events/${id}`);
           const eventData = await response.json();
           return eventData;
@@ -33,11 +38,11 @@ const Cart = () => {
       setBoughtTrips(tripsData);
     };
     fetchBought();
-  }, [purchasedTrips]);
+  }, [boughtTripsId]);
 
   const handleRemove = (id) =>{
     removeFromCart(id);
-    setTripsId(cart);
+    setTripsId(getCart());
   }
 
   return (

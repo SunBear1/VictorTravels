@@ -9,14 +9,7 @@ const useAuth = () => {
     const token = Cookies.get('token');
 
     if (token) {
-      try {
-        const decodedToken = jwtDecode(token);
-        if (decodedToken.exp * 1000 > Date.now()) {
-          setIsLoggedIn(true);
-        }
-      } catch (err) {
-        console.error(err);
-      }
+      setIsLoggedIn(true);
     }
   }, []);
 

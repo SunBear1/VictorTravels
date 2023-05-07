@@ -29,3 +29,11 @@ background-color: #5a3f9e;
 #log{
     float: right;
 }
+
+#logout{
+  display: block;
+color: white;
+text-align: center;
+padding: 14px 16px;
+text-decoration: none;
+}

@@ -5,40 +5,45 @@ import Cookies from 'js-cookie';
 export const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
-  const [username, setUsername] = useState('');
-  const [cart, setCart] = useState([]);
-  const [purchasedTrips, setPurchasedTrips] = useState([]);
-
-  // Decode the JWT token and set the username
-  const token = Cookies.get('token');
-  if (token) {
-    const decodedToken = jwtDecode(token);
-    setUsername(decodedToken.username);
-  }
 
   // Login function to update the username state
   const login = (token) => {
-    const decodedToken = jwtDecode(token);
-    setUsername(decodedToken.username);
-    Cookies.set('token', token, { expires: 7, sameSite: 'strict' });
+    const decodedToken = jwtDecode(token.replace("Bearer ", ""));
+    Cookies.set('token', token);
+    Cookies.set('username', decodedToken.login);
   };
+
+  const getUsername = () => {
+    return Cookies.get('username');
+  }
+
+  const getCart = () => {
+    return JSON.parse(Cookies.get('cart') || '[]');
+  }
+
+  const getPurchasedTrips = () => {
+    return JSON.parse(Cookies.get('purchasedTrips') || '[]');
+  }
+
 
   // Logout function to clear the username state and the cart
   const logout = () => {
     Cookies.remove('token');
-    setUsername('');
-    setCart([]);
+    Cookies.remove('username');
+    Cookies.remove('purchasedTrips');
+    Cookies.remove('cart');
+    window.location.reload();
   };
 
   useEffect(() => {
     const timer = setInterval(() => {
       // Decrement timeLeft for each trip in the cart
-      setCart((prevCart) =>
-        prevCart.map((trip) => ({
-          ...trip,
-          timeLeft: trip.timeLeft - 1,
-        }))
-      );
+      const cartItems = getCart();
+      const cart = cartItems.map((trip) => ({
+        ...trip,
+        timeLeft: trip.timeLeft - 1,
+      }));
+      Cookies.set('cart', JSON.stringify(cart));
     }, 60000); // 1 minute interval
 
     // Clear the timer when component unmounts
@@ -47,28 +52,41 @@ const UserProvider = ({ children }) => {
 
   const addToPurchasedTrips = (trip) => {
     // Add the trip to the cart with initial timeLeft value of 30 minutes
-    setPurchasedTrips((trips) => [...trips, trip]);
+    const trips = getPurchasedTrips();
+    trips.push(trip);
+    Cookies.set('purchasedTrips', JSON.stringify(trips));
   };
 
   const addToCart = (trip) => {
     // Add the trip to the cart with initial timeLeft value of 30 minutes
-    setCart((prevCart) => [...prevCart, { ...trip, timeLeft: 30 }]);
+    const trips = getCart();
+
+    const newTrip = {
+      trip: trip,
+      timeLeft: 60
+    }
+    trips.push(newTrip);
+    Cookies.set('purchasedTrips', JSON.stringify(trips));
   };
 
   const removeFromCart = (tripId) => {
     // Remove the trip from the cart by filtering out the trip with matching id
-    setCart((prevCart) => prevCart.filter((trip) => trip.id !== tripId));
+    const trips = getCart();
+
+    const newTrips = trips.filter((trip) => trip.id !== tripId)
+    Cookies.set('purchasedTrips', JSON.stringify(newTrips));
   };
 
   const itemInCart = (id) => {
-    if(cart.includes(id)){
-        return true;
+    const trips = getCart();
+    if (trips.includes(id)) {
+      return true;
     }
     return false;
   };
 
   return (
-    <UserContext.Provider value={{ username, cart, login, logout, addToCart, removeFromCart, itemInCart, addToPurchasedTrips }}>
+    <UserContext.Provider value={{ getUsername, getCart, getPurchasedTrips, login, logout, addToCart, removeFromCart, itemInCart, addToPurchasedTrips }}>
       {children}
     </UserContext.Provider>
   );

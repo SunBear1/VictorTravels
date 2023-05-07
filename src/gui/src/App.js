@@ -8,27 +8,32 @@ import TripDetail from './TripDetail';
 import PrivateRoute from './PrivateRoute';
 import Cart from './Cart';
 import Buy from './Buy';
+import LoginRoute from './LoginRoute';
 
 const App = () => {
   return (
     <div>
-          <MyNavigation/>
-          <Routes>
-            <Route path='/'/>
-            <Route path="search" element={<SearchComp/>} />
-            <Route path="trips" element={<TripList/>}/>
-            <Route path="login" element={<LoginForm/>}/>
-            <Route path="trips/trip/:id" element={<TripDetail/>} />
-            <Route path="register" element={<RegisterForm/>}/>
-            
-            <Route exact path='/cart' element={<PrivateRoute/>}>
-              <Route exact path='/cart' element={<Cart/>}/>
-            </Route>
+      <MyNavigation />
+      <Routes>
+        <Route path='/' />
+        <Route path="/search" element={<SearchComp />} />
+        <Route path="/trips" element={<TripList />} />
 
-            <Route exact path='/:id/buy' element={<PrivateRoute/>}>
-              <Route exact path='/:id/buy' element={<Buy/>}/>
-            </Route>
-          </Routes>
+        <Route exact path='/login' element={<LoginRoute />}>
+          <Route path="/login" element={<LoginForm />} />
+        </Route>
+
+        <Route path="/trips/trip/:id" element={<TripDetail />} />
+        <Route path="/register" element={<RegisterForm />} />
+
+        <Route exact path='/cart' element={<PrivateRoute />}>
+          <Route exact path='/cart' element={<Cart />} />
+        </Route>
+
+        <Route exact path='/:id/buy' element={<PrivateRoute />}>
+          <Route exact path='/:id/buy' element={<Buy />} />
+        </Route>
+      </Routes>
     </div>
   );
 }

@@ -3,6 +3,7 @@ import threading
 
 import uvicorn
 from fastapi import FastAPI, APIRouter
+from fastapi.middleware.cors import CORSMiddleware
 
 from common.constants import LIVE_EVENTS_QUEUE_NAME
 from endpoints.events import router as event_router
@@ -14,6 +15,14 @@ from endpoints.users import router as users_router
 from rabbitmq.live_events import consume_live_event, start_consuming
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"]
+)
 
 api_router = APIRouter()
 
