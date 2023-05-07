@@ -1,12 +1,13 @@
 import json
 import logging
+from datetime import date
+from typing import Optional, List
+
 import requests
 from common.authentication import oauth2_scheme, verify_jwt_token
 from common.constants import TRIP_RESEARCHER_SERVICE_ADDRESS
-from datetime import date
 from fastapi import APIRouter, Response, Depends, status, Query
 from starlette.responses import JSONResponse
-from typing import Optional, List
 from users.service import verify_user_identify
 
 router = APIRouter(prefix="/api/v1/trips")
@@ -33,12 +34,13 @@ async def get_trip(trip_id: str, token: str = Depends(oauth2_scheme)):
                             content="User does not have permission to use this service", media_type="text/plain")
         print(f"http://{TRIP_RESEARCHER_SERVICE_ADDRESS}/api/v1/trips/{trip_id}")
         response = requests.get(f"http://{TRIP_RESEARCHER_SERVICE_ADDRESS}/api/v1/trips/{trip_id}",
-                                 timeout=3.00,
-                                 verify=False)
+                                timeout=3.00,
+                                verify=False)
         logger.info(f"Request redirected to {TRIP_RESEARCHER_SERVICE_ADDRESS}.")
 
         if response.status_code == status.HTTP_200_OK:
-            return JSONResponse(status_code=status.HTTP_200_OK, content=json.loads(response.content.decode("utf-8")), media_type="application/json")
+            return JSONResponse(status_code=status.HTTP_200_OK, content=json.loads(response.content.decode("utf-8")),
+                                media_type="application/json")
         if response.status_code == status.HTTP_404_NOT_FOUND:
             return Response(status_code=status.HTTP_404_NOT_FOUND, content=f"Trip with ID {trip_id} does not exist",
                             media_type="text/plain")
@@ -97,12 +99,14 @@ async def get_trips(
             "diet": diet,
             "max-price": max_price
         }
-        response = requests.get(f"http://{TRIP_RESEARCHER_SERVICE_ADDRESS}/api/v1/trips", params=query_params, timeout=3.00,
+        response = requests.get(f"http://{TRIP_RESEARCHER_SERVICE_ADDRESS}/api/v1/trips", params=query_params,
+                                timeout=3.00,
                                 verify=False)
         logger.info(f"Request redirected to {TRIP_RESEARCHER_SERVICE_ADDRESS}.")
 
         if response.status_code == status.HTTP_200_OK:
-            return JSONResponse(status_code=status.HTTP_200_OK, content=json.loads(response.content.decode("utf-8")), media_type="application/json")
+            return JSONResponse(status_code=status.HTTP_200_OK, content=json.loads(response.content.decode("utf-8")),
+                                media_type="application/json")
         if response.status_code == status.HTTP_400_BAD_REQUEST:
             return Response(status_code=status.HTTP_400_BAD_REQUEST, content="Query for tour researcher is invalid",
                             media_type="text/plain")
