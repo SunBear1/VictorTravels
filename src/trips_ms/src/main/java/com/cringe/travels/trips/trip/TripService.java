@@ -1,8 +1,10 @@
 package com.cringe.travels.trips.trip;
 
-import java.time.LocalDate;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -223,28 +225,47 @@ public class TripService {
         return repository.findByOfferID(id);
     }
 
-    public List<Trip> getFilteredTrips(Integer adults, Integer kids_to_3yo, Integer kids_to_10yo, Integer kids_to_18yo,
-                           LocalDate date_from, LocalDate date_to, List<String> departure_region,
-                           List<String> arrival_region, List<String> transport, String order, List<String> diet,
-                           Integer max_price){
+    public List<Trip> getFilteredTrips(Integer adults, Integer kidsTo3Yo, Integer kidsTo10Yo, Integer kidsTo18Yo,
+                                       Date dateFrom, Date dateTo, List<String> departureRegion,
+                                       List<String> arrivalRegion, List<String> transport, String order, List<String> diet,
+                                       Integer max_price){
         int head_count = 0;
         if (adults != null)
             head_count += adults;
-        if (kids_to_3yo != null)
-            head_count += kids_to_3yo;
-        if (kids_to_10yo != null)
-            head_count += kids_to_10yo;
-        if (kids_to_18yo != null)
-            head_count += kids_to_18yo;
+        if (kidsTo3Yo != null)
+            head_count += kidsTo3Yo;
+        if (kidsTo10Yo != null)
+            head_count += kidsTo10Yo;
+        if (kidsTo18Yo != null)
+            head_count += kidsTo18Yo;
 
-        return repository.findTripsByCustomQuery("TUTAJ CUSTOM QUERY KTÓRE TUTAJ STWORZYMY");
+        String room_type = getRoomTypeForPeople(head_count);
+        String query = "{ \"hotel.rooms." + room_type + ".available\": { $gt: 0 }";
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        if (dateFrom != null)
+            query = query + ",date_from: { $gte: ISODate('" + formatter.format(dateFrom) + "') }";
+        if (dateTo != null)
+             query = query + ",date_to: { $lte: ISODate('" + formatter.format(dateTo) + "') }";
+
+        query = query + " }";
+        return repository.findTripsByCustomQuery(query);
     }
 
 
-    public String getRoomTypeForPeople(Integer adults, Integer kids_to_3yo, Integer kids_to_10yo, Integer kids_to_18yo){
-        // Tutaj zwracamy odpowiedni typ pokoju dla odpowiedniego zestawu klientów
-        // podział wykonujemy sami wg naszego widzi mi się.
-        return "XD";
+    public String getRoomTypeForPeople(Integer head_count){
+        if (head_count == 1){
+             return "studio";
+        } else if (head_count == 2){
+            return "small";
+        } else if (head_count == 3) {
+            return "medium";
+        } else if (head_count == 4) {
+            return "large";
+        } else {
+            return "apartment";
+        }
     }
 
 }
