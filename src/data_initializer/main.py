@@ -1,6 +1,9 @@
 import json
 import logging
 import sys
+from datetime import datetime
+
+from bson import datetime as bson_datetime
 
 from db_clients import PostgreSQLClient, MongoDBClient, PG_DB_USERS_NAME, \
     PG_DB_EVENTS_NAME, PG_DB_HOTELS_NAME, PG_DB_TRANSPORTS_NAME, MONGO_DB_TRIPS_NAME, MONGO_DB_RESERVATIONS_NAME, \
@@ -12,6 +15,20 @@ handler = logging.StreamHandler()
 handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
 logger.setLevel(logging.INFO)
 logger.addHandler(handler)
+
+
+def convert_dates_in_mongodb(documents: list):
+    for doc_id in documents:
+        document = MongoDBClient.trips_collection.find_one({"_id": doc_id})
+
+        date_obj = datetime.strptime(document["date_from"], "%d-%m-%Y")
+        mongo_date = bson_datetime.datetime(date_obj.year, date_obj.month, date_obj.day)
+        MongoDBClient.trips_collection.update_one({"_id": doc_id}, {"$set": {"date_from": mongo_date}})
+
+        date_obj = datetime.strptime(document["date_to"], "%d-%m-%Y")
+        mongo_date = bson_datetime.datetime(date_obj.year, date_obj.month, date_obj.day)
+        MongoDBClient.trips_collection.update_one({"_id": doc_id}, {"$set": {"date_to": mongo_date}})
+
 
 if __name__ == "__main__":
     logger.info("Data initializer started")
@@ -40,6 +57,7 @@ if __name__ == "__main__":
     try:
         MongoDBClient.drop_database(db_name=MONGO_DB_TRIPS_NAME)
         MongoDBClient.trips_collection.insert_many(documents=trips_db_docs)
+        convert_dates_in_mongodb(documents=["0001", "0002", "0003", "0004", "0005", "0006"])
         logger.info(f"Committed init {MONGO_DB_TRIPS_NAME} data to mongoDB")
 
         MongoDBClient.drop_database(db_name=MONGO_DB_RESERVATIONS_NAME)
