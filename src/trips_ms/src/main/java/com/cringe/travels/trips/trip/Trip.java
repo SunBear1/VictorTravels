@@ -2,6 +2,7 @@ package com.cringe.travels.trips.trip;
 
 import java.util.HashMap;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -16,6 +17,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Document("trips")
 public class Trip {
+    @Id
     private String id;
 
     @Field("trip_id")

@@ -1,5 +1,6 @@
 package com.cringe.travels.trips.trip;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -214,7 +215,36 @@ public class TripService {
         }
     }
 
-    public Trip getbyId(String id) {
+    public Trip getbyTripId(String id) {
         return repository.findByTripID(id);
     }
+
+    public Trip getByOfferId(String id) {
+        return repository.findByOfferID(id);
+    }
+
+    public List<Trip> getFilteredTrips(Integer adults, Integer kids_to_3yo, Integer kids_to_10yo, Integer kids_to_18yo,
+                           LocalDate date_from, LocalDate date_to, List<String> departure_region,
+                           List<String> arrival_region, List<String> transport, String order, List<String> diet,
+                           Integer max_price){
+        int head_count = 0;
+        if (adults != null)
+            head_count += adults;
+        if (kids_to_3yo != null)
+            head_count += kids_to_3yo;
+        if (kids_to_10yo != null)
+            head_count += kids_to_10yo;
+        if (kids_to_18yo != null)
+            head_count += kids_to_18yo;
+
+        return repository.findTripsByCustomQuery("TUTAJ CUSTOM QUERY KTÓRE TUTAJ STWORZYMY");
+    }
+
+
+    public String getRoomTypeForPeople(Integer adults, Integer kids_to_3yo, Integer kids_to_10yo, Integer kids_to_18yo){
+        // Tutaj zwracamy odpowiedni typ pokoju dla odpowiedniego zestawu klientów
+        // podział wykonujemy sami wg naszego widzi mi się.
+        return "XD";
+    }
+
 }
