@@ -1,16 +1,15 @@
 package com.cringe.travels.trips.trip;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.TimeZone;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Optional;
+import java.util.TimeZone;
 
 @Service
 public class TripService {
@@ -226,9 +225,9 @@ public class TripService {
     }
 
     public List<Trip> getFilteredTrips(Integer adults, Integer kidsTo3Yo, Integer kidsTo10Yo, Integer kidsTo18Yo,
-                                       Date dateFrom, Date dateTo, List<String> departureRegion,
+                                       String dateFrom, String dateTo, List<String> departureRegion,
                                        List<String> arrivalRegion, List<String> transport, String order, List<String> diet,
-                                       Integer max_price){
+                                       Integer max_price) {
         int head_count = 0;
         if (adults != null)
             head_count += adults;
@@ -244,20 +243,23 @@ public class TripService {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        // TODO sprawdzić czy format dateFrom oraz DateTo jest poprawny
+
         if (dateFrom != null)
-            query = query + ",date_from: { $gte: ISODate('" + formatter.format(dateFrom) + "') }";
+            query = query + ",date_from: { $gte: ISODate('" + dateFrom + "') }";
         if (dateTo != null)
-             query = query + ",date_to: { $lte: ISODate('" + formatter.format(dateTo) + "') }";
+            query = query + ",date_to: { $lte: ISODate('" + dateTo + "') }";
 
         query = query + " }";
         return repository.findTripsByCustomQuery(query);
     }
 
 
-    public String getRoomTypeForPeople(Integer head_count){
-        if (head_count == 1){
-             return "studio";
-        } else if (head_count == 2){
+    public String getRoomTypeForPeople(Integer head_count) {
+        if (head_count == 1) {
+            return "studio";
+        } else if (head_count == 2) {
             return "small";
         } else if (head_count == 3) {
             return "medium";

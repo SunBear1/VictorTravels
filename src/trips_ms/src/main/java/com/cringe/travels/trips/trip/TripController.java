@@ -1,14 +1,12 @@
 package com.cringe.travels.trips.trip;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
+import java.util.List;
 
 @RequestMapping("api/v1/trips")
 @RestController
@@ -34,7 +32,7 @@ public class TripController {
     ResponseEntity<?> getByOfferId(@PathVariable String id) {
         logger.info("GET REQUEST api/v1/trips/" + id);
         Trip trip = service.getByOfferId(id);
-        if(trip == null){
+        if (trip == null) {
             return ResponseEntity.badRequest().body("Nie ma takiej oferty wycieczki");
         }
         return ResponseEntity.ok(trip);
@@ -42,24 +40,20 @@ public class TripController {
 
     @GetMapping("")
     public ResponseEntity<List<Trip>> getTrips(
-        @RequestParam(required = false) Integer adults,
-        @RequestParam(required = false) Integer kids_to_3yo,
-        @RequestParam(required = false) Integer kids_to_10yo,
-        @RequestParam(required = false) Integer kids_to_18yo,
-        @RequestParam(required = false) String date_from,
-        @RequestParam(required = false) String date_to,
-        @RequestParam(required = false) List<String> departure_region,
-        @RequestParam(required = false) List<String> arrival_region,
-        @RequestParam(required = false) List<String> transport,
-        @RequestParam(required = false) String order,
-        @RequestParam(required = false) List<String> diet,
-        @RequestParam(required = false) Integer max_price) throws ParseException {
+            @RequestParam(required = false) Integer adults,
+            @RequestParam(required = false) Integer kids_to_3yo,
+            @RequestParam(required = false) Integer kids_to_10yo,
+            @RequestParam(required = false) Integer kids_to_18yo,
+            @RequestParam(required = false) String date_from,
+            @RequestParam(required = false) String date_to,
+            @RequestParam(required = false) List<String> departure_region,
+            @RequestParam(required = false) List<String> arrival_region,
+            @RequestParam(required = false) List<String> transport,
+            @RequestParam(required = false) String order,
+            @RequestParam(required = false) List<String> diet,
+            @RequestParam(required = false) Integer max_price) throws ParseException {
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        Date dateFrom = dateFormat.parse(date_from);
-        Date dateTo = dateFormat.parse(date_to);
-
-        List<Trip> trips = service.getFilteredTrips(adults, kids_to_3yo, kids_to_10yo, kids_to_18yo, dateFrom, dateTo, departure_region, arrival_region, transport, order, diet, max_price);
-    return ResponseEntity.ok(trips);
-}
+        List<Trip> trips = service.getFilteredTrips(adults, kids_to_3yo, kids_to_10yo, kids_to_18yo, date_from, date_to, departure_region, arrival_region, transport, order, diet, max_price);
+        return ResponseEntity.ok(trips);
+    }
 }
