@@ -1,26 +1,26 @@
-GATEWAY_IMAGE_NAME := gateway-image:development
+GATEWAY_IMAGE_NAME := malajski/victor-travels:gateway
 GATEWAY_CONTAINER_NAME := gateway-app
 POSTGRES_IMAGE_NAME := postgres-image:development
 POSTGRES_CONTAINER_NAME := postgres-db
 MONGO_IMAGE_NAME := mongodb-image:development
 MONGO_CONTAINER_NAME := mongo-db
-RABBIT_IMAGE_NAME := rabbitmq-image:development
+RABBIT_IMAGE_NAME := malajski/victor-travels:rabbitmq
 RABBIT_CONTAINER_NAME := rabbitmq
-RESERVATIONS_IMAGE_NAME := reservations-image:development
+RESERVATIONS_IMAGE_NAME := malajski/victor-travels:reservations
 RESERVATIONS_CONTAINER_NAME := reservations-ms
-PURCHASE_IMAGE_NAME := purchase-image:development
+PURCHASE_IMAGE_NAME := malajski/victor-travels:purchases
 PURCHASE_CONTAINER_NAME := purchase-ms
-PAYMENT_IMAGE_NAME := payment-image:development
+PAYMENT_IMAGE_NAME := malajski/victor-travels:payments
 PAYMENT_CONTAINER_NAME := payment-ms
-TRIPS_IMAGE_NAME := trips-image:development
+TRIPS_IMAGE_NAME := malajski/victor-travels:trips
 TRIPS_CONTAINER_NAME := trips-ms
 DATA_INIT_CONTAINER_NAME := data-init
-DATA_INIT_IMAGE_NAME := data-init-image:development
-HOTEL_IMAGE_NAME :=  hotel-image:development
+DATA_INIT_IMAGE_NAME := malajski/victor-travels:data-init
+HOTEL_IMAGE_NAME := malajski/victor-travels:hotels
 HOTEL_CONTAINER_NAME := hotel-ms
-TRANSPORT_IMAGE_NAME :=  transport-image:development
+TRANSPORT_IMAGE_NAME := malajski/victor-travels:transports
 TRANSPORT_CONTAINER_NAME := transport-ms
-EVENTHUB_IMAGE_NAME :=  event-hub-image:development
+EVENTHUB_IMAGE_NAME := malajski/victor-travels:eventhub
 EVENTHUB_CONTAINER_NAME := event-hub-ms
 
 

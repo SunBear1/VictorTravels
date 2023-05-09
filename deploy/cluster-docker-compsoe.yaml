@@ -1,0 +1,127 @@
+version: "3.8"
+services:
+  gateway:
+    container_name: gateway
+    image: malajski/victor-travels:gateway
+    ports:
+      - "18000:8080"
+    environment:
+      POSTGRES_PORT: 5432
+      POSTGRES_ADDRESS: actina20.maas
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: student
+      POSTGRES_DB: rsww_17998_users
+      TRIP_RESEARCHER_ADDRESS: trips:8000
+      RESERVATIONS_MS_ADDRESS: reservations:8001
+      PURCHASE_MS_ADDRESS: purchases:8002
+      PAYMENT_MS_ADDRESS: payments:8003
+      RABBITMQ_ADDRESS: rabbitmq
+  data-init:
+    container_name: data-init
+    image: malajski/victor-travels:data-init
+    deploy:
+      restart_policy:
+        condition: none
+    environment:
+      POSTGRES_PORT: 5432
+      POSTGRES_ADDRESS: actina20.maas
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: student
+      PG_DB_USERS_NAME: rsww_17998_users
+      PG_DB_EVENTS_NAME: rsww_17998_events
+      PG_DB_HOTELS_NAME: rsww_17998_hotels
+      PG_DB_TRANSPORTS_NAME: rsww_17998_transports
+      MONGODB_PORT: 27017
+      MONGODB_ADDRESS: actina15.maas
+      MONGODB_USER: root
+      MONGODB_PASSWORD: student
+      MONGODB_RESERVATIONS_DB: rsww_17998_reservations_db
+      MONGODB_RESERVATIONS_COLL: trip-offers
+      MONGODB_TRIPS_DB: rsww_17998_trips_db
+      MONGODB_TRIPS_COLL: trips
+      MONGODB_PURCHASES_DB: rsww_17998_purchases_db
+      MONGODB_PAYMENTS_DB: rsww_17998_payments_db
+  rabbitmq:
+    container_name: rabbitmq
+    image: malajski/victor-travels:rabbitmq
+    ports:
+      - "17998:5672"
+      - "18004:15672"
+  reservations:
+    container_name: reservations-ms
+    image: malajski/victor-travels:reservations
+    ports:
+      - "18001:8001"
+    environment:
+      MONGODB_PORT: 27017
+      MONGODB_ADDRESS: actina15.maas
+      MONGODB_USER: root
+      MONGODB_PASSWORD: student
+      MONGODB_DB: rsww_17998_reservations_db
+      RABBITMQ_ADDRESS: rabbitmq
+  purchases:
+    container_name: purchase-ms
+    image: malajski/victor-travels:purchases
+    ports:
+      - "18002:8002"
+    environment:
+      MONGODB_PORT: 27017
+      MONGODB_ADDRESS: actina15.maas
+      MONGODB_USER: root
+      MONGODB_PASSWORD: student
+      MONGODB_DB: rsww_17998_purchases_db
+      RABBITMQ_ADDRESS: rabbitmq
+  payments:
+    container_name: payment-ms
+    image: malajski/victor-travels:payments
+    ports:
+      - "18003:8003"
+    environment:
+      MONGODB_PORT: 27017
+      MONGODB_ADDRESS: actina15.maas
+      MONGODB_USER: root
+      MONGODB_PASSWORD: student
+      MONGODB_DB: rsww_17998_payments_db
+      RABBITMQ_ADDRESS: rabbitmq
+  trips:
+    container_name: trips-ms
+    image: malajski/victor-travels:trips
+    ports:
+      - "17999:8000"
+    environment:
+      MONGODB_PORT: 27017
+      MONGODB_ADDRESS: actina15.maas
+      MONGODB_USER: root
+      MONGODB_PASSWORD: student
+      MONGODB_DB: rsww_17998_trips_db
+      RABBITMQ_ADDRESS: rabbitmq
+  hotels:
+    container_name: hotel-ms
+    image: malajski/victor-travels:hotels
+    environment:
+      RABBITMQ_ADDRESS: rabbitmq
+      POSTGRES_PORT: 5432
+      POSTGRES_ADDRESS: actina20.maas
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: student
+      PG_DB_HOTELS_NAME: rsww_17998_hotels
+  transports:
+    container_name: transport-ms
+    image: malajski/victor-travels:transports
+    environment:
+      RABBITMQ_ADDRESS: rabbitmq
+      POSTGRES_PORT: 5432
+      POSTGRES_ADDRESS: actina20.maas
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: student
+      PG_DB_TRANSPORTS_NAME: rsww_17998_transports
+  event-hub:
+    container_name: eventhub-ms
+    image: malajski/victor-travels:eventhub
+    environment:
+      RABBITMQ_ADDRESS: rabbitmq
+      POSTGRES_PORT: 5432
+      POSTGRES_ADDRESS: actina20.maas
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: student
+      PG_DB_EVENTHUB_NAME: rsww_17998_events

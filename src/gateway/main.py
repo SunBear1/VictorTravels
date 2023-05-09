@@ -1,19 +1,16 @@
 import json
 import logging
-import threading
 
 import uvicorn
 from fastapi import FastAPI, APIRouter
 from fastapi.openapi.utils import get_openapi
 
-from common.constants import LIVE_EVENTS_QUEUE_NAME
 from endpoints.events import router as event_router
 from endpoints.payments import router as payments_router
 from endpoints.purchases import router as purchases_router
 from endpoints.reservations import router as reservations_router
 from endpoints.trips import router as trips_router
 from endpoints.users import router as users_router
-from rabbitmq.live_events import consume_live_event, start_consuming
 
 app = FastAPI()
 
@@ -33,13 +30,6 @@ handler = logging.StreamHandler()
 handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
 logger.setLevel(logging.INFO)
 logger.addHandler(handler)
-
-
-@app.on_event("startup")
-async def startup_event():
-    live_events_consumer = threading.Thread(target=start_consuming,
-                                            args=(LIVE_EVENTS_QUEUE_NAME, consume_live_event))
-    live_events_consumer.start()
 
 
 if __name__ == "__main__":
