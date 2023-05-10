@@ -2,11 +2,12 @@ import json
 import logging
 
 import requests
-from common.authentication import oauth2_scheme, verify_jwt_token
-from common.constants import RESERVATIONS_MS_ADDRESS
 from fastapi import APIRouter, Response, Depends, status
 from pydantic import BaseModel
 from starlette.responses import JSONResponse
+
+from common.authentication import oauth2_scheme, verify_jwt_token
+from common.constants import RESERVATIONS_MS_ADDRESS
 from users.service import verify_user_identify
 
 router = APIRouter(prefix="/api/v1/reservations")
@@ -29,12 +30,13 @@ class TripReservationData(BaseModel):
                  403: {"description": "User does not have permission to use this service"},
                  400: {"description": "Trip with provided ID does not have enough places left"},
                  404: {"description": "Trip with provided ID does not exist"},
-                 422: {"description": "Unknown error occurred"}
+                 500: {"description": "Unknown error occurred"},
+                 503: {"description": "Failed to connect to backend service"},
              },
              )
 async def make_reservation(trip_offer_id: str, payload: TripReservationData, token: str = Depends(oauth2_scheme)):
     """
-    Make a trip reservation
+    Make a reservation of a specific trip
     """
     try:
         users_credentials = verify_jwt_token(token=token)
@@ -63,7 +65,8 @@ async def make_reservation(trip_offer_id: str, payload: TripReservationData, tok
                             content=response.content,
                             media_type="text/plain")
         if response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR:
-            return Response(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, content="Reservation service crashed :-)",
+            return Response(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            content="Reservation service crashed :-)",
                             media_type="text/plain")
 
     except requests.exceptions.ConnectionError:

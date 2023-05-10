@@ -1,14 +1,12 @@
 package com.cringe.travels.trips.trip;
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
+import java.util.List;
 
 @RequestMapping("api/v1/trips")
 @RestController
@@ -22,17 +20,59 @@ public class TripController {
         this.service = service;
     }
 
-    @GetMapping("")
-    @ResponseBody
-    List<Trip> getAll() {
-        logger.info("GET REQUEST api/v1/trips");
-        return service.getAllActive();
-    }
+//    @GetMapping("")
+//    @ResponseBody
+//    List<Trip> getAll() {
+//        logger.info("GET REQUEST api/v1/trips");
+//        return service.getAllActive();
+//    }
 
     @GetMapping("/{id}")
     @ResponseBody
-    Trip getbyId(@PathVariable String id) {
+    ResponseEntity<?> getByOfferId(@PathVariable String id) {
         logger.info("GET REQUEST api/v1/trips/" + id);
-        return service.getbyId(id);
+        Trip trip = service.getByOfferId(id);
+        if (trip == null) {
+            return ResponseEntity.badRequest().body("Nie ma takiej oferty wycieczki");
+        }
+        return ResponseEntity.ok(trip);
     }
+
+    @GetMapping("")
+    public ResponseEntity<List<Trip>> getTrips(
+            @RequestParam(required = false) Integer adults,
+            @RequestParam(required = false) Integer kidsTo3yo,
+            @RequestParam(required = false) Integer kidsTo10yo,
+            @RequestParam(required = false) Integer kidsTo18yo,
+            @RequestParam(required = false) String dateFrom,
+            @RequestParam(required = false) String dateTo,
+            @RequestParam(required = false) List<String> departureRegion,
+            @RequestParam(required = false) List<String> arrivalRegion,
+            @RequestParam(required = false) List<String> transport,
+            @RequestParam(required = false) String order,
+            @RequestParam(required = false) List<String> diet,
+            @RequestParam(required = false) Integer maxPrice) {
+
+        List<Trip> trips = service.getFilteredTrips(adults, kidsTo3yo, kidsTo10yo, kidsTo18yo, dateFrom, dateTo, departureRegion, arrivalRegion, transport, order, diet, maxPrice);
+        return ResponseEntity.ok(trips);
+    }
+
+    @GetMapping("/price")
+    @ResponseBody
+    ResponseEntity<?> getTripPrice(
+            @RequestParam(required = false) Integer adults,
+            @RequestParam(required = false) Integer kidsTo3yo,
+            @RequestParam(required = false) Integer kidsTo10yo,
+            @RequestParam(required = false) Integer kidsTo18yo,
+            @RequestParam(required = false) Integer roomCost,
+            @RequestParam(required = false) Integer dietCost,
+            @RequestParam(required = false) Integer transportToCost,
+            @RequestParam(required = false) Integer transportFromCost,
+            @RequestParam(required = false) Integer numberOfDays
+    ) {
+        logger.info("GET REQUEST api/v1/trips/price");
+        Float tripPrice = service.calculateTripPrices(adults, kidsTo3yo, kidsTo10yo, kidsTo18yo, roomCost, numberOfDays, transportToCost, transportFromCost, dietCost);
+        return ResponseEntity.ok(tripPrice);
+    }
+
 }
