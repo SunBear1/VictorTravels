@@ -262,14 +262,14 @@ public class TripService {
         }
         if (transport != null) {
             query = query + "\"transport_types\": {\"$in\": [";
-            for (String transport_type : transport) {
+            for (String transport_type : transport) { // TODO nie ma sprawdzania własnego transportu, czy to działa? Trzeba przetestować
                 query = query + "\"" + transport_type +  "\","; // TODO użyć StringBuildera
             }
             query = query + "]}";
         }
         if (diet != null) { // TODO Poprawić żeby działało z innymi query
             query = query + "$or: [";
-            for (String diet_option : diet) {
+            for (String diet_option : diet) { // TODO Dieta jest dostępna jeśli jej wartość jest różna od 0. To co jest teraz nie działa, trzeba to poprawić.
                 query = query + "{ \"hotel.diet." + diet_option + "\": { $exists: true } }"; // TODO użyć StringBuildera
             }
             query = query + "]";
