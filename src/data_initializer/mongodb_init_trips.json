@@ -48,6 +48,9 @@
     },
     "date_from": "01-08-2023",
     "date_to": "08-08-2023",
+    "transport_types": [
+      "plane"
+    ],
     "from": {
       "Łódź": {
         "plane": {
@@ -150,6 +153,9 @@
     },
     "date_from": "05-07-2023",
     "date_to": "15-07-2023",
+    "transport_types": [
+      "plane"
+    ],
     "from": {
       "Katowice": {
         "plane": {
@@ -268,6 +274,9 @@
     },
     "date_from": "05-07-2023",
     "date_to": "12-07-2023",
+    "transport_types": [
+      "plane"
+    ],
     "from": {
       "Katowice": {
         "plane": {
@@ -402,6 +411,9 @@
     },
     "date_from": "05-07-2023",
     "date_to": "15-07-2023",
+    "transport_types": [
+      "plane"
+    ],
     "from": {
       "Katowice": {
         "plane": {
@@ -520,6 +532,10 @@
     },
     "date_from": "01-07-2023",
     "date_to": "02-07-2023",
+    "transport_types": [
+      "plane",
+      "train"
+    ],
     "from": {
       "Katowice": {
         "plane": {
@@ -686,6 +702,10 @@
     },
     "date_from": "07-07-2023",
     "date_to": "09-07-2023",
+    "transport_types": [
+      "plane",
+      "train"
+    ],
     "from": {
       "Katowice": {
         "plane": {

@@ -39,4 +39,6 @@ public class Trip {
     private HashMap<String, Transport> from;
 
     private HashMap<String, Transport> to;
+
+    private Float price;
 }
