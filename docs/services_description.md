@@ -349,3 +349,10 @@ Typ: Relacyjna baza danych PostgreSQL z jedną tabelą:
 
 - Wewnątrz klastra - `15672`
 - Na zewnątrz klastra - `18004`
+
+### GUI
+
+### Porty
+
+- Wewnątrz klastra - `80`
+- Na zewnątrz klastra - `18005`

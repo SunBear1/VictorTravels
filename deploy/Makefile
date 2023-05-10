@@ -22,12 +22,14 @@ TRANSPORT_IMAGE_NAME :=  transport-image:development
 TRANSPORT_CONTAINER_NAME := transport-ms
 EVENTHUB_IMAGE_NAME :=  event-hub-image:development
 EVENTHUB_CONTAINER_NAME := event-hub-ms
+GUI_IMAGE_NAME := malajski/victor-travels:gui
+GUI_CONTAINER_NAME := web-gui
 
 
 build-and-run: build run
 
 
-build: gateway rabbit reservations purchases payments data-init hotels trips transports event-hub clean
+build: gateway rabbit reservations purchases payments data-init hotels trips transports event-hub gui clean
 
 
 run:
@@ -42,6 +44,7 @@ run:
 	HOTEL_IMAGE=${HOTEL_IMAGE_NAME} \
 	TRANSPORT_IMAGE=${TRANSPORT_IMAGE_NAME} \
 	EVENTHUB_IMAGE=${EVENTHUB_IMAGE_NAME} \
+	GUI_IMAGE=${GUI_IMAGE_NAME} \
 	docker-compose -p "victor-travels" up
 
 
@@ -55,7 +58,7 @@ clean:
 
 
 delete:
-	@docker image rm ${GATEWAY_IMAGE_NAME} ${RABBIT_IMAGE_NAME} ${RESERVATIONS_IMAGE_NAME} ${PURCHASE_IMAGE_NAME} ${PAYMENT_IMAGE_NAME} ${DATA_INIT_IMAGE_NAME} ${HOTEL_IMAGE_NAME} ${TRANSPORT_IMAGE_NAME} ${EVENTHUB_IMAGE_NAME} --force
+	@docker image rm ${GATEWAY_IMAGE_NAME} ${RABBIT_IMAGE_NAME} ${RESERVATIONS_IMAGE_NAME} ${PURCHASE_IMAGE_NAME} ${PAYMENT_IMAGE_NAME} ${DATA_INIT_IMAGE_NAME} ${HOTEL_IMAGE_NAME} ${TRANSPORT_IMAGE_NAME} ${EVENTHUB_IMAGE_NAME} ${GUI_IMAGE_NAME} --force
 
 
 gateway:
@@ -98,3 +101,7 @@ transports:
 event-hub:
 	@echo "Building image for ${EVENTHUB_CONTAINER_NAME}..."
 	@docker build -f ../src/event_hub_ms/Dockerfile -t ${EVENTHUB_IMAGE_NAME} ../src/event_hub_ms
+
+gui:
+	@echo "Building image for ${GUI_CONTAINER_NAME}..."
+	@docker build -f ../src/gui/Dockerfile -t ${GUI_IMAGE_NAME} ../src/gui
