@@ -41,19 +41,38 @@ public class TripController {
     @GetMapping("")
     public ResponseEntity<List<Trip>> getTrips(
             @RequestParam(required = false) Integer adults,
-            @RequestParam(required = false) Integer kids_to_3yo,
-            @RequestParam(required = false) Integer kids_to_10yo,
-            @RequestParam(required = false) Integer kids_to_18yo,
-            @RequestParam(required = false) String date_from,
-            @RequestParam(required = false) String date_to,
-            @RequestParam(required = false) List<String> departure_region,
-            @RequestParam(required = false) List<String> arrival_region,
+            @RequestParam(required = false) Integer kidsTo3yo,
+            @RequestParam(required = false) Integer kidsTo10yo,
+            @RequestParam(required = false) Integer kidsTo18yo,
+            @RequestParam(required = false) String dateFrom,
+            @RequestParam(required = false) String dateTo,
+            @RequestParam(required = false) List<String> departureRegion,
+            @RequestParam(required = false) List<String> arrivalRegion,
             @RequestParam(required = false) List<String> transport,
             @RequestParam(required = false) String order,
             @RequestParam(required = false) List<String> diet,
-            @RequestParam(required = false) Integer max_price) throws ParseException {
+            @RequestParam(required = false) Integer maxPrice) {
 
-        List<Trip> trips = service.getFilteredTrips(adults, kids_to_3yo, kids_to_10yo, kids_to_18yo, date_from, date_to, departure_region, arrival_region, transport, order, diet, max_price);
+        List<Trip> trips = service.getFilteredTrips(adults, kidsTo3yo, kidsTo10yo, kidsTo18yo, dateFrom, dateTo, departureRegion, arrivalRegion, transport, order, diet, maxPrice);
         return ResponseEntity.ok(trips);
     }
+
+    @GetMapping("/price")
+    @ResponseBody
+    ResponseEntity<?> getTripPrice(
+            @RequestParam(required = false) Integer adults,
+            @RequestParam(required = false) Integer kidsTo3yo,
+            @RequestParam(required = false) Integer kidsTo10yo,
+            @RequestParam(required = false) Integer kidsTo18yo,
+            @RequestParam(required = false) Integer roomCost,
+            @RequestParam(required = false) Integer dietCost,
+            @RequestParam(required = false) Integer transportToCost,
+            @RequestParam(required = false) Integer transportFromCost,
+            @RequestParam(required = false) Integer numberOfDays
+    ) {
+        logger.info("GET REQUEST api/v1/trips/price");
+        Float tripPrice = service.calculateTripPrices(adults, kidsTo3yo, kidsTo10yo, kidsTo18yo, roomCost, numberOfDays, transportToCost, transportFromCost, dietCost);
+        return ResponseEntity.ok(tripPrice);
+    }
+
 }
