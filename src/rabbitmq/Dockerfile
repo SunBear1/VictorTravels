@@ -8,12 +8,6 @@ RUN apt-get install -y curl
 
 RUN rabbitmq-plugins enable rabbitmq_management
 
-RUN rabbitmq-plugins enable rabbitmq_federation
-
-RUN rabbitmq-plugins enable rabbitmq_federation_management
-
-RUN rabbitmq-plugins enable rabbitmq_tracing
-
 ADD rabbitmq.config /etc/rabbitmq/
 
 ADD definitions.json /etc/rabbitmq/
@@ -22,4 +16,4 @@ RUN chown rabbitmq:rabbitmq /etc/rabbitmq/rabbitmq.config /etc/rabbitmq/definiti
 
 CMD ["rabbitmq-server"]
 
-EXPOSE 4369 5671 5672 25672 15671 15672
+EXPOSE 5672 15672

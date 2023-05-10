@@ -1,9 +1,17 @@
-FROM maven:3.6.3-openjdk-17-slim as build
+FROM maven:3.6.3-openjdk-17-slim as build-stage
 
-WORKDIR /event_hub
+WORKDIR /eventhub
 
-COPY . .
+COPY pom.xml ./
+
+COPY src/ src
 
 RUN mvn clean package
 
-CMD ["java", "-jar", "/event_hub/target/eventhub_exec.jar"]
+FROM openjdk:17-jdk-alpine as serve-stage
+
+WORKDIR /eventhub
+
+COPY --from=build-stage /eventhub/target/eventhub_exec.jar ./eventhub.jar
+
+CMD ["java", "-jar", "eventhub.jar"]
