@@ -1,6 +1,6 @@
-wget https://github.com/SunBear1/VictorTravels/blob/main/deploy/cluster-docker-compsoe.yaml
+curl https://raw.githubusercontent.com/SunBear1/VictorTravels/main/deploy/cluster-docker-compose.yaml > cluster-docker-compose.yaml
 
-docker stack deploy -c docker-compose.yaml RSWW_179987 --with-registry-auth
+docker stack deploy -c cluster-docker-compose.yaml RSWW_179987 --with-registry-auth
 
 docker service update --force RSWW_179987_hotels
 docker service update --force RSWW_179987_transports

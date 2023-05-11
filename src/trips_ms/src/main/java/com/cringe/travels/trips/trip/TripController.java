@@ -1,11 +1,11 @@
 package com.cringe.travels.trips.trip;
 
+import com.cringe.travels.trips.trip.entity.TripConfigurations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.util.List;
 
 @RequestMapping("api/v1/trips")
@@ -75,4 +75,11 @@ public class TripController {
         return ResponseEntity.ok(tripPrice);
     }
 
+    @GetMapping("/configurations")
+    @ResponseBody
+    ResponseEntity<?> getTripConfigurations() {
+        logger.info("GET REQUEST api/v1/trips/configurations");
+        TripConfigurations configurations = service.queryForTripConfigurations();
+        return ResponseEntity.ok(configurations);
+    }
 }

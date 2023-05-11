@@ -1,10 +1,9 @@
 package com.cringe.travels.trips.trip;
 
-import java.util.List;
-
-import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
+
+import java.util.List;
 
 public interface TripRepository extends MongoRepository<Trip, String> {
 
