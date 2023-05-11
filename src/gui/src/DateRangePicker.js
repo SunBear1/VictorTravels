@@ -4,17 +4,19 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './DateRangePicker.css'; // import your custom styles
 
 const DateRangePicker = (props) => {
-  const [startDate, setStartDate] = useState(props.startDate);
-  const [endDate, setEndDate] = useState(props.endDate);
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
 
   const handleStartDateChange = (date) => {
+    const isoDate = date ? date.toISOString().slice(0, 10) : null;
     setStartDate(date);
-    props.getValue(date, endDate);
+    props.getValue(isoDate, endDate?.toISOString().slice(0, 10));
   };
 
   const handleEndDateChange = (date) => {
+    const isoDate = date ? date.toISOString().slice(0, 10) : null;
     setEndDate(date);
-    props.getValue(startDate, date);
+    props.getValue(startDate?.toISOString().slice(0, 10), isoDate);
   };
 
   return (

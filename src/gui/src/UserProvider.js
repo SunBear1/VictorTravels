@@ -39,12 +39,17 @@ const UserProvider = ({ children }) => {
     const timer = setInterval(() => {
       // Decrement timeLeft for each trip in the cart
       const cartItems = getCart();
-      const cart = cartItems.map((trip) => ({
-        ...trip,
-        timeLeft: trip.timeLeft - 1,
-      }));
+      const cart =  cartItems.filter(trip => {
+        if (trip.timeLeft === 0 || trip.timeLeft < 0) {
+          return false;
+        } else {
+          return true;
+        }
+      }).map(trip => {
+        return { ...trip, timeLeft: trip.timeLeft - 1 };
+      });
       Cookies.set('cart', JSON.stringify(cart));
-    }, 60000); // 1 minute interval
+    }, 1000); // 1 minute interval
 
     // Clear the timer when component unmounts
     return () => clearInterval(timer);
@@ -60,30 +65,30 @@ const UserProvider = ({ children }) => {
   const addToCart = (trip) => {
     // Add the trip to the cart with initial timeLeft value of 30 minutes
     const trips = getCart();
+    console.log(trips);
 
     const newTrip = {
       trip: trip,
       timeLeft: 60
     }
     trips.push(newTrip);
-    Cookies.set('purchasedTrips', JSON.stringify(trips));
+    Cookies.set('cart', JSON.stringify(trips));
   };
 
   const removeFromCart = (tripId) => {
-    // Remove the trip from the cart by filtering out the trip with matching id
     const trips = getCart();
-
-    const newTrips = trips.filter((trip) => trip.id !== tripId)
-    Cookies.set('purchasedTrips', JSON.stringify(newTrips));
+    console.log(trips);
+    const newTrips = trips.filter((trip) => trip.trip !== tripId)
+    console.log(newTrips);
+    Cookies.set('cart', JSON.stringify(newTrips));
   };
 
   const itemInCart = (id) => {
     const trips = getCart();
-    if (trips.includes(id)) {
-      return true;
-    }
-    return false;
+    return trips.some(obj => obj.trip === id);
   };
+
+
 
   return (
     <UserContext.Provider value={{ getUsername, getCart, getPurchasedTrips, login, logout, addToCart, removeFromCart, itemInCart, addToPurchasedTrips }}>

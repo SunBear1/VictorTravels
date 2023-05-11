@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import LocationEnum from './LocationEnum';
 import CounterComp from './CounterComp';
 import DateRangePicker from './DateRangePicker';
+
+import axios from 'axios';
 import "./SearchComp.css"
 
 
@@ -13,7 +15,7 @@ function SearchComp() {
 
   const navigate = useNavigate();
 
-  
+
   const [trips, setTrips] = useState([]);
   const [transportType, setTransportType] = useState('');
   const [startDate, setStartDate] = useState(null);
@@ -23,9 +25,9 @@ function SearchComp() {
   const [showCheckboxes, setShowCheckboxes] = useState(true);
 
   const [adultCounter, setAdultCounter] = useState(0);
-  const [child1Counter, setChild1Counter] = useState(0);
-  const [child2Counter, setChild2Counter] = useState(0);
-  const [child3Counter, setChild3Counter] = useState(0);
+  const [childrenTo3yoCounter, setChildrenTo3yoCounter] = useState(0);
+  const [childrenTo10yoCounter, setChildrenTo10yoCounter] = useState(0);
+  const [childrenTo18yoCounter, setChildrenTo18yoCounter] = useState(0);
 
   const handleLocationChange = (event) => {
     const { value, checked } = event.target;
@@ -37,19 +39,18 @@ function SearchComp() {
   };
 
   const handleParentInputChange = (value, parentId) => {
-    console.log("asdasd + " + value);
     switch (parentId) {
       case 1:
         setAdultCounter(value);
         break;
       case 2:
-        setChild1Counter(value);
+        setChildrenTo3yoCounter(value);
         break;
       case 3:
-        setChild2Counter(value);
+        setChildrenTo10yoCounter(value);
         break;
       case 4:
-        setChild3Counter(value);
+        setChildrenTo18yoCounter(value);
         break;
       default:
         break;
@@ -57,19 +58,21 @@ function SearchComp() {
   };
 
   const handleDateInputChange = (startDate, endDate) => {
-      setStartDate(startDate);
-      setEndDate(endDate);
+    console.log(startDate);
+    console.log(endDate);
+    setStartDate(startDate);
+    setEndDate(endDate);
   }
 
   const changeCheckboxes = (event) => {
     var checkboxes = document.getElementById("checkBoxes");
     console.log(checkboxes);
     if (showCheckboxes) {
-        checkboxes.style.display = "block";
-        setShowCheckboxes(false);
+      checkboxes.style.display = "block";
+      setShowCheckboxes(false);
     } else {
-        checkboxes.style.display = "none";
-        setShowCheckboxes(true);
+      checkboxes.style.display = "none";
+      setShowCheckboxes(true);
     }
   }
 
@@ -93,77 +96,100 @@ function SearchComp() {
     const formattedEndDate = endDate.toLocaleDateString('en-US', options);
 
     const encodedList = selectedCountries.join(',');
-    navigate(`/trips?adult=${adultCounter}&child1=${child1Counter}&child2=${child2Counter}&child3=${child3Counter}&date-start=${formattedStartDate}&date-end=${formattedEndDate}&locations=${encodedList}`);
+    navigate(`/trips?adult=${adultCounter}&child1=${childrenTo3yoCounter}&child2=${childrenTo10yoCounter}&child3=${childrenTo18yoCounter}&date-start=${formattedStartDate}&date-end=${formattedEndDate}&locations=${encodedList}`);
   }
 
 
   const handleSubmit1 = async (event) => {
+    if(transportType === "Dowolny")transportType = null;
     event.preventDefault();
-
+    try {
+      const response = await axios.get('http://localhost:18000/api/v1/trips', {
+        params:{
+          adults: adultCounter,
+          kids_to_3yo: childrenTo3yoCounter,
+          kids_to_10yo: childrenTo10yoCounter,
+          kids_to_18yo: childrenTo18yoCounter,
+          date_from: startDate,
+          date_to: endDate,
+          arrival_region: selectedCountries
+        }
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      setTrips(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error(error)
+      
     }
+  }
 
   return (
     <div className="Search">
 
-      <div> 
-      <h1>Date Range for Trip</h1>
-      <DateRangePicker getValue={handleDateInputChange}/>
+      <div>
+        <h1>Date Range for Trip</h1>
+        <DateRangePicker getValue={handleDateInputChange} />
       </div>
       <div id='Osoby'>
-        <div><CounterComp getValue={handleParentInputChange} parentId={1} text="Dorośli"/></div>
-        <div><CounterComp getValue={handleParentInputChange} parentId={2} text="Dzieci 1"/></div>
-        <div><CounterComp getValue={handleParentInputChange} parentId={3} text="Dzieci 2"/></div>
-        <div><CounterComp getValue={handleParentInputChange} parentId={4} text="Dzieci 3"/></div>
+        <div><CounterComp getValue={handleParentInputChange} parentId={1} text="Dorośli" /></div>
+        <div><CounterComp getValue={handleParentInputChange} parentId={2} text="Dzieci do 3 lat" /></div>
+        <div><CounterComp getValue={handleParentInputChange} parentId={3} text="Dzieci do 10 lat" /></div>
+        <div><CounterComp getValue={handleParentInputChange} parentId={4} text="Dzieci do 18 lat" /></div>
       </div>
       <div id='Dokad'>
         <div className='multipleSelection'>
           <div className="selectBox" onClick={changeCheckboxes}>
-                  <select>
-                      <option>Select locations</option>
-                  </select>
-                  <div className="overSelect"></div>
+            <select>
+              <option>Select locations</option>
+            </select>
+            <div className="overSelect"></div>
           </div>
           <div id='checkBoxes'>
-          {countriesCheckboxes}
+            {countriesCheckboxes}
           </div>
         </div>
 
         <ul>
-        {selectedCountries.map((option) => (
-          <div className='selectedLocationsList'><li key={option}>{option}</li><br/></div>
-        ))}
-      </ul>
+          {selectedCountries.map((option) => (
+            <div className='selectedLocationsList'><li key={option}>{option}</li><br /></div>
+          ))}
+        </ul>
       </div>
 
       <div>
-      <label id="transport">Transport type:</label>
-          <select onChange={(e) => setTransportType(e.target.value)} >
-              <option value="any">Dowolny</option>
-              <option value="own">Własny</option>
-              <option value="train">Pociąg</option>
-              <option value="plane">Samolot</option>
-          </select>
+        <label id="transport">Transport type:</label>
+        <select onChange={(e) => setTransportType(e.target.value)} >
+          <option value="any">Dowolny</option>
+          <option value="own">Własny</option>
+          <option value="train">Pociąg</option>
+          <option value="plane">Samolot</option>
+        </select>
       </div>
-      <br/>
+      <br />
       <button onClick={handleSubmit1}>Szukaj</button>
 
       <ul className="trip-items">
-                {trips.map((trip, index) => (
-                    <Link to={"trip/" + trip.id}>
-                        <li key={index} className="trip-item">
-                            <img src={trip.image} alt={trip.name} className="trip-item__image" />
-                            <div className="trip-item__details">
-                                <h3 className="trip-item__name">{trip.name}</h3>
-                                <p className="trip-item__location">{trip.location}</p>
-                                <p className="trip-item__description">{trip.description}</p>
-                                <p className="trip-item__date">{trip.date}</p>
-                                <p className="trip-item__diets">Diety: {trip.diets.join(', ')}</p>
-                                <p className="trip-item__price">Cena za osobę: {trip.price} zł</p>
-                            </div>
-                        </li>
-                    </Link>
-                ))}
-            </ul>
+        {trips.map((trip, index) => (
+          <Link to={"trip/" + trip.id}>
+            <li key={index} className="trip-item">
+              <img src={trip.hotel.image} alt={trip.id} className="trip-item__image" />
+              <div className="trip-item__details">
+                <h3 className="trip-item__name">{trip.localisation.country} {trip.hotel.name}</h3>
+                <p className="trip-item__location">{trip.localisation.country.region}</p>
+                <p className="trip-item__description">{trip.hotel.description.map(value => <li>{value}</li>)}</p>
+                <p className="trip-item__date">OD : {trip.dateFrom}</p>
+                <p className="trip-item__date">DO : {trip.dateTo}</p>
+                <p className="trip-item__diets">Diety: {Object.keys(trip.hotel.diet).map(key => <li>{key}: {trip.hotel.diet[key]}</li>)}</p>
+                <p className="trip-item__price">Cena za osobę: {trip.price} zł</p>
+              </div>
+            </li>
+          </Link>
+        ))}
+      </ul>
     </div>
   );
 }

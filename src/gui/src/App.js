@@ -23,7 +23,7 @@ const App = () => {
           <Route path="/login" element={<LoginForm />} />
         </Route>
 
-        <Route path="/trips/trip/:id" element={<TripDetail />} />
+        <Route path="/search/trip/:id" element={<TripDetail />} />
         <Route path="/register" element={<RegisterForm />} />
 
         <Route exact path='/cart' element={<PrivateRoute />}>

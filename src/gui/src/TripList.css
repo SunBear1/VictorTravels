@@ -29,6 +29,11 @@
 }
 
 .trip-items {
+    width: 70%;
+}
+
+.trip-item__details{
+    margin-left: 20px;
 }
 
 
