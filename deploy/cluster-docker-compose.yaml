@@ -1,5 +1,10 @@
 version: "3.8"
 services:
+  web-gui:
+    container_name: web-gui
+    image: malajski/wildboar-iot-gym:frontend
+    ports:
+      - "18005:80"
   gateway:
     container_name: gateway
     image: malajski/victor-travels:gateway
