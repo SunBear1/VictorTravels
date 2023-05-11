@@ -3,6 +3,7 @@ import logging
 
 import uvicorn
 from fastapi import FastAPI, APIRouter
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 
 from endpoints.events import router as event_router
@@ -13,6 +14,14 @@ from endpoints.trips import router as trips_router
 from endpoints.users import router as users_router
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"]
+)
 
 api_router = APIRouter()
 
