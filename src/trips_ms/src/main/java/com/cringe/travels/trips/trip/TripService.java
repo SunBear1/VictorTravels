@@ -270,9 +270,9 @@ public class TripService {
             }
             query = query + "]}";
         }
-        if (diet != null) { // TODO Poprawić żeby działało z innymi query
+        if (diet != null) {
             query = query + "$or: [";
-            for (String diet_option : diet) { // TODO Dieta jest dostępna jeśli jej wartość jest różna od 0. To co jest teraz nie działa, trzeba to poprawić.
+            for (String diet_option : diet) {
                 query = query + "{ \"hotel.diet." + diet_option + "\": { $exists: true } }"; // TODO użyć StringBuildera
             }
             query = query + "]";
@@ -361,11 +361,6 @@ public class TripService {
         }
     }
 
-
-//    Lista miast z których można wyruszyć
-//    Lista krajów do których można się wybrać
-//    Lista dostępnych transportów tak ogólnie
-
     public List<Localisation> getArrivalLocations(List<Trip> trips) {
         List<Localisation> arrivalLocations = new ArrayList<>();
         for (Trip trip : trips) {
@@ -390,7 +385,6 @@ public class TripService {
                 .distinct()
                 .toList();
     }
-
 
     public TripConfigurations queryForTripConfigurations() {
         List<Trip> trips = repository.findAllActiveTrips();
