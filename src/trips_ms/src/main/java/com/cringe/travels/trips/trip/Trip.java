@@ -1,6 +1,7 @@
 package com.cringe.travels.trips.trip;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -39,6 +40,8 @@ public class Trip {
     private HashMap<String, Transport> from;
 
     private HashMap<String, Transport> to;
+
+    private List<String> transport_types;
 
     private Float price;
 }

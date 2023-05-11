@@ -1,15 +1,18 @@
 package com.cringe.travels.trips.trip;
 
+import com.cringe.travels.trips.trip.entity.Localisation;
+import com.cringe.travels.trips.trip.entity.TripConfigurations;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 public class TripService {
@@ -262,12 +265,12 @@ public class TripService {
         }
         if (transport != null) {
             query = query + "\"transport_types\": {\"$in\": [";
-            for (String transport_type : transport) {
-                query = query + "\"" + transport_type +  "\","; // TODO użyć StringBuildera
+            for (String transport_type : transport) { // TODO nie ma sprawdzania własnego transportu, czy to działa? Trzeba przetestować
+                query = query + "\"" + transport_type + "\","; // TODO użyć StringBuildera
             }
             query = query + "]}";
         }
-        if (diet != null) { // TODO Poprawić żeby działało z innymi query
+        if (diet != null) {
             query = query + "$or: [";
             for (String diet_option : diet) {
                 query = query + "{ \"hotel.diet." + diet_option + "\": { $exists: true } }"; // TODO użyć StringBuildera
@@ -287,9 +290,9 @@ public class TripService {
         List<Trip> filteredTrips = repository.findTripsByCustomQuery(query);
         for (int i = 0; i < filteredTrips.size(); i++) {
             var roomPrice = filteredTrips.get(i).getHotel().getRooms().get(room_type).getCost();
-            float tripPrice = calculateTripPrices(adults, kidsTo3Yo, kidsTo10Yo, kidsTo18Yo, roomPrice,null,null,null,null);
-            filteredTrips.get(i).setPrice(calculateTripPrices(adults, kidsTo3Yo, kidsTo10Yo, kidsTo18Yo, roomPrice,null,null,null,null));
-            if (max_price != null && tripPrice > max_price){
+            float tripPrice = calculateTripPrices(adults, kidsTo3Yo, kidsTo10Yo, kidsTo18Yo, roomPrice, null, null, null, null);
+            filteredTrips.get(i).setPrice(calculateTripPrices(adults, kidsTo3Yo, kidsTo10Yo, kidsTo18Yo, roomPrice, null, null, null, null));
+            if (max_price != null && tripPrice > max_price) {
                 filteredTrips.remove(i);
                 i--;
             }
@@ -299,7 +302,7 @@ public class TripService {
     }
 
 
-    public Float calculateTripPrices(Integer adults, Integer kidsTo3Yo, Integer kidsTo10Yo, Integer kidsTo18Yo, Integer room_cost, Integer number_of_days, Integer transport_to_cost, Integer transport_from_cost, Integer diet_cost){
+    public Float calculateTripPrices(Integer adults, Integer kidsTo3Yo, Integer kidsTo10Yo, Integer kidsTo18Yo, Integer room_cost, Integer number_of_days, Integer transport_to_cost, Integer transport_from_cost, Integer diet_cost) {
         float totalPrice = 0;
         float provision = 1.1F;
 
@@ -320,22 +323,22 @@ public class TripService {
         if (kidsTo18Yo == null)
             kidsTo18Yo = 0;
 
-        for (int i=0; i< kidsTo3Yo; i++){
+        for (int i = 0; i < kidsTo3Yo; i++) {
             float transportCost = 0;
             float hotelCost = (float) ((diet_cost + room_cost) * number_of_days * 0.1);
             totalPrice = totalPrice + (transportCost + hotelCost) * provision;
         }
-        for (int i=0; i< kidsTo10Yo; i++){
+        for (int i = 0; i < kidsTo10Yo; i++) {
             float transportCost = (float) ((transport_to_cost + transport_from_cost) * 0.5);
             float hotelCost = (float) ((diet_cost + room_cost) * number_of_days * 0.5);
             totalPrice = totalPrice + (transportCost + hotelCost) * provision;
         }
-        for (int i=0; i< kidsTo18Yo; i++){
+        for (int i = 0; i < kidsTo18Yo; i++) {
             float transportCost = (float) ((transport_to_cost + transport_from_cost) * 0.6);
             float hotelCost = (float) ((diet_cost + room_cost) * number_of_days * 0.7);
             totalPrice = totalPrice + (transportCost + hotelCost) * provision;
         }
-        for (int i=0; i< adults; i++){
+        for (int i = 0; i < adults; i++) {
             float transportCost = (float) (transport_to_cost + transport_from_cost);
             float hotelCost = (float) ((diet_cost + room_cost) * number_of_days);
             totalPrice = totalPrice + (transportCost + hotelCost) * provision;
@@ -356,6 +359,41 @@ public class TripService {
         } else {
             return "apartment";
         }
+    }
+
+    public List<Localisation> getArrivalLocations(List<Trip> trips) {
+        List<Localisation> arrivalLocations = new ArrayList<>();
+        for (Trip trip : trips) {
+            Localisation locations = trip.getLocalisation();
+            if (!arrivalLocations.contains(locations))
+                arrivalLocations.add(locations);
+        }
+        return arrivalLocations;
+    }
+
+    public List<String> getTransportTypes(List<Trip> trips) {
+        List<String> transportTypes = new ArrayList<>();
+        for (Trip trip : trips) {
+            transportTypes.addAll(trip.getTransport_types());
+        }
+        return transportTypes.stream().distinct().toList();
+    }
+
+    public List<String> getDepartureLocations(List<Trip> trips) {
+        return trips.stream()
+                .flatMap(trip -> Stream.concat(trip.getFrom().keySet().stream(), trip.getTo().keySet().stream()))
+                .distinct()
+                .toList();
+    }
+
+    public TripConfigurations queryForTripConfigurations() {
+        List<Trip> trips = repository.findAllActiveTrips();
+
+        List<Localisation> arrivalLocations = getArrivalLocations(trips);
+        List<String> transportTypes = getTransportTypes(trips);
+        List<String> departureLocations = getDepartureLocations(trips);
+
+        return new TripConfigurations(departureLocations, arrivalLocations, transportTypes);
     }
 
 }

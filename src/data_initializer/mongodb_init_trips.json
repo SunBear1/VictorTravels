@@ -498,9 +498,7 @@
         "Nowoczesny sty"
       ],
       "diet": {
-        "AllInclusive": 0,
         "Breakfast": 300,
-        "TwoMeals": 0,
         "None": 0
       },
       "rooms": {
@@ -668,9 +666,7 @@
         "Nowoczesny sty"
       ],
       "diet": {
-        "AllInclusive": 0,
         "Breakfast": 300,
-        "TwoMeals": 0,
         "None": 0
       },
       "rooms": {
