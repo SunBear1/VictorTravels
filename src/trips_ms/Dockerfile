@@ -26,6 +26,8 @@ FROM openjdk:17-jdk-alpine as serve-stage
 
 WORKDIR /trips
 
+RUN apk --no-cache add curl
+
 COPY --from=build-stage /trips/target/trips-0.0.1-SNAPSHOT.jar ./trips.jar
 
 CMD ["java", "-jar", "trips.jar"]
