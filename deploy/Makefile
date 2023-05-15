@@ -1,3 +1,4 @@
+BASE_PYTHON_IMAGE_NAME := base-python:dev
 GATEWAY_IMAGE_NAME := malajski/victor-travels:gateway
 GATEWAY_CONTAINER_NAME := gateway-app
 POSTGRES_IMAGE_NAME := postgres-image:development
@@ -29,7 +30,7 @@ GUI_CONTAINER_NAME := web-gui
 build-and-run: build run
 
 
-build: gateway rabbit reservations purchases payments data-init hotels trips transports event-hub gui clean
+build: base gateway rabbit reservations purchases payments data-init hotels trips transports event-hub gui clean
 
 
 run:
@@ -60,6 +61,10 @@ clean:
 delete:
 	@docker image rm ${GATEWAY_IMAGE_NAME} ${RABBIT_IMAGE_NAME} ${RESERVATIONS_IMAGE_NAME} ${PURCHASE_IMAGE_NAME} ${PAYMENT_IMAGE_NAME} ${DATA_INIT_IMAGE_NAME} ${HOTEL_IMAGE_NAME} ${TRANSPORT_IMAGE_NAME} ${EVENTHUB_IMAGE_NAME} ${GUI_IMAGE_NAME} --force
 
+
+base:
+	@echo "Building base images..."
+	@docker build -f ../src/base_images/base-python.dockerfile -t ${BASE_PYTHON_IMAGE_NAME} ../src/base_images
 
 gateway:
 	@echo "Building image for ${GATEWAY_CONTAINER_NAME}..."

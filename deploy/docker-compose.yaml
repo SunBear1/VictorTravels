@@ -6,9 +6,6 @@ services:
     restart: always
     ports:
       - "18005:80"
-    depends_on:
-      - gateway
-      - trips
   gateway:
     container_name: gateway
     image: ${GATEWAY_IMAGE}
@@ -26,11 +23,11 @@ services:
       PURCHASE_MS_ADDRESS: purchases:8002
       PAYMENT_MS_ADDRESS: payments:8003
       RABBITMQ_ADDRESS: rabbitmq
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      postgresql:
-        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
+      interval: 5s
+      timeout: 1s
+      retries: 10
   data-init:
     container_name: data-init
     image: ${DATA_INIT_IMAGE}
@@ -112,11 +109,11 @@ services:
       MONGODB_PASSWORD: student
       MONGODB_DB: rsww_17998_reservations_db
       RABBITMQ_ADDRESS: rabbitmq
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      mongodb:
-        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
+      interval: 5s
+      timeout: 1s
+      retries: 10
   purchases:
     container_name: purchase-ms
     image: ${PURCHASE_IMAGE}
@@ -130,11 +127,11 @@ services:
       MONGODB_PASSWORD: student
       MONGODB_DB: rsww_17998_purchases_db
       RABBITMQ_ADDRESS: rabbitmq
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      mongodb:
-        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
+      interval: 5s
+      timeout: 1s
+      retries: 10
   payments:
     container_name: payment-ms
     image: ${PAYMENT_IMAGE}
@@ -148,11 +145,6 @@ services:
       MONGODB_PASSWORD: student
       MONGODB_DB: rsww_17998_payments_db
       RABBITMQ_ADDRESS: rabbitmq
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      mongodb:
-        condition: service_healthy
   trips:
     container_name: trips-ms
     image: ${TRIPS_IMAGE}
@@ -165,11 +157,11 @@ services:
       MONGODB_PASSWORD: student
       MONGODB_DB: rsww_17998_trips_db
       RABBITMQ_ADDRESS: rabbitmq
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      mongodb:
-        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
+      interval: 5s
+      timeout: 1s
+      retries: 10
   hotels:
     container_name: hotel-ms
     image: ${HOTEL_IMAGE}
@@ -181,11 +173,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: student
       PG_DB_HOTELS_NAME: rsww_17998_hotels
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      postgresql:
-        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
+      interval: 5s
+      timeout: 1s
+      retries: 10
   transports:
     container_name: transport-ms
     image: ${TRANSPORT_IMAGE}
@@ -197,11 +189,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: student
       PG_DB_TRANSPORTS_NAME: rsww_17998_transports
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      postgresql:
-        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
+      interval: 5s
+      timeout: 1s
+      retries: 10
   event-hub:
     container_name: eventhub-ms
     image: ${EVENTHUB_IMAGE}
@@ -213,8 +205,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: student
       PG_DB_EVENTHUB_NAME: rsww_17998_events
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      postgresql:
-        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
+      interval: 5s
+      timeout: 1s
+      retries: 10

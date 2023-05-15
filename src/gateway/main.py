@@ -40,7 +40,6 @@ handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
 logger.setLevel(logging.INFO)
 logger.addHandler(handler)
 
-
 if __name__ == "__main__":
     openapi_schema = get_openapi(
         title="Dokumentacja REST API",

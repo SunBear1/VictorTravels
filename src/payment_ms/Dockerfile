@@ -1,8 +1,6 @@
-FROM python:3.11.2-alpine as build-stage
+FROM base-python:dev as serve-stage
 
 WORKDIR /payments
-
-RUN pip install --upgrade pip
 
 COPY . .
 
