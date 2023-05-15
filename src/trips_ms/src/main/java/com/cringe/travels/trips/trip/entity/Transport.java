@@ -9,5 +9,4 @@ import lombok.Data;
 public class Transport {
     private TransportDetails plane;
     private TransportDetails train;
-    private TransportDetails own;
 }

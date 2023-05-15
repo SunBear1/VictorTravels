@@ -50,7 +50,7 @@ async def get_trip(trip_id: str):
         return Response(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@router.get("/",
+@router.get("",
             responses={
                 200: {"description": "Trips fetched successfully"},
                 400: {"description": "Invalid tour researcher query parameters"},
