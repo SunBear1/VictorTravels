@@ -2,6 +2,7 @@ package com.cringe.travels.trips.rabbitmq;
 
 import java.nio.charset.StandardCharsets;
 
+import com.cringe.travels.trips.trip.TripUpdatesService;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,11 +14,11 @@ import com.cringe.travels.trips.trip.TripService;
 public class Receiver {
 
 
-    private final TripService service;
+    private final TripUpdatesService service;
     Logger logger = LoggerFactory.getLogger(Receiver.class);
 
 
-    Receiver(TripService service) {
+    Receiver(TripUpdatesService service) {
         this.service = service;
     }
 
