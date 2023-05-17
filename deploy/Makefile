@@ -110,3 +110,7 @@ event-hub:
 gui:
 	@echo "Building image for ${GUI_CONTAINER_NAME}..."
 	@docker build -f ../src/gui/Dockerfile -t ${GUI_IMAGE_NAME} ../src/gui
+
+test_gateway:
+	@echo "Running component tests for gateway..."
+	@python3 -m pytest ../tests/api/component --color=yes
