@@ -13,6 +13,7 @@ TRIPS_COLLECTION_NAME = "trip-offers"
 RESERVATIONS_COLLECTION_NAME = "reservations"
 HOTELS_DOCUMENT_ID = "available_hotels"
 CONNECTIONS_DOCUMENT_ID = "available_connections"
+TRIP_OFFERS_DOCUMENT_ID = "available_trip_offers"
 
 logger = logging.getLogger("reservations")
 

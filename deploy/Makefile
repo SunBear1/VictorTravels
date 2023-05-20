@@ -32,6 +32,7 @@ build-and-run: build run
 
 build: base gateway rabbit reservations purchases payments data-init hotels trips transports event-hub gui clean
 
+test: component_tests
 
 run:
 	@echo "Starting platform..."
@@ -111,6 +112,6 @@ gui:
 	@echo "Building image for ${GUI_CONTAINER_NAME}..."
 	@docker build -f ../src/gui/Dockerfile -t ${GUI_IMAGE_NAME} ../src/gui
 
-test_gateway:
-	@echo "Running component tests for gateway..."
-	@python3 -m pytest ../tests/api/component --color=yes
+component_tests:
+	@echo "Running component tests..."
+	@python3 -m pytest -v ../tests/api/component
