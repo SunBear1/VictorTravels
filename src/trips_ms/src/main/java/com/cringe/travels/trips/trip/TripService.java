@@ -134,6 +134,8 @@ public class TripService {
             kidsTo10Yo = 0;
         if (kidsTo18Yo == null)
             kidsTo18Yo = 0;
+        if (room_cost == null)
+            room_cost = 700;
 
         for (int i = 0; i < kidsTo3Yo; i++) {
             float transportCost = 0;
