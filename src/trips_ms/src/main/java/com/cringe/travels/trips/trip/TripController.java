@@ -3,6 +3,7 @@ package com.cringe.travels.trips.trip;
 import com.cringe.travels.trips.trip.entity.TripConfigurations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +34,7 @@ public class TripController {
         logger.info("GET REQUEST api/v1/trips/" + id);
         Trip trip = service.getByOfferId(id);
         if (trip == null) {
-            return ResponseEntity.badRequest().body("Nie ma takiej oferty wycieczki");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Trip offer with ID " + id + " does not exist.");
         }
         return ResponseEntity.ok(trip);
     }

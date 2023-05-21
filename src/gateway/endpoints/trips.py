@@ -190,9 +190,6 @@ async def get_trip_configurations():
         if response.status_code == status.HTTP_200_OK:
             return JSONResponse(status_code=status.HTTP_200_OK, content=json.loads(response.content.decode("utf-8")),
                                 media_type="application/json")
-        if response.status_code == status.HTTP_400_BAD_REQUEST:
-            return Response(status_code=status.HTTP_400_BAD_REQUEST, content="Query for tour researcher is invalid",
-                            media_type="text/plain")
         if response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR:
             return Response(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content="Tour researcher crashed :-)",
                             media_type="text/plain")

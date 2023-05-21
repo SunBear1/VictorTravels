@@ -1,8 +1,16 @@
 import logging
 
-from mongodb.mongodb_client import MongoDBClient, HOTELS_DOCUMENT_ID, CONNECTIONS_DOCUMENT_ID
+from mongodb.mongodb_client import MongoDBClient, HOTELS_DOCUMENT_ID, CONNECTIONS_DOCUMENT_ID, TRIP_OFFERS_DOCUMENT_ID
 
 logger = logging.getLogger("reservations")
+
+
+def check_if_trip_offer_exists(trip_offer_id: str) -> bool:
+    trip_offers_document = MongoDBClient.trips_collection.find_one({"_id": TRIP_OFFERS_DOCUMENT_ID})
+    if trip_offer_id not in trip_offers_document["trip_offers_list"]:
+        logger.info(f"There is no trip offer with ID {trip_offer_id}.")
+        return False
+    return True
 
 
 def check_if_hotel_exists(hotel_id: str) -> bool:

@@ -7,6 +7,7 @@ from starlette.responses import JSONResponse
 
 from common.authentication import oauth2_scheme, verify_jwt_token
 from common.constants import PURCHASE_MS_ADDRESS
+from users.exceptions import UserWrongTokenSchemaException
 from users.service import verify_user_identify
 
 router = APIRouter(prefix="/api/v1/purchases")
@@ -53,6 +54,10 @@ async def purchase_trip(reservation_id: str, token: str = Depends(oauth2_scheme)
 
     except requests.exceptions.ConnectionError:
         return Response(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, content="Can't connect to purchase service",
+                        media_type="text/plain")
+    except UserWrongTokenSchemaException:
+        return Response(status_code=status.HTTP_403_FORBIDDEN,
+                        content="User does not have permission to use this service",
                         media_type="text/plain")
     except Exception as ex:
         logger.info(f"Exception in gateway occurred: {ex}")

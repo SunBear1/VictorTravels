@@ -32,7 +32,6 @@ build-and-run: build run
 
 build: base gateway rabbit reservations purchases payments data-init hotels trips transports event-hub gui clean
 
-
 run:
 	@echo "Starting platform..."
 	@GATEWAY_IMAGE=${GATEWAY_IMAGE_NAME} \
@@ -110,3 +109,8 @@ event-hub:
 gui:
 	@echo "Building image for ${GUI_CONTAINER_NAME}..."
 	@docker build -f ../src/gui/Dockerfile -t ${GUI_IMAGE_NAME} ../src/gui
+
+test:
+	@pip install pytest pytest-md pytest-emoji starlette fastapi
+	@echo "Running component tests..."
+	@python3 -m pytest -v --emoji --md ../tests/api/api-test-report.md ../tests/api/component
