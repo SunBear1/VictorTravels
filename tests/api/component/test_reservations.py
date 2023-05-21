@@ -37,7 +37,6 @@ def test_make_reservation_insufficient_places(gateway_reservations_url, authoriz
                              headers={"Authorization": authorization_token})
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    # TODO add response.text assert
 
 
 def test_make_reservation_not_found(gateway_reservations_url, authorization_token):
@@ -54,8 +53,8 @@ def test_make_reservation_not_found(gateway_reservations_url, authorization_toke
     response = requests.post(f"{gateway_reservations_url}/{trip_offer_id}", json=payload,
                              headers={"Authorization": authorization_token})
 
-    assert response.status_code == status.HTTP_404_NOT_FOUND
-    # TODO add response.text assert
+    assert (response.status_code == status.HTTP_404_NOT_FOUND
+            and response.text == "Trip offer with ID 0000 does not exist")
 
 
 def test_make_reservation_invalid_payload(gateway_reservations_url, authorization_token):

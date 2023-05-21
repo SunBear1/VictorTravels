@@ -1,4 +1,5 @@
 import json
+from time import sleep
 
 import requests
 from fastapi import status
@@ -27,6 +28,7 @@ def test_purchase_trip_permission_denied(gateway_purchases_url):
 
 
 def test_purchase_trip_success(gateway_purchases_url, reservation_id, authorization_token):
+    sleep(0.1)  # PyTest is faster then RabbitMQ
     response = requests.post(f"{gateway_purchases_url}/{reservation_id}",
                              headers={"Authorization": authorization_token})
 
