@@ -2,6 +2,7 @@ import com.rabbitmq.client.ConnectionFactory;
 import config.Config;
 import database.DatabaseHandler;
 import messageHandlers.HotelForEventhubMQHandler;
+import messageHandlers.LiveEventsHandler;
 import messageHandlers.ReservationsForEventhubMQHandler;
 import messageHandlers.TransportForEventhubMQHandler;
 
@@ -9,13 +10,15 @@ import java.sql.Connection;
 
 public class EventStoreMsMain {
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         DatabaseHandler databaseHandler = new DatabaseHandler(Config.setupDBConnection());
         Connection conn = Config.setupDBConnection();
 
         HotelForEventhubMQHandler hotelMQ = new HotelForEventhubMQHandler(databaseHandler);
         TransportForEventhubMQHandler transportMQ = new TransportForEventhubMQHandler(databaseHandler);
-        ReservationsForEventhubMQHandler reservationMQ = new ReservationsForEventhubMQHandler(databaseHandler, hotelMQ, transportMQ);
+        LiveEventsHandler liveEventsMQ = new LiveEventsHandler(databaseHandler);
+        ReservationsForEventhubMQHandler reservationMQ = new ReservationsForEventhubMQHandler(databaseHandler, hotelMQ,
+                transportMQ, liveEventsMQ);
 
         hotelMQ.setReservationsForEventhubMQHandler(reservationMQ);
         transportMQ.setReservationsForEventhubMQHandler(reservationMQ);
@@ -23,9 +26,11 @@ public class EventStoreMsMain {
         Thread threadReservations = new Thread(reservationMQ);
         Thread threadHotel = new Thread(hotelMQ);
         Thread threadTransport = new Thread(transportMQ);
-        
+        Thread threadLiveEvents = new Thread(liveEventsMQ);
+
         threadReservations.start();
         threadHotel.start();
         threadTransport.start();
+        threadLiveEvents.start();
     }
 }

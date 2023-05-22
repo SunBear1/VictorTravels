@@ -200,6 +200,7 @@ services:
     restart: always
     environment:
       RABBITMQ_ADDRESS: rabbitmq
+      RABBITMQ_PORT: 5672
       POSTGRES_PORT: 5432
       POSTGRES_ADDRESS: postgresql
       POSTGRES_USER: postgres
