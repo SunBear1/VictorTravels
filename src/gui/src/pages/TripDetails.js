@@ -36,26 +36,28 @@ function TripDetails() {
   const [kidsTo10yo, setKidsTo10yo] = useState(0);
   const [kidsTo18yo, setKidsTo18yo] = useState(0);
 
-  const [transportFromCost, setTransportFromCost] = useState(null);
-  const [transportFromId, setTransportFromId] = useState(null);
-  const [transportToCost, setTransportToCost] = useState(null);
-  const [transportToId, setTransportToId] = useState(null);
-  const [ownTransportFrom, setOwnTransportFrom] = useState(true);
-  const [ownTransportTo, setOwnTransportTo] = useState(true);
+    const [transportFromCost, setTransportFromCost] = useState(null);
+    const [transportFromId, setTransportFromId] = useState(null);
+    const [transportToCost, setTransportToCost] = useState(null);
+    const [transportToId, setTransportToId] = useState(null);
+    const [ownTransportFrom, setOwnTransportFrom] = useState(true);
+    const [ownTransportTo, setOwnTransportTo] = useState(true);
 
-  const [numberOfDays, setNumberOfDays] = useState(null);
+    const [numberOfDays, setNumberOfDays] = useState(null);
 
-  const [finalPrice, setFinalPrice] = useState(null);
+    const [finalPrice, setFinalPrice] = useState(null);
 
-  useEffect(
-      () => {
-        const sum = adultNumber + kidsTo3yo + kidsTo10yo + kidsTo18yo;
-        if (sum === 0) {
-          setSelectedRoom(null);
-        } else if (sum === 1) {
-          const roomType = 'studio';
-          if (trip.hotel.rooms[roomType].available > 0)
-            setSelectedRoom(roomType);
+    const [handleResravation, sethandleResravation] = useState(null);
+
+    useEffect(
+        () => {
+            const sum = adultNumber + kidsTo3yo + kidsTo10yo + kidsTo18yo;
+            if (sum === 0) {
+                setSelectedRoom(null);
+            } else if (sum === 1) {
+                const roomType = 'studio';
+                if (trip.hotel.rooms[roomType].available > 0)
+                    setSelectedRoom(roomType);
         } else if (sum === 2) {
           const roomType = 'small';
           if (trip.hotel.rooms[roomType].available > 0)
@@ -121,38 +123,6 @@ function TripDetails() {
         selectedRoom,
       ]
   );
-  const handleReservation = () => {
-    console.log('abba');
-  };
-
-  // const handleResravation = async event => {
-  //   event.preventDefault ();
-  //   const sum = adultNumber + kidsTo3yo + kidsTo10yo + kidsTo18yo;
-  //   const token = Cookies.get ('token');
-  //   const data = {
-  //     hotel_id: trip.hotel.hotelId,
-  //     room_type: selectedRoom,
-  //     connection_id_to: ownTransportTo ? null : transportToId,
-  //     connection_id_from: ownTransportFrom ? null : transportToId,
-  //     head_count: sum,
-  //     price: finalPrice,
-  //   };
-  //   const config = {
-  //     headers: {Authorization: token},
-  //   };
-
-  //   try {
-  //     const response = await axios.post (
-  //       'http://localhost:18000/api/v1/reservations/' + trip.id,
-  //       data,
-  //       config
-  //     );
-  //     console.log (response.data);
-  //     addToCart (trip.id);
-  //   } catch (error) {
-  //     console.error (error);
-  //   }
-  // };
 
   const handleTransportFromBooking = (cost, id) => {
     setTransportFromCost(cost);
