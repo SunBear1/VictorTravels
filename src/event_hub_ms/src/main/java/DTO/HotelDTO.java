@@ -1,11 +1,11 @@
 package DTO;
 
 public class HotelDTO {
-    private String title;
-    private String trip_offer_id;
-    private String operation_type;
-    private String hotel_id;
-    private String room_type;
+    private final String title;
+    private final String trip_offer_id;
+    private final String operation_type;
+    private final String hotel_id;
+    private final String room_type;
 
     public HotelDTO(String title, String trip_offer_id, String operation_type, String hotel_id, String room_type) {
         this.title = title;

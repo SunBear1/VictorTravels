@@ -1,16 +1,16 @@
 package DTO;
 
 public class LiveEventsDTO {
-    private static String title = "live_events_generation";
-    private Integer trip_id;
-    private String country;
+    private static final String title = "live_events_generation";
+    private final Integer trip_id;
+    private final String country;
     private String region;
-    private String hotel_name;
+    private final String hotel_name;
     private String room_type;
     private String transport_type;
 
     public LiveEventsDTO(Integer trip_id, String country, String region, String hotel_name, String room_type,
-            String transport_type) {
+                         String transport_type) {
         this.trip_id = trip_id;
         this.country = region;
         this.hotel_name = hotel_name;

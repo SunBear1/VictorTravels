@@ -29,6 +29,17 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.12.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -47,8 +58,9 @@
                         <configuration>
                             <finalName>eventhub_exec</finalName>
                             <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>EventStoreMsMain</mainClass>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>EventHubMsMain</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

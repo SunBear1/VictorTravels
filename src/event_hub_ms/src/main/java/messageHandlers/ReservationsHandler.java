@@ -13,21 +13,22 @@ import events.TransportEvent;
 
 import java.io.IOException;
 import java.net.ConnectException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
-public class ReservationsForEventhubMQHandler implements Runnable {
+public class ReservationsHandler implements Runnable {
     private final static String EXCHANGE = "reservations";
     private final static String ROUTING_KEY = "reservations-for-reservations-ms";
     private final static String QUEUE_NAME_TO_CONSUME = "reservations-for-eventhub-ms";
     private final DatabaseHandler databaseHandler;
     private Channel channel;
-    private final HotelForEventhubMQHandler hotelMQ;
-    private final TransportForEventhubMQHandler transportMQ;
+    private final HotelsHandler hotelMQ;
+    private final TransportsHandler transportMQ;
     private final LiveEventsHandler liveEventsMQ;
 
-    public ReservationsForEventhubMQHandler(DatabaseHandler databaseHandler, HotelForEventhubMQHandler hotelMQ,
-            TransportForEventhubMQHandler transportMQ, LiveEventsHandler liveEventsMQ) {
+    public ReservationsHandler(DatabaseHandler databaseHandler, HotelsHandler hotelMQ,
+                               TransportsHandler transportMQ, LiveEventsHandler liveEventsMQ) {
         this.databaseHandler = databaseHandler;
         this.transportMQ = transportMQ;
         this.hotelMQ = hotelMQ;
@@ -39,17 +40,15 @@ public class ReservationsForEventhubMQHandler implements Runnable {
         ConnectionFactory factory = new ConnectionFactory();
         Config.setConfigFactory(factory);
         try (com.rabbitmq.client.Connection connection = factory.newConnection();
-                Channel channel = connection.createChannel()) {
+             Channel channel = connection.createChannel()) {
 
             this.channel = channel;
-
-            System.out.println("Connection to RabbitMQ with Reservations established.");
 
             DefaultConsumer consumer = new DefaultConsumer(channel) {
                 @Override
                 public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties,
-                        byte[] body) throws IOException {
-                    String message = new String(body, "UTF-8");
+                                           byte[] body) throws IOException {
+                    String message = new String(body, StandardCharsets.UTF_8);
                     System.out.println("[MQ CONSUME] Received message from reservationMS queue " + QUEUE_NAME_TO_CONSUME
                             + " with payload: " + message);
                     consumeMessageFromReservations(message);
@@ -60,7 +59,6 @@ public class ReservationsForEventhubMQHandler implements Runnable {
             channel.basicConsume(QUEUE_NAME_TO_CONSUME, false, consumer);
 
             while (true) {
-                ;
             }
 
         } catch (ConnectException e) {
