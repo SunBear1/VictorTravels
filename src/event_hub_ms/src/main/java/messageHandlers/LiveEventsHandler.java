@@ -11,6 +11,7 @@ import events.ReservationEvent;
 
 import java.io.IOException;
 import java.net.ConnectException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -74,7 +75,7 @@ public class LiveEventsHandler implements Runnable {
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             String json = objectMapper.writeValueAsString(liveEventDTO);
 
-            channel.basicPublish(EXCHANGE, ROUTING_KEY, null, json.getBytes());
+            channel.basicPublish(EXCHANGE, ROUTING_KEY, null, json.getBytes(StandardCharsets.UTF_8));
             System.out.println("[MQ PUBLISH] Published message to LiveEvents exchange " +
                     ROUTING_KEY + " with payload: " + json);
             databaseHandler.saveLiveEventsDTO(liveEventDTO);

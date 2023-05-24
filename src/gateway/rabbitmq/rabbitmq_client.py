@@ -11,7 +11,9 @@ VHOST = os.getenv("RABBITMQ_VHOST", "/victor_travels")
 HOST = os.getenv("RABBITMQ_ADDRESS", "localhost")
 PORT = os.getenv("RABBITMQ_PORT", 5672)
 
-logger = logging.getLogger("reservations")
+LIVE_EVENTS_CONSUME_QUEUE_NAME = "live-events-for-gateway"
+
+logger = logging.getLogger("gateway")
 
 
 class RabbitMQClient:
