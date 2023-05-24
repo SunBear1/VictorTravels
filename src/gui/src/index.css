@@ -1,23 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #1e293b;
 }
 
-a, a:hover, a:focus, a:active {
-  text-decoration: none;
-  color: inherit;
+a,
+a:hover,
+a:focus,
+a:active {
+    text-decoration: none;
+    color: inherit;
 }
-
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
-
 
 .multipleSelection {
   width: 300px;
@@ -42,8 +46,8 @@ code {
 }
 
 #checkBoxes {
-  display: none;
-  border: 1px #8DF5E4 solid;
+    display: none;
+    border: 1px #8df5e4 solid;
 }
 
 #checkBoxes label {
@@ -51,13 +55,13 @@ code {
 }
 
 #checkBoxes label:hover {
-  background-color: #4F615E;
+    background-color: #4f615e;
 }
 
-.error{
-  color: #c44545;
+.error {
+    color: #c44545;
 }
 
-.good{
-  color: #5fc93eb6;
+.good {
+    color: #5fc93eb6;
 }
