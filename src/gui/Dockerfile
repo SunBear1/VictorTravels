@@ -4,6 +4,8 @@ WORKDIR /gui
 
 COPY package*.json ./
 
+COPY tailwind.config.js .
+
 RUN npm install
 
 COPY src src/

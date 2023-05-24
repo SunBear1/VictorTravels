@@ -4,6 +4,7 @@ import {useContext, useEffect, useState} from 'react';
 import useAuth from '../useAuth';
 import {UserContext} from '../UserProvider';
 import ReservationInfo from '../components/ReservationInfo/ReservationInfo';
+import Cookies from "js-cookie";
 
 function TripDetails() {
   const {id} = useParams();
@@ -46,8 +47,6 @@ function TripDetails() {
     const [numberOfDays, setNumberOfDays] = useState(null);
 
     const [finalPrice, setFinalPrice] = useState(null);
-
-    const [handleResravation, sethandleResravation] = useState(null);
 
     useEffect(
         () => {
@@ -124,25 +123,54 @@ function TripDetails() {
       ]
   );
 
-  const handleTransportFromBooking = (cost, id) => {
-    setTransportFromCost(cost);
-    setTransportFromId(id);
-  };
+    const handleTransportFromBooking = (cost, id) => {
+        setTransportFromCost(cost);
+        setTransportFromId(id);
+    };
 
-  const handleTransportToBooking = (cost, id) => {
-    setTransportToCost(cost);
-    setTransportToId(id);
-  };
+    const handleTransportToBooking = (cost, id) => {
+        setTransportToCost(cost);
+        setTransportToId(id);
+    };
 
-  return (
-      <div>
-        {trip &&
-            <div>
-              <div className="flex justify-center mt-20">
-                <div className="flex items-center mr-20">
-                  <img
-                      className="h-auto max-w-xl rounded-lg shadow-xl dark:shadow-gray-800"
-                      src={trip.hotel.image}
+    const handleResravation = async event => {
+        event.preventDefault();
+        const sum = adultNumber + kidsTo3yo + kidsTo10yo + kidsTo18yo;
+        const token = Cookies.get('token');
+        const data = {
+            hotel_id: trip.hotel.hotelId,
+            room_type: selectedRoom,
+            connection_id_to: ownTransportTo ? null : transportToId,
+            connection_id_from: ownTransportFrom ? null : transportToId,
+            head_count: sum,
+            price: finalPrice,
+        };
+        const config = {
+            headers: {Authorization: token},
+        };
+
+        try {
+            const response = await axios.post(
+                'http://localhost:18000/api/v1/reservations/' + trip.id,
+                data,
+                config
+            );
+            console.log(response.data);
+            addToCart(trip.id);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    return (
+        <div>
+            {trip &&
+                <div>
+                    <div className="flex justify-center mt-20">
+                        <div className="flex items-center mr-20">
+                            <img
+                                className="h-auto max-w-xl rounded-lg shadow-xl dark:shadow-gray-800"
+                                src={trip.hotel.image}
                       alt="image description"
                   />
                 </div>
