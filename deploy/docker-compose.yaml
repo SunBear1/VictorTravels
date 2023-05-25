@@ -23,6 +23,7 @@ services:
       PURCHASE_MS_ADDRESS: purchases:8002
       PAYMENT_MS_ADDRESS: payments:8003
       RABBITMQ_ADDRESS: rabbitmq
+      RABBITMQ_PORT: 5672
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
       interval: 5s

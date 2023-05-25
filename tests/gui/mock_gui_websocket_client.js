@@ -1,17 +1,9 @@
-// THIS IS A MOCK PROGRAM FOR SIMULATING GUI WEBSOCKET SERVER
-
-
 const WebSocket = require('ws');
-const wss = new WebSocket.Server({port: 18005});
 
-wss.on('connection', (ws) => {
-  ws.on('message', (message) => {
-    console.log('Received message:', JSON.parse(message));
-  });
+const socket = new WebSocket('ws://127.0.0.1:18000/ws/events/preferences');
 
-  ws.on('close', () => {
-    console.log('Connection closed');
-  });
+socket.addEventListener('message', (event) => {
+    const eventData = JSON.parse(event.data);
+    // Update the UI with the received event data
+    console.log('Received event:', eventData);
 });
-
-console.log('WebSocket server started on port 18005');

@@ -1,7 +1,7 @@
 package DTO;
 
 public class LiveEventsDTO {
-    private static final String title = "live_events_generation";
+    private static final String title = "user_preferences_live_event";
     private final Integer trip_id;
     private final String country;
     private final String region;
