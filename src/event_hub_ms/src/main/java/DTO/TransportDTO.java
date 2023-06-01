@@ -1,12 +1,12 @@
 package DTO;
 
 public class TransportDTO {
-    private String title;
-    private String trip_offer_id;
-    private String operation_type;
-    private String connection_id_to;
-    private String connection_id_from;
-    private int head_count;
+    private final String title;
+    private final String trip_offer_id;
+    private final String operation_type;
+    private final String connection_id_to;
+    private final String connection_id_from;
+    private final int head_count;
 
     public TransportDTO(String title, String trip_offer_id, String operation_type, String connection_id_to, String connection_id_from, int head_count) {
         this.title = title;

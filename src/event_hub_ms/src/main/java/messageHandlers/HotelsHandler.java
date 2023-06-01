@@ -11,28 +11,28 @@ import events.HotelEvent;
 import events.ReservationEvent;
 
 import java.io.IOException;
+import java.net.ConnectException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
-public class HotelForEventhubMQHandler implements Runnable{
+public class HotelsHandler implements Runnable {
     private final static String EXCHANGE = "hotel-events";
     private final static String ROUTING_KEY = "hotel-events-for-hotel-ms";
     private final static String QUEUE_NAME_TO_CONSUME = "hotel-events-for-eventhub-ms";
-    private DatabaseHandler databaseHandler;
-    private ReservationsForEventhubMQHandler reservationsMQ;
+    private final DatabaseHandler databaseHandler;
+    private ReservationsHandler reservationsMQ;
     private Channel channel;
 
-    public HotelForEventhubMQHandler(DatabaseHandler databaseHandler) {
+    public HotelsHandler(DatabaseHandler databaseHandler) {
         this.databaseHandler = databaseHandler;
     }
 
-    public void setReservationsForEventhubMQHandler(ReservationsForEventhubMQHandler reservationsMQ) {
+    public void setReservationsForEventhubMQHandler(ReservationsHandler reservationsMQ) {
         this.reservationsMQ = reservationsMQ;
     }
 
     @Override
     public void run() {
-        System.out.println("Hello from hotel thread!");
-
         ConnectionFactory factory = new ConnectionFactory();
         Config.setConfigFactory(factory);
         try (com.rabbitmq.client.Connection connection = factory.newConnection();
@@ -42,9 +42,11 @@ public class HotelForEventhubMQHandler implements Runnable{
 
             DefaultConsumer consumer = new DefaultConsumer(channel) {
                 @Override
-                public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-                    String message = new String(body, "UTF-8");
-                    System.out.println("[MQ CONSUME] Received message from hotelMS queue " + QUEUE_NAME_TO_CONSUME + " with payload: " + message);
+                public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties,
+                                           byte[] body) throws IOException {
+                    String message = new String(body, StandardCharsets.UTF_8);
+                    System.out.println("[MQ CONSUME] Received message from hotelMS queue " + QUEUE_NAME_TO_CONSUME
+                            + " with payload: " + message);
                     consumeMessageFromHotel(message);
                     channel.basicAck(envelope.getDeliveryTag(), false);
                 }
@@ -53,10 +55,15 @@ public class HotelForEventhubMQHandler implements Runnable{
             channel.basicConsume(QUEUE_NAME_TO_CONSUME, false, consumer);
 
             while (true) {
-                ;
             }
 
-        } catch (TimeoutException | IOException e) {
+        } catch (ConnectException e) {
+            System.err.println("Error: Connection refused. Make sure RabbitMQ is running.");
+        } catch (TimeoutException e) {
+            System.err.println("Error: Connection timeout occurred.");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("Error: I/O exception occurred.");
             e.printStackTrace();
         }
 
@@ -89,8 +96,7 @@ public class HotelForEventhubMQHandler implements Runnable{
             databaseHandler.saveHotelEvent(hotelEvent);
 
             reservationsMQ.sendMessageFromHotel(hotelEvent);
-        }
-        catch (JsonProcessingException e) {
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
     }

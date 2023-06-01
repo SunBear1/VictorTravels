@@ -113,4 +113,4 @@ gui:
 test:
 	@pip install pytest pytest-md pytest-emoji starlette fastapi
 	@echo "Running component tests..."
-	@python3 -m pytest -v --emoji --md ../tests/api/api-test-report.md ../tests/api/component
+	@pytest -v --emoji --md ../tests/api/api-test-report.md ../tests/api/component

@@ -1,4 +1,5 @@
 package messageHandlers;
+
 import DTO.TransportDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,28 +11,28 @@ import events.ReservationEvent;
 import events.TransportEvent;
 
 import java.io.IOException;
+import java.net.ConnectException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
-public class TransportForEventhubMQHandler implements Runnable{
+public class TransportsHandler implements Runnable {
     private final static String EXCHANGE = "transport-events";
     private final static String ROUTING_KEY = "transport-events-for-transport-ms";
     private final static String QUEUE_NAME_TO_CONSUME = "transport-events-for-eventhub-ms";
     private final DatabaseHandler databaseHandler;
-    private ReservationsForEventhubMQHandler reservationsMQ;
+    private ReservationsHandler reservationsMQ;
     private Channel channel;
 
-    public TransportForEventhubMQHandler(DatabaseHandler databaseHandler) {
+    public TransportsHandler(DatabaseHandler databaseHandler) {
         this.databaseHandler = databaseHandler;
     }
 
-    public void setReservationsForEventhubMQHandler(ReservationsForEventhubMQHandler reservationsMQ) {
+    public void setReservationsForEventhubMQHandler(ReservationsHandler reservationsMQ) {
         this.reservationsMQ = reservationsMQ;
     }
 
     @Override
     public void run() {
-        System.out.println("Hello from transport thread!");
-
         ConnectionFactory factory = new ConnectionFactory();
         Config.setConfigFactory(factory);
         try (com.rabbitmq.client.Connection connection = factory.newConnection();
@@ -41,9 +42,11 @@ public class TransportForEventhubMQHandler implements Runnable{
 
             DefaultConsumer consumer = new DefaultConsumer(channel) {
                 @Override
-                public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-                    String message = new String(body, "UTF-8");
-                    System.out.println("[MQ CONSUME] Received message from transportMS queue " + QUEUE_NAME_TO_CONSUME + " with payload: " + message);
+                public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties,
+                                           byte[] body) throws IOException {
+                    String message = new String(body, StandardCharsets.UTF_8);
+                    System.out.println("[MQ CONSUME] Received message from transportMS queue " + QUEUE_NAME_TO_CONSUME
+                            + " with payload: " + message);
                     consumeMessageFromTransport(message);
                     channel.basicAck(envelope.getDeliveryTag(), false);
                 }
@@ -52,10 +55,15 @@ public class TransportForEventhubMQHandler implements Runnable{
             channel.basicConsume(QUEUE_NAME_TO_CONSUME, false, consumer);
 
             while (true) {
-                ;
             }
 
-        } catch (TimeoutException | IOException e) {
+        } catch (ConnectException e) {
+            System.err.println("Error: Connection refused. Make sure RabbitMQ is running.");
+        } catch (TimeoutException e) {
+            System.err.println("Error: Connection timeout occurred.");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.err.println("Error: I/O exception occurred.");
             e.printStackTrace();
         }
     }
@@ -68,7 +76,8 @@ public class TransportForEventhubMQHandler implements Runnable{
         String connection_id_from = reservationEvent.getConnection_id_from();
         int head_count = reservationEvent.getHead_count();
 
-        TransportDTO transportDTO = new TransportDTO(title, trip_offer_id, operation_type, connection_id_to, connection_id_from, head_count);
+        TransportDTO transportDTO = new TransportDTO(title, trip_offer_id, operation_type, connection_id_to,
+                connection_id_from, head_count);
         databaseHandler.saveTransportDTO(transportDTO);
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -90,8 +99,7 @@ public class TransportForEventhubMQHandler implements Runnable{
             databaseHandler.saveTransportEvent(transportEvent);
 
             reservationsMQ.sendMessageFromTransport(transportEvent);
-        }
-        catch (JsonProcessingException e) {
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
     }

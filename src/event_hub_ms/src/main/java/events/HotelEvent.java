@@ -7,7 +7,8 @@ public class HotelEvent {
     private List<String> trip_offers_id;
     private Boolean is_hotel_booked_up;
 
-    public HotelEvent() {}
+    public HotelEvent() {
+    }
 
     public String getTitle() {
         return title;

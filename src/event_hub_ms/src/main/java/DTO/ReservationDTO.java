@@ -3,10 +3,10 @@ package DTO;
 import java.util.List;
 
 public class ReservationDTO {
-    private String title;
-    private String operation_type;
-    private List<String> trip_offers_affected;
-    private String connection_id;
+    private final String title;
+    private final String operation_type;
+    private final List<String> trip_offers_affected;
+    private final String connection_id;
 
     public ReservationDTO(String title, String operation_type, List<String> trip_offers_affected, String connection_id) {
         this.title = title;
