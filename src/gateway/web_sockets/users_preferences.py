@@ -13,16 +13,16 @@ logger = logging.getLogger("gateway")
 async def send_user_preferences_event(preferences_ws: WebSocket):
     await preferences_ws.accept()
 
-    if websocket_manager.user_preferences_client is not None:
+    if preferences_ws in websocket_manager.user_preferences_clients:
         await preferences_ws.close()
         return
 
-    websocket_manager.user_preferences_client = preferences_ws
-
     try:
-        logger.info("Established connection to client via websocket on preferences endpoint.")
+        websocket_manager.user_preferences_clients.append(preferences_ws)
+        logger.info(f"Established connection to client {preferences_ws.client.host}:{preferences_ws.client.port} via "
+                    f"websocket on preferences endpoint.")
         while True:
             await preferences_ws.receive_text()
     except WebSocketDisconnect:
-        websocket_manager.user_preferences_client = None
-        logger.info("Client disconnected from websocket.")
+        websocket_manager.user_preferences_clients.remove(preferences_ws)
+        logger.info(f"Client {preferences_ws.client.host}:{preferences_ws.client.port} disconnected from websocket.")
