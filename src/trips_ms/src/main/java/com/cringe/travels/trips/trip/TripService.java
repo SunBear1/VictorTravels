@@ -39,21 +39,28 @@ public class TripService {
             Integer max_price) {
         // TODO Zwiększyć logowanie w tym servicie
         String query = "{ 'is_booked_up' : false,";
-        
-        int head_count = countAll(adults, kidsTo18Yo, kidsTo10Yo, kidsTo3Yo);
+        int head_count = 0;
+        if (adults != null)
+            head_count += adults;
+        if (kidsTo3Yo != null)
+            head_count += kidsTo3Yo;
+        if (kidsTo10Yo != null)
+            head_count += kidsTo10Yo;
+        if (kidsTo18Yo != null)
+            head_count += kidsTo18Yo;
+
         String room_type = getRoomTypeForPeople(head_count);
 
         // If there is too many people or some parameters have negative values, return
         // empty list
-        if (room_type.isEmpty() || head_count == -1) {
+        if (room_type.isEmpty()) {
             return new ArrayList<Trip>();
         }
-
         if (head_count > 0) {
             query = query + "\"hotel.rooms." + room_type + ".available\": { $gt: 0 }";
         }
         if (arrivalRegion != null) {
-            query = query + "$or: [";
+            query = query + "$and: [";
             for (String region : arrivalRegion) {
                 query = query + "{ \"localisation.country\": \"" + region + "\" }"; // TODO użyć StringBuildera
             }
@@ -75,7 +82,7 @@ public class TripService {
             query = query + "]}";
         }
         if (diet != null) {
-            query = query + "$or: [";
+            query = query + "$and: [";
             for (String diet_option : diet) {
                 query = query + "{ \"hotel.diet." + diet_option + "\": { $exists: true } }"; // TODO użyć StringBuildera
             }
@@ -90,7 +97,7 @@ public class TripService {
             query = query + ",date_to: { $lte: ISODate('" + dateTo + "') }";
 
         query = query + " }";
-
+        logger.info(query);
         List<Trip> filteredTrips = repository.findTripsByCustomQuery(query);
         for (int i = 0; i < filteredTrips.size(); i++) {
             int roomPrice = filteredTrips.get(i).getHotel().getRooms().get(room_type).getCost();
@@ -159,47 +166,18 @@ public class TripService {
     }
 
     public String getRoomTypeForPeople(Integer head_count) {
-        if (head_count > 6) {
-            return "";
-        } else if (head_count == 1) {
+        if (head_count == 1)
             return "studio";
-        } else if (head_count == 2) {
+        else if (head_count == 2)
             return "small";
-        } else if (head_count == 3) {
+        else if (head_count == 3)
             return "medium";
-        } else if (head_count == 4) {
+        else if (head_count == 4)
             return "large";
-        } else {
+        else if (head_count < 7)
             return "apartment";
-        }
-    }
-
-    public Integer countAll(Integer adults, Integer kidsTo18Yo, Integer kidsTo10Yo, Integer kidsTo3Yo) {
-        int head_count = 0;
-        Boolean hasBadParameter = false;
-        if (adults != null) {
-            if (adults < 0)
-                hasBadParameter = true;
-            head_count += adults;
-        }
-        if (kidsTo3Yo != null) {
-            if (kidsTo3Yo < 0)
-                hasBadParameter = true;
-            head_count += kidsTo3Yo;
-        }
-        if (kidsTo10Yo != null) {
-            if (kidsTo10Yo < 0)
-                hasBadParameter = true;
-
-            head_count += kidsTo10Yo;
-        }
-        if (kidsTo18Yo != null) {
-            if (kidsTo18Yo < 0)
-                hasBadParameter = true;
-            head_count += kidsTo18Yo;
-        }
-
-        return hasBadParameter ? -1 : head_count;
+        else
+            return "";
     }
 
     public List<Localisation> getArrivalLocations(List<Trip> trips) {

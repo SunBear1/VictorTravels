@@ -111,6 +111,6 @@ gui:
 	@docker build -f ../src/gui/Dockerfile -t ${GUI_IMAGE_NAME} ../src/gui
 
 test:
-	@pip install pytest pytest-md pytest-emoji starlette fastapi
+	@pip3 install pytest pytest-md pytest-emoji starlette fastapi
 	@echo "Running component tests..."
 	@pytest -v --emoji --md ../tests/api/api-test-report.md ../tests/api/component
