@@ -25,12 +25,15 @@ EVENTHUB_IMAGE_NAME := malajski/victor-travels:eventhub
 EVENTHUB_CONTAINER_NAME := event-hub-ms
 GUI_IMAGE_NAME := malajski/victor-travels:gui
 GUI_CONTAINER_NAME := web-gui
+EVENT_GENERATOR_IMAGE_NAME := malajski/victor-travels:event-generator
+EVENT_GENERATOR_CONTAINER_NAME := event-generator
 
 
 build-and-run: build run
 
 
-build: base gateway rabbit reservations purchases payments data-init hotels trips transports event-hub gui clean
+build: base gui gateway rabbit reservations purchases payments event-hub hotels transports trips data-init data-generator clean
+
 
 run:
 	@echo "Starting platform..."
@@ -45,6 +48,7 @@ run:
 	TRANSPORT_IMAGE=${TRANSPORT_IMAGE_NAME} \
 	EVENTHUB_IMAGE=${EVENTHUB_IMAGE_NAME} \
 	GUI_IMAGE=${GUI_IMAGE_NAME} \
+	EVENT_GENERATOR_IMAGE=${EVENT_GENERATOR_IMAGE_NAME} \
 	docker-compose -p "victor-travels" up
 
 
@@ -109,6 +113,10 @@ event-hub:
 gui:
 	@echo "Building image for ${GUI_CONTAINER_NAME}..."
 	@docker build -f ../src/gui/Dockerfile -t ${GUI_IMAGE_NAME} ../src/gui
+
+data-generator:
+	@echo "Building image for ${EVENT_GENERATOR_CONTAINER_NAME}..."
+	@docker build -f ../src/event_generator/Dockerfile -t ${EVENT_GENERATOR_IMAGE_NAME} ../src/event_generator
 
 test:
 	@pip install pytest pytest-md pytest-emoji starlette fastapi

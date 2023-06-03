@@ -74,6 +74,13 @@
       "arguments": {}
     },
     {
+      "name": "generated-random-events-for-eventhub-ms",
+      "vhost": "/victor_travels",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
       "name": "reservations-for-reservations-ms",
       "vhost": "/victor_travels",
       "durable": true,
@@ -161,6 +168,13 @@
     },
     {
       "name": "payments",
+      "vhost": "/victor_travels",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false
+    },
+    {
+      "name": "generated-random-events",
       "vhost": "/victor_travels",
       "type": "direct",
       "durable": true,
@@ -258,6 +272,13 @@
       "destination": "payments-for-payment-ms",
       "destination_type": "queue",
       "routing_key": "payments-for-payment-ms"
+    },
+    {
+      "source": "generated-random-events",
+      "vhost": "/victor_travels",
+      "destination": "generated-random-events-for-eventhub-ms",
+      "destination_type": "queue",
+      "routing_key": "generated-random-events-for-eventhub-ms"
     }
   ]
 }
