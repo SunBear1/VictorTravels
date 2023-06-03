@@ -3,8 +3,6 @@ package com.cringe.travels.trips.trip;
 import com.cringe.travels.trips.trip.entity.Localisation;
 import com.cringe.travels.trips.trip.entity.Transport;
 import com.cringe.travels.trips.trip.entity.TripConfigurations;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -13,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -23,10 +20,9 @@ public class TripService {
     Logger logger = LoggerFactory.getLogger(TripService.class);
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
-
     TripService(TripRepository repository) {
         this.repository = repository;
-        //formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        // formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
     public Trip getbyTripId(String id) {
@@ -38,22 +34,21 @@ public class TripService {
     }
 
     public List<Trip> getFilteredTrips(Integer adults, Integer kidsTo3Yo, Integer kidsTo10Yo, Integer kidsTo18Yo,
-                                       String dateFrom, String dateTo, List<String> departureRegion,
-                                       List<String> arrivalRegion, List<String> transport, String order, List<String> diet,
-                                       Integer max_price) {
+            String dateFrom, String dateTo, List<String> departureRegion,
+            List<String> arrivalRegion, List<String> transport, String order, List<String> diet,
+            Integer max_price) {
         // TODO Zwiększyć logowanie w tym servicie
         String query = "{ 'is_booked_up' : false,";
-        int head_count = 0;
-        if (adults != null)
-            head_count += adults;
-        if (kidsTo3Yo != null)
-            head_count += kidsTo3Yo;
-        if (kidsTo10Yo != null)
-            head_count += kidsTo10Yo;
-        if (kidsTo18Yo != null)
-            head_count += kidsTo18Yo;
-
+        
+        int head_count = countAll(adults, kidsTo18Yo, kidsTo10Yo, kidsTo3Yo);
         String room_type = getRoomTypeForPeople(head_count);
+
+        // If there is too many people or some parameters have negative values, return
+        // empty list
+        if (room_type.isEmpty() || head_count == -1) {
+            return new ArrayList<Trip>();
+        }
+
         if (head_count > 0) {
             query = query + "\"hotel.rooms." + room_type + ".available\": { $gt: 0 }";
         }
@@ -67,7 +62,8 @@ public class TripService {
         if (departureRegion != null) {
             query = query + "$and: [ { $or: [";
             for (String region : departureRegion) {
-                query = query + "{ \"from." + region + ".plane.transportBookedUp\": false }, { \"from." + region + ".train.transportBookedUp\": false }"; // TODO użyć StringBuildera
+                query = query + "{ \"from." + region + ".plane.transportBookedUp\": false }, { \"from." + region
+                        + ".train.transportBookedUp\": false }"; // TODO użyć StringBuildera
             }
             query = query + "]}]";
         }
@@ -98,7 +94,8 @@ public class TripService {
         List<Trip> filteredTrips = repository.findTripsByCustomQuery(query);
         for (int i = 0; i < filteredTrips.size(); i++) {
             int roomPrice = filteredTrips.get(i).getHotel().getRooms().get(room_type).getCost();
-            float tripPrice = calculateTripPrices(adults, kidsTo3Yo, kidsTo10Yo, kidsTo18Yo, roomPrice, null, null, null, null);
+            float tripPrice = calculateTripPrices(adults, kidsTo3Yo, kidsTo10Yo, kidsTo18Yo, roomPrice, null, null,
+                    null, null);
             filteredTrips.get(i).setPrice(tripPrice);
             if (max_price != null && tripPrice > max_price) {
                 filteredTrips.remove(i);
@@ -113,8 +110,9 @@ public class TripService {
         return filteredTrips;
     }
 
-
-    public Float calculateTripPrices(Integer adults, Integer kidsTo3Yo, Integer kidsTo10Yo, Integer kidsTo18Yo, Integer room_cost, Integer number_of_days, Integer transport_to_cost, Integer transport_from_cost, Integer diet_cost) {
+    public Float calculateTripPrices(Integer adults, Integer kidsTo3Yo, Integer kidsTo10Yo, Integer kidsTo18Yo,
+            Integer room_cost, Integer number_of_days, Integer transport_to_cost, Integer transport_from_cost,
+            Integer diet_cost) {
         float totalPrice = 0;
         float provision = 1.1F;
 
@@ -160,9 +158,10 @@ public class TripService {
         return totalPrice;
     }
 
-
     public String getRoomTypeForPeople(Integer head_count) {
-        if (head_count == 1) {
+        if (head_count > 6) {
+            return "";
+        } else if (head_count == 1) {
             return "studio";
         } else if (head_count == 2) {
             return "small";
@@ -173,6 +172,34 @@ public class TripService {
         } else {
             return "apartment";
         }
+    }
+
+    public Integer countAll(Integer adults, Integer kidsTo18Yo, Integer kidsTo10Yo, Integer kidsTo3Yo) {
+        int head_count = 0;
+        Boolean hasBadParameter = false;
+        if (adults != null) {
+            if (adults < 0)
+                hasBadParameter = true;
+            head_count += adults;
+        }
+        if (kidsTo3Yo != null) {
+            if (kidsTo3Yo < 0)
+                hasBadParameter = true;
+            head_count += kidsTo3Yo;
+        }
+        if (kidsTo10Yo != null) {
+            if (kidsTo10Yo < 0)
+                hasBadParameter = true;
+
+            head_count += kidsTo10Yo;
+        }
+        if (kidsTo18Yo != null) {
+            if (kidsTo18Yo < 0)
+                hasBadParameter = true;
+            head_count += kidsTo18Yo;
+        }
+
+        return hasBadParameter ? -1 : head_count;
     }
 
     public List<Localisation> getArrivalLocations(List<Trip> trips) {
