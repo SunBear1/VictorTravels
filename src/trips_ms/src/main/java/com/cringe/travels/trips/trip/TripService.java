@@ -38,7 +38,7 @@ public class TripService {
             List<String> arrivalRegion, List<String> transport, String order, List<String> diet,
             Integer max_price) {
         // TODO Zwiększyć logowanie w tym servicie
-        String query = "{ 'is_booked_up' : false,";
+        String query = "{$and:[{ 'is_booked_up' : false}";
         int head_count = 0;
         if (adults != null)
             head_count += adults;
@@ -56,47 +56,48 @@ public class TripService {
         if (room_type.isEmpty()) {
             return new ArrayList<Trip>();
         }
+        
         if (head_count > 0) {
-            query = query + "\"hotel.rooms." + room_type + ".available\": { $gt: 0 }";
+            query = query + ",{\"hotel.rooms." + room_type + ".available\": { $gt: 0 }}";
         }
         if (arrivalRegion != null) {
-            query = query + "$and: [";
+            query = query + ",{$or: [";
             for (String region : arrivalRegion) {
                 query = query + "{ \"localisation.country\": \"" + region + "\" }"; // TODO użyć StringBuildera
             }
-            query = query + "]";
+            query = query + "]}";
         }
         if (departureRegion != null) {
-            query = query + "$and: [ { $or: [";
+            query = query + ",{ $or: [";
             for (String region : departureRegion) {
                 query = query + "{ \"from." + region + ".plane.transportBookedUp\": false }, { \"from." + region
                         + ".train.transportBookedUp\": false }"; // TODO użyć StringBuildera
             }
-            query = query + "]}]";
+            query = query + "]}";
         }
         if (transport != null && !transport.contains("own")) {
-            query = query + "\"transport_types\": {\"$in\": [";
+            query = query + ",{\"transport_types\": {\"$in\": [";
             for (String transport_type : transport) {
                 query = query + "\"" + transport_type + "\","; // TODO użyć StringBuildera
             }
-            query = query + "]}";
+            query = query + "]}}";
         }
         if (diet != null) {
-            query = query + "$and: [";
+            query = query + ",{$or: [";
             for (String diet_option : diet) {
                 query = query + "{ \"hotel.diet." + diet_option + "\": { $exists: true } }"; // TODO użyć StringBuildera
             }
-            query = query + "]";
+            query = query + "]}";
         }
 
         // TODO sprawdzić czy format dateFrom oraz DateTo jest poprawny
 
         if (dateFrom != null)
-            query = query + ",date_from: { $gte: ISODate('" + dateFrom + "') }";
+            query = query + ",{date_from: { $gte: ISODate('" + dateFrom + "') }}";
         if (dateTo != null)
-            query = query + ",date_to: { $lte: ISODate('" + dateTo + "') }";
+            query = query + ",{date_to: { $lte: ISODate('" + dateTo + "') }}";
 
-        query = query + " }";
+        query = query + "]}";
         logger.info(query);
         List<Trip> filteredTrips = repository.findTripsByCustomQuery(query);
         for (int i = 0; i < filteredTrips.size(); i++) {
