@@ -3,8 +3,6 @@ package com.cringe.travels.trips.trip;
 import com.cringe.travels.trips.trip.entity.Localisation;
 import com.cringe.travels.trips.trip.entity.Transport;
 import com.cringe.travels.trips.trip.entity.TripConfigurations;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -13,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -23,10 +20,9 @@ public class TripService {
     Logger logger = LoggerFactory.getLogger(TripService.class);
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
-
     TripService(TripRepository repository) {
         this.repository = repository;
-        //formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        // formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
     public Trip getbyTripId(String id) {
@@ -38,11 +34,11 @@ public class TripService {
     }
 
     public List<Trip> getFilteredTrips(Integer adults, Integer kidsTo3Yo, Integer kidsTo10Yo, Integer kidsTo18Yo,
-                                       String dateFrom, String dateTo, List<String> departureRegion,
-                                       List<String> arrivalRegion, List<String> transport, String order, List<String> diet,
-                                       Integer max_price) {
+            String dateFrom, String dateTo, List<String> departureRegion,
+            List<String> arrivalRegion, List<String> transport, String order, List<String> diet,
+            Integer max_price) {
         // TODO Zwiększyć logowanie w tym servicie
-        String query = "{ 'is_booked_up' : false,";
+        String query = "{$and:[{ 'is_booked_up' : false}";
         int head_count = 0;
         if (adults != null)
             head_count += adults;
@@ -54,51 +50,60 @@ public class TripService {
             head_count += kidsTo18Yo;
 
         String room_type = getRoomTypeForPeople(head_count);
+
+        // If there is too many people or some parameters have negative values, return
+        // empty list
+        if (room_type.isEmpty()) {
+            return new ArrayList<Trip>();
+        }
+        
         if (head_count > 0) {
-            query = query + "\"hotel.rooms." + room_type + ".available\": { $gt: 0 }";
+            query = query + ",{\"hotel.rooms." + room_type + ".available\": { $gt: 0 }}";
         }
         if (arrivalRegion != null) {
-            query = query + "$or: [";
+            query = query + ",{$or: [";
             for (String region : arrivalRegion) {
                 query = query + "{ \"localisation.country\": \"" + region + "\" }"; // TODO użyć StringBuildera
             }
-            query = query + "]";
+            query = query + "]}";
         }
         if (departureRegion != null) {
-            query = query + "$and: [ { $or: [";
+            query = query + ",{ $or: [";
             for (String region : departureRegion) {
-                query = query + "{ \"from." + region + ".plane.transportBookedUp\": false }, { \"from." + region + ".train.transportBookedUp\": false }"; // TODO użyć StringBuildera
-            }
-            query = query + "]}]";
-        }
-        if (transport != null && !transport.contains("own")) {
-            query = query + "\"transport_types\": {\"$in\": [";
-            for (String transport_type : transport) {
-                query = query + "\"" + transport_type + "\","; // TODO użyć StringBuildera
+                query = query + "{ \"from." + region + ".plane.transportBookedUp\": false }, { \"from." + region
+                        + ".train.transportBookedUp\": false }"; // TODO użyć StringBuildera
             }
             query = query + "]}";
         }
+        if (transport != null && !transport.contains("own")) {
+            query = query + ",{\"transport_types\": {\"$in\": [";
+            for (String transport_type : transport) {
+                query = query + "\"" + transport_type + "\","; // TODO użyć StringBuildera
+            }
+            query = query + "]}}";
+        }
         if (diet != null) {
-            query = query + "$or: [";
+            query = query + ",{$or: [";
             for (String diet_option : diet) {
                 query = query + "{ \"hotel.diet." + diet_option + "\": { $exists: true } }"; // TODO użyć StringBuildera
             }
-            query = query + "]";
+            query = query + "]}";
         }
 
         // TODO sprawdzić czy format dateFrom oraz DateTo jest poprawny
 
         if (dateFrom != null)
-            query = query + ",date_from: { $gte: ISODate('" + dateFrom + "') }";
+            query = query + ",{date_from: { $gte: ISODate('" + dateFrom + "') }}";
         if (dateTo != null)
-            query = query + ",date_to: { $lte: ISODate('" + dateTo + "') }";
+            query = query + ",{date_to: { $lte: ISODate('" + dateTo + "') }}";
 
-        query = query + " }";
-
+        query = query + "]}";
+        logger.info(query);
         List<Trip> filteredTrips = repository.findTripsByCustomQuery(query);
         for (int i = 0; i < filteredTrips.size(); i++) {
             int roomPrice = filteredTrips.get(i).getHotel().getRooms().get(room_type).getCost();
-            float tripPrice = calculateTripPrices(adults, kidsTo3Yo, kidsTo10Yo, kidsTo18Yo, roomPrice, null, null, null, null);
+            float tripPrice = calculateTripPrices(adults, kidsTo3Yo, kidsTo10Yo, kidsTo18Yo, roomPrice, null, null,
+                    null, null);
             filteredTrips.get(i).setPrice(tripPrice);
             if (max_price != null && tripPrice > max_price) {
                 filteredTrips.remove(i);
@@ -113,8 +118,9 @@ public class TripService {
         return filteredTrips;
     }
 
-
-    public Float calculateTripPrices(Integer adults, Integer kidsTo3Yo, Integer kidsTo10Yo, Integer kidsTo18Yo, Integer room_cost, Integer number_of_days, Integer transport_to_cost, Integer transport_from_cost, Integer diet_cost) {
+    public Float calculateTripPrices(Integer adults, Integer kidsTo3Yo, Integer kidsTo10Yo, Integer kidsTo18Yo,
+            Integer room_cost, Integer number_of_days, Integer transport_to_cost, Integer transport_from_cost,
+            Integer diet_cost) {
         float totalPrice = 0;
         float provision = 1.1F;
 
@@ -160,19 +166,19 @@ public class TripService {
         return totalPrice;
     }
 
-
     public String getRoomTypeForPeople(Integer head_count) {
-        if (head_count == 1) {
+        if (head_count == 1)
             return "studio";
-        } else if (head_count == 2) {
+        else if (head_count == 2)
             return "small";
-        } else if (head_count == 3) {
+        else if (head_count == 3)
             return "medium";
-        } else if (head_count == 4) {
+        else if (head_count == 4)
             return "large";
-        } else {
+        else if (head_count < 7)
             return "apartment";
-        }
+        else
+            return "";
     }
 
     public List<Localisation> getArrivalLocations(List<Trip> trips) {
