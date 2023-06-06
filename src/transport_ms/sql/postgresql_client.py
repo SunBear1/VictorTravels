@@ -1,7 +1,8 @@
 import logging
 import os
-import psycopg2
 from typing import List
+
+import psycopg2
 
 PG_HOST = os.getenv("POSTGRES_ADDRESS", "localhost")
 PG_USER = os.getenv("POSTGRES_USER", "admin")

@@ -7,6 +7,9 @@ logger = logging.getLogger("transports")
 
 
 def get_offers_for_transport(connection_id: str) -> List:
+    if connection_id == "own":
+        return []
+
     trip_offer_id_query = f"SELECT TripOfferID FROM Offers WHERE ConnectionID = '{connection_id}';"
 
     pg_client = PostgreSQLClient()
@@ -16,6 +19,9 @@ def get_offers_for_transport(connection_id: str) -> List:
 
 
 def update_left_seats_in_transport(connection_id: str, operation: str, number_of_seats: int):
+    if connection_id == "own":
+        return
+
     math_operator = f" - {number_of_seats}"
     if operation == "add":
         math_operator = f" + {number_of_seats}"
@@ -27,16 +33,23 @@ def update_left_seats_in_transport(connection_id: str, operation: str, number_of
 
 
 def check_if_transport_booked_up(connection_id: str) -> bool:
+    if connection_id == "own":
+        return False
+
     check_transport_booked_up_query = f"SELECT ConnectionID FROM SeatsLeft WHERE ConnectionID='{connection_id}' AND seatsleft=0;"
 
     pg_client = PostgreSQLClient()
     transport_booked_up_query = pg_client.execute_query_for_database(query=check_transport_booked_up_query)
 
     result = True if transport_booked_up_query else False
+    logger.info(msg=f"Transport {connection_id} booked up status: {result}")
     return result
 
 
 def get_number_of_seats_left(connection_id: str) -> int:
+    if connection_id == "own":
+        return 100  # some big number that won't trigger 0 seats left exception
+
     number_of_seats_left_query = f"SELECT SeatsLeft FROM SeatsLeft WHERE ConnectionID='{connection_id}';"
 
     pg_client = PostgreSQLClient()

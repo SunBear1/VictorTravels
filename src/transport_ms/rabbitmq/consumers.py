@@ -2,11 +2,12 @@ import asyncio
 import json
 import logging
 
-from rabbitmq.rabbitmq_client import RabbitMQClient, TRIP_RESEARCHER_EXCHANGE_NAME, TRIP_RESEARCHER_PUBLISH_QUEUE_NAME, \
-    EVENT_HUB_PUBLISH_QUEUE_NAME, EVENT_HUB_EXCHANGE_NAME
 from service.errors import UnprocessableEntityError
 from service.transports_for_trip import get_offers_for_transport, check_if_transport_booked_up, \
     get_number_of_seats_left, update_left_seats_in_transport
+
+from rabbitmq.rabbitmq_client import RabbitMQClient, TRIP_RESEARCHER_EXCHANGE_NAME, TRIP_RESEARCHER_PUBLISH_QUEUE_NAME, \
+    EVENT_HUB_PUBLISH_QUEUE_NAME, EVENT_HUB_EXCHANGE_NAME
 
 logger = logging.getLogger("transports")
 
@@ -63,9 +64,6 @@ def consume_eventhub_ms_event(ch, method, properties, body):
 
     is_transport_to_booked_up = check_if_transport_booked_up(connection_id=connection_id_to)
     is_transport_from_booked_up = check_if_transport_booked_up(connection_id=connection_id_from)
-
-    logger.info(msg=f"Transport {connection_id_to} booked up status: {is_transport_to_booked_up}")
-    logger.info(msg=f"Transport {connection_id_from} booked up status: {is_transport_from_booked_up}")
 
     transport_booking_status_msg = {
         "title": "transport_booking_status",
