@@ -9,7 +9,7 @@ USERNAME = os.getenv("RABBITMQ_USERNAME", "admin")
 PASSWORD = os.getenv("RABBITMQ_PASSWORD", "admin")
 VHOST = os.getenv("RABBITMQ_VHOST", "/victor_travels")
 HOST = os.getenv("RABBITMQ_ADDRESS", "localhost")
-PORT = os.getenv("RABBITMQ_PORT", 5672)
+PORT = os.getenv("RABBITMQ_PORT", 17998)
 
 TRANSPORT_CONSUME_QUEUE_NAME = "transport-events-for-transport-ms"
 

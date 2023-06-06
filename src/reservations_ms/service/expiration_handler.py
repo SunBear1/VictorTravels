@@ -30,8 +30,11 @@ async def start_measuring_reservation_time(
             "$set": {"reservation_status": "expired"}})
 
         update_rooms_available(hotel_id=hotel_id, room_type=room_type, value=1)
-        update_seats_available(connection_id=connections_id[0], value=head_count)
-        update_seats_available(connection_id=connections_id[1], value=head_count)
+
+        if connections_id[0] != "own":
+            update_seats_available(connection_id=connections_id[0], value=head_count)
+        if connections_id[1] != "own":
+            update_seats_available(connection_id=connections_id[1], value=head_count)
 
         reservations_client = RabbitMQClient()
         reservations_client.send_data_to_queue(queue_name=RESERVATIONS_PUBLISH_QUEUE_NAME,
