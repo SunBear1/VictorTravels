@@ -114,7 +114,7 @@ function ReservationInfo({
               </div>
               {!isReserved
                   ? selectedRoom &&
-                  <button className="reserve-button" onClick={handleResravation}>
+                  <button className="mt-5 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded" onClick={handleResravation}>
                     Rezerwuj teraz
                   </button>
                   : <p>Zarezerwowany</p>}

@@ -1,9 +1,13 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {UserContext} from '../UserProvider';
+import React, { useContext, useEffect, useState } from 'react';
+import { UserContext } from '../UserProvider';
+import { NavLink, useNavigate } from 'react-router-dom';
+import Cookies from "js-cookie";
+import axios from 'axios';
 
 function Cart() {
-    const {getCart, removeFromCart, getPurchasedTrips} = useContext(UserContext);
+    const { getCart, removeFromCart, getPurchasedTrips, getTripFromCart } = useContext(UserContext);
 
+    const navigate = useNavigate();
     const [trips, setTrips] = useState([]);
     const [tripsId, setTripsId] = useState(getCart());
     const [boughtTrips, setBoughtTrips] = useState([]);
@@ -53,9 +57,26 @@ function Cart() {
         removeFromCart(id);
         setTripsId(getCart());
     };
+
     const handleBuy = async id => {
-        removeFromCart(id);
-        setTripsId(getCart());
+        const trip = getTripFromCart(id);
+        const token = Cookies.get('token');
+        console.log(token);
+        const config = {
+            headers: { Authorization: token },
+        };
+        try {
+            const response = await axios.post(
+                'http://localhost:18000/api/v1/purchases/' + trip.reservationId,
+                null,
+                config
+            );
+            console.log(response.data);
+            navigate("/" + trip.trip + '/buy');
+        } catch (error) {
+            console.error(error);
+        }
+
     };
 
     useEffect(() => {
@@ -71,12 +92,13 @@ function Cart() {
                         }
                     })
                     .map(countdown => {
-                        return {...countdown, timeLeft: countdown.timeLeft - 1};
+                        return { ...countdown, timeLeft: countdown.timeLeft - 1 };
                     });
             });
         }, 1000);
         return () => clearInterval(intervalId);
     }, []);
+
     return (
         <div className="flex justify-center">
             <div className="inline-flex items-center flex-col">
@@ -88,13 +110,13 @@ function Cart() {
                         <div key={trip.id}>
                             <h2>{trip.hotel.name}</h2>
                             <h3>{trip.localisation.country}</h3>
-                            <img src={trip.hotel.image} alt={trip.id}/>
-                            {/* <p>
-                Time left: {tripsId?.filter((obj) => obj.trip === trip.id)[0]?.timeLeft} seconds
-              </p>
-              <button onClick={() => handleRemove(trip.id)}>Remove from Cart</button>
+                            <img src={trip.hotel.image} alt={trip.id} />
+                            <p>
+                                <p className='text-white'>Time left: {tripsId?.filter((obj) => obj.trip === trip.id)[0]?.timeLeft} seconds</p>
+                            </p>
+                            <button className="mt-5 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4" onClick={() => handleRemove(trip.id)}>Remove from Cart</button>
 
-              <button onClick={() => handleBuy(trip.id)}>Buy Trip</button> */}
+                            <button className="mt-5 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4" onClick={() => handleBuy(trip.id)}>Buy Trip</button>
                         </div>
                     ))
                     : <p className="tracking-widest text-gray-500 md:text-lg dark:text-gray-400 my-80">
