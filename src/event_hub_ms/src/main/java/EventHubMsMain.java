@@ -1,5 +1,6 @@
 import config.Config;
 import database.DatabaseHandler;
+import messageHandlers.GeneratedEventsHandler;
 import messageHandlers.HotelsHandler;
 import messageHandlers.LiveEventsHandler;
 import messageHandlers.ReservationsHandler;
@@ -26,7 +27,10 @@ public class EventHubMsMain {
 
         HotelsHandler hotelMQ = new HotelsHandler(databaseHandler);
         TransportsHandler transportMQ = new TransportsHandler(databaseHandler);
+
         LiveEventsHandler liveEventsMQ = new LiveEventsHandler(databaseHandler);
+        GeneratedEventsHandler generatedEventsMQ = new GeneratedEventsHandler(databaseHandler, hotelMQ, transportMQ,
+                liveEventsMQ);
 
         ReservationsHandler reservationMQ = new ReservationsHandler(databaseHandler, hotelMQ,
                 transportMQ, liveEventsMQ);
@@ -38,10 +42,12 @@ public class EventHubMsMain {
         Thread threadHotel = new Thread(hotelMQ);
         Thread threadTransport = new Thread(transportMQ);
         Thread threadLiveEvents = new Thread(liveEventsMQ);
+        Thread threadRandomGeneratedEvents = new Thread(generatedEventsMQ);
 
         threadReservations.start();
         threadHotel.start();
         threadTransport.start();
         threadLiveEvents.start();
+        threadRandomGeneratedEvents.start();
     }
 }

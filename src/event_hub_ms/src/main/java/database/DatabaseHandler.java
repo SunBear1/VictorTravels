@@ -1,7 +1,7 @@
 package database;
 
-import DTO.HotelDTO;
-import DTO.LiveEventsDTO;
+import DTO.HotelReservationEventDTO;
+import DTO.LiveReservationEventsDTO;
 import DTO.ReservationDTO;
 import DTO.TransportDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -118,7 +118,7 @@ public class DatabaseHandler {
 
     }
 
-    public void saveHotelDTO(HotelDTO hotelDTO) {
+    public void saveHotelDTO(HotelReservationEventDTO hotelDTO) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -239,7 +239,7 @@ public class DatabaseHandler {
         return null;
     }
 
-    public LiveEventsDTO getTripById(String id) {
+    public LiveReservationEventsDTO getTripById(String id) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -257,7 +257,7 @@ public class DatabaseHandler {
                 System.out.println("[DATABASE] trip_id: " + tripID + ", hotel_name: " + hotelName + ", " +
                         "country: " + country + ", region: " + region);
 
-                return new LiveEventsDTO(tripID, country, region, hotelName, null, null);
+                return new LiveReservationEventsDTO(tripID, country, region, hotelName, null, null);
             }
 
         } catch (SQLException e) {
@@ -266,7 +266,7 @@ public class DatabaseHandler {
         return null;
     }
 
-    public void saveLiveEventsDTO(LiveEventsDTO liveEventDTO) {
+    public void saveLiveEventsDTO(LiveReservationEventsDTO liveEventDTO) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);

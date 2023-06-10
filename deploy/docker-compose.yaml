@@ -204,7 +204,7 @@ services:
     environment:
       RABBITMQ_ADDRESS: rabbitmq
       RABBITMQ_PORT: 5672
-      ACTIVATE_GENERATION: "True"
+      ACTIVATE_GENERATION: "False"
       GENERATION_FREQUENCY: 30
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
