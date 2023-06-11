@@ -65,7 +65,6 @@ const UserProvider = ({children}) => {
     const addToCart = (trip, reservationId) => {
         // Add the trip to the cart with initial timeLeft value of 30 minutes
         const trips = getCart();
-        console.log(trips);
 
         const newTrip = {
             trip,
@@ -86,8 +85,8 @@ const UserProvider = ({children}) => {
 
     const getTripFromCart = tripId => {
         const trips = getCart();
-        console.log(trips);
-        return trips.find(trip => trip.trip === tripId);
+        const trip_found = trips.find(trip => trip.trip === tripId);
+        return trip_found;
     };
 
     const itemInCart = id => {
