@@ -37,6 +37,11 @@ public class LiveEventsHandler implements Runnable {
             this.channel = channel;
 
             while (true) {
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
 
         } catch (ConnectException e) {

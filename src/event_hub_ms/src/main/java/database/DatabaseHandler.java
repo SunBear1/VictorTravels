@@ -243,7 +243,7 @@ public class DatabaseHandler {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM tripsforliveevents WHERE offerid = " + id + ";";
+            String sql = "SELECT * FROM tripsforliveevents WHERE offerid = '" + id + "';";
             stmt = conn.prepareStatement(sql);
 
             rs = stmt.executeQuery();

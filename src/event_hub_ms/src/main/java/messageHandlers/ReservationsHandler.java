@@ -59,6 +59,11 @@ public class ReservationsHandler implements Runnable {
             channel.basicConsume(QUEUE_NAME_TO_CONSUME, false, consumer);
 
             while (true) {
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
 
         } catch (ConnectException e) {
