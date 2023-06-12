@@ -1,12 +1,13 @@
 import logging
 import os
-import psycopg2
 from typing import List
 
+import psycopg2
+
 PG_HOST = os.getenv("POSTGRES_ADDRESS", "localhost")
-PG_USER = os.getenv("POSTGRES_USER", "admin")
-PG_PASSWD = os.getenv("POSTGRES_PASSWORD", "admin")
-PG_DB_HOTELS_NAME = os.getenv("PG_DB_HOTELS_NAME", "hotels")
+PG_USER = os.getenv("POSTGRES_USER", "postgres")
+PG_PASSWD = os.getenv("POSTGRES_PASSWORD", "student")
+PG_DB_HOTELS_NAME = os.getenv("PG_DB_HOTELS_NAME", "rsww_17998_hotels")
 PG_PORT = os.getenv("POSTGRES_PORT", 5432)
 
 logger = logging.getLogger("hotels")

@@ -1,6 +1,6 @@
 package messageHandlers;
 
-import DTO.HotelReservationEventDTO;
+import DTO.HotelEventDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -56,6 +56,11 @@ public class HotelsHandler implements Runnable {
             channel.basicConsume(QUEUE_NAME_TO_CONSUME, false, consumer);
 
             while (true) {
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
 
         } catch (ConnectException e) {
@@ -70,19 +75,41 @@ public class HotelsHandler implements Runnable {
 
     }
 
-    public void sendReservationEventMessage(ReservationEvent reservationEvent) {
+    public void prepareReservationEventMessage(ReservationEvent reservationEvent) {
         String title = "trip_offer_hotel_room_update";
         String trip_offer_id = reservationEvent.getTrip_offer_id();
         String operation_type = (reservationEvent.getReservation_status().equals("created") ? "delete" : "add");
         String hotel_id = reservationEvent.getHotel_id();
         String room_type = reservationEvent.getRoom_type();
-        HotelReservationEventDTO hotelDTO = new HotelReservationEventDTO(title, trip_offer_id, operation_type, hotel_id,
-                room_type);
-        databaseHandler.saveHotelDTO(hotelDTO);
+        int resource_amount = 1;
+        String resource_type = "availability";
+
+        HotelEventDTO hotelEventDTO = new HotelEventDTO(title, trip_offer_id, operation_type, hotel_id,
+                room_type, resource_amount, resource_type);
+        databaseHandler.saveHotelDTO(hotelEventDTO);
+        sendMessage(hotelEventDTO);
+    }
+
+   public void prepareGeneratedEventMessage(RandomGeneratedEvent randomGeneratedEvent){
+        String title = "trip_offer_hotel_room_update";
+        String trip_offer_id = databaseHandler.getTripOfferIDbyHotelID(randomGeneratedEvent.getName());
+        String operation_type = (randomGeneratedEvent.getOperation());
+        String hotel_id = randomGeneratedEvent.getName();
+        String room_type = randomGeneratedEvent.getField();
+        int resource_amount = randomGeneratedEvent.getValue();
+        String resource_type = randomGeneratedEvent.getResource();
+
+        HotelEventDTO hotelEventDTO = new HotelEventDTO(title, trip_offer_id, operation_type, hotel_id,
+                room_type, resource_amount, resource_type);
+        databaseHandler.saveHotelDTO(hotelEventDTO);
+        sendMessage(hotelEventDTO);
+    }
+
+    public void sendMessage(Object payload){
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            String json = objectMapper.writeValueAsString(hotelDTO);
+            String json = objectMapper.writeValueAsString(payload);
             channel.basicPublish(EXCHANGE, ROUTING_KEY, null, json.getBytes());
             System.out.println("[MQ PUBLISH] Published message to HotelMS exchange " +
                     ROUTING_KEY + " with payload: " + json);
@@ -90,31 +117,6 @@ public class HotelsHandler implements Runnable {
             e.printStackTrace();
         }
     }
-
-    // public void sendRandomGeneratedEventMessage(RandomGeneratedEvent
-    // randomGeneratedEvent) {
-    // String title = randomGeneratedEvent.getTitle();
-    // String operation = randomGeneratedEvent.getOperation();
-    // String hotel_id = randomGeneratedEvent.getName();
-    // String room_type =
-    // String resource_type;
-    // int resource_amount;
-
-    // HotelReservationEventDTO hotelDTO = new HotelReservationEventDTO(title,
-    // trip_offer_id, operation_type, hotel_id,
-    // room_type);
-    // databaseHandler.saveHotelDTO(hotelDTO);
-    // ObjectMapper objectMapper = new ObjectMapper();
-    // try {
-    // objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-    // String json = objectMapper.writeValueAsString(hotelDTO);
-    // channel.basicPublish(EXCHANGE, ROUTING_KEY, null, json.getBytes());
-    // System.out.println("[MQ PUBLISH] Published message to HotelMS exchange " +
-    // ROUTING_KEY + " with payload: " + json);
-    // } catch (IOException e) {
-    // e.printStackTrace();
-    // }
-    // }
 
     public void consumeMessageFromHotel(String json) {
         try {

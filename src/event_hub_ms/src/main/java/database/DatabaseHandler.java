@@ -1,9 +1,9 @@
 package database;
 
-import DTO.HotelReservationEventDTO;
+import DTO.HotelEventDTO;
 import DTO.LiveReservationEventsDTO;
 import DTO.ReservationDTO;
-import DTO.TransportDTO;
+import DTO.TransportEventDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -118,7 +118,7 @@ public class DatabaseHandler {
 
     }
 
-    public void saveHotelDTO(HotelReservationEventDTO hotelDTO) {
+    public void saveHotelDTO(HotelEventDTO hotelDTO) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
@@ -148,14 +148,14 @@ public class DatabaseHandler {
         }
     }
 
-    public void saveTransportDTO(TransportDTO transportDTO) {
+    public void saveTransportDTO(TransportEventDTO transportEventDTO) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            String json = objectMapper.writeValueAsString(transportDTO);
+            String json = objectMapper.writeValueAsString(transportEventDTO);
 
-            String type = transportDTO.getTitle();
-            String operation = transportDTO.getOperation_type();
+            String type = transportEventDTO.getTitle();
+            String operation = transportEventDTO.getOperation_type();
             String from = "EventhubMS";
             String to = "TransportMS";
             Timestamp receiveDate = new Timestamp(System.currentTimeMillis());
@@ -243,7 +243,7 @@ public class DatabaseHandler {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM tripsforliveevents WHERE offerid = " + id + ";";
+            String sql = "SELECT * FROM tripsforliveevents WHERE offerid = '" + id + "';";
             stmt = conn.prepareStatement(sql);
 
             rs = stmt.executeQuery();
@@ -296,4 +296,26 @@ public class DatabaseHandler {
             e.printStackTrace();
         }
     }
+
+    public String getTripOfferIDbyHotelID(String hotelID){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT * FROM tripsforliveevents WHERE hotelid = '" + hotelID + "';";
+            stmt = conn.prepareStatement(sql);
+
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                String offerID = rs.getString("offerID");
+
+                System.out.println("[DATABASE] " + stmt);
+                System.out.println("[DATABASE] offerID: " + offerID );
+                return offerID;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

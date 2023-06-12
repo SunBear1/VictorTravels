@@ -59,6 +59,11 @@ public class ReservationsHandler implements Runnable {
             channel.basicConsume(QUEUE_NAME_TO_CONSUME, false, consumer);
 
             while (true) {
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
 
         } catch (ConnectException e) {
@@ -88,8 +93,8 @@ public class ReservationsHandler implements Runnable {
                     reservationEvent.setConnection_id_from(tmp.getConnection_id_from());
                     reservationEvent.setHead_count(tmp.getHead_count());
                 }
-                hotelMQ.sendReservationEventMessage(reservationEvent);
-                transportMQ.sendMessage(reservationEvent);
+                hotelMQ.prepareReservationEventMessage(reservationEvent);
+                transportMQ.prepareReservationEventMessage(reservationEvent);
             }
 
             if (reservationEvent.getReservation_status().equals("created")

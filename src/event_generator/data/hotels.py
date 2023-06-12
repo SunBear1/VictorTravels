@@ -1,44 +1,44 @@
 HOTELS_REGISTRY = {
     "HHINER-2": {
-        "smallroomsleft": 12,
-        "mediumroomsleft": 6,
-        "largeroomsleft": 10,
-        "apartmentroomsleft": 3,
-        "studioroomsleft": 1
+        "small": 12,
+        "medium": 6,
+        "large": 10,
+        "apartment": 3,
+        "studio": 1
     },
     "HHINER-1": {
-        "smallroomsleft": 12,
-        "mediumroomsleft": 6,
-        "largeroomsleft": 10,
-        "apartmentroomsleft": 3,
-        "studioroomsleft": 1
+        "small": 12,
+        "medium": 6,
+        "large": 10,
+        "apartment": 3,
+        "studio": 1
     },
     "HSMKB-1": {
-        "smallroomsleft": 15,
-        "mediumroomsleft": 5,
-        "largeroomsleft": 0,
-        "apartmentroomsleft": 2,
-        "studioroomsleft": 5
+        "small": 15,
+        "medium": 5,
+        "large": 0,
+        "apartment": 2,
+        "studio": 5
     },
     "HGR-1": {
-        "smallroomsleft": 2,
-        "mediumroomsleft": 10,
-        "largeroomsleft": 20,
-        "apartmentroomsleft": 0,
-        "studioroomsleft": 0
+        "small": 2,
+        "medium": 10,
+        "large": 20,
+        "apartment": 0,
+        "studio": 0
     },
     "HAB-1": {
-        "smallroomsleft": 3,
-        "mediumroomsleft": 9,
-        "largeroomsleft": 20,
-        "apartmentroomsleft": 5,
-        "studioroomsleft": 15
+        "small": 3,
+        "medium": 9,
+        "large": 20,
+        "apartment": 5,
+        "studio": 15
     },
     "HFP-1": {
-        "smallroomsleft": 20,
-        "mediumroomsleft": 1,
-        "largeroomsleft": 3,
-        "apartmentroomsleft": 0,
-        "studioroomsleft": 1
+        "small": 20,
+        "medium": 1,
+        "large": 3,
+        "apartment": 0,
+        "studio": 1
     }
 }

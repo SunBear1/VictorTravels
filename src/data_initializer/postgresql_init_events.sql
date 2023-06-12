@@ -11,7 +11,7 @@ CREATE TABLE EventsLog
 
 CREATE TABLE TripsForLiveEvents
 (
-    OfferID   INTEGER PRIMARY KEY,
+    OfferID   VARCHAR(50) PRIMARY KEY,
     TripID    INTEGER,
     HotelID   VARCHAR(20),
     HotelName VARCHAR(50),
@@ -20,9 +20,9 @@ CREATE TABLE TripsForLiveEvents
 );
 
 INSERT INTO TripsForLiveEvents (OfferID, TripID, HotelID, HotelName, Country, Region)
-VALUES (1, 1, 'HFP-1', 'Hotel Fuerteventura Princess', 'Wyspy Kanaryjskie', 'Fuerteventura'),
-       (2, 2, 'HAB-1', 'Hotel Alhambra', 'Hiszpania', 'Costa Brava'),
-       (3, 3, 'HGR-1', 'Hotel Gaia Royal', 'Grecja', 'Kos'),
-       (4, 4, 'HSMKB-1', 'Hotel Smy Kos Beach & Splash', 'Grecja', 'Kos'),
-       (5, 5, 'HHINER-1', 'Hotel Holiday Inn Express Rzeszów Airport', 'Polska', 'Rzeszów'),
-       (6, 5, 'HHINER-2', 'Hotel Holiday Inn Express Rzeszów Airport', 'Polska', 'Rzeszów');
+VALUES ('0001', 1, 'HFP-1', 'Hotel Fuerteventura Princess', 'Wyspy Kanaryjskie', 'Fuerteventura'),
+       ('0002', 2, 'HAB-1', 'Hotel Alhambra', 'Hiszpania', 'Costa Brava'),
+       ('0003', 3, 'HGR-1', 'Hotel Gaia Royal', 'Grecja', 'Kos'),
+       ('0004', 4, 'HSMKB-1', 'Hotel Smy Kos Beach & Splash', 'Grecja', 'Kos'),
+       ('0005', 5, 'HHINER-1', 'Hotel Holiday Inn Express Rzeszów Airport', 'Polska', 'Rzeszów'),
+       ('0006', 5, 'HHINER-2', 'Hotel Holiday Inn Express Rzeszów Airport', 'Polska', 'Rzeszów');
