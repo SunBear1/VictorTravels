@@ -1,12 +1,13 @@
 package messageHandlers;
 
-import DTO.LiveEventsDTO;
+import DTO.LiveReservationEventsDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.ConnectionFactory;
 import config.Config;
 import database.DatabaseHandler;
+import events.RandomGeneratedEvent;
 import events.ReservationEvent;
 
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class LiveEventsHandler implements Runnable {
         ConnectionFactory factory = new ConnectionFactory();
         Config.setConfigFactory(factory);
         try (com.rabbitmq.client.Connection connection = factory.newConnection();
-             Channel channel = connection.createChannel()) {
+                Channel channel = connection.createChannel()) {
 
             this.channel = channel;
 
@@ -61,12 +62,12 @@ public class LiveEventsHandler implements Runnable {
         return null;
     }
 
-    public void sendMessage(ReservationEvent reservationEvent) {
+    public void sendReservationEventMessage(ReservationEvent reservationEvent) {
         String trip_offer_id = reservationEvent.getTrip_offer_id();
         String room_type = reservationEvent.getRoom_type();
         String connection_to = reservationEvent.getConnection_id_to();
 
-        LiveEventsDTO liveEventDTO = databaseHandler.getTripById(trip_offer_id);
+        LiveReservationEventsDTO liveEventDTO = databaseHandler.getTripById(trip_offer_id);
         liveEventDTO.setRoomType(room_type);
         liveEventDTO.setTransportType(extractTransportType(connection_to));
 
@@ -79,6 +80,22 @@ public class LiveEventsHandler implements Runnable {
             System.out.println("[MQ PUBLISH] Published message to LiveEvents exchange " +
                     ROUTING_KEY + " with payload: " + json);
             databaseHandler.saveLiveEventsDTO(liveEventDTO);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendRandomGeneratedEventMessage(RandomGeneratedEvent randomGeneratedEvent) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            String json = objectMapper.writeValueAsString(randomGeneratedEvent);
+
+            channel.basicPublish(EXCHANGE, ROUTING_KEY, null, json.getBytes(StandardCharsets.UTF_8));
+            System.out.println("[MQ PUBLISH] Published message to LiveEvents exchange " +
+                    ROUTING_KEY + " with payload: " + json);
+            // databaseHandler.saveLiveEventsDTO(randomGeneratedEvent);
 
         } catch (IOException e) {
             e.printStackTrace();

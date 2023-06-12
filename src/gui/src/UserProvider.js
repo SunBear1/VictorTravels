@@ -62,14 +62,14 @@ const UserProvider = ({children}) => {
         Cookies.set('purchasedTrips', JSON.stringify(trips));
     };
 
-    const addToCart = trip => {
+    const addToCart = (trip, reservationId) => {
         // Add the trip to the cart with initial timeLeft value of 30 minutes
         const trips = getCart();
-        console.log(trips);
 
         const newTrip = {
             trip,
-            timeLeft: 60,
+            reservationId,
+            timeLeft: 600,
         };
         trips.push(newTrip);
         Cookies.set('cart', JSON.stringify(trips));
@@ -81,6 +81,12 @@ const UserProvider = ({children}) => {
         const newTrips = trips.filter(trip => trip.trip !== tripId);
         console.log(newTrips);
         Cookies.set('cart', JSON.stringify(newTrips));
+    };
+
+    const getTripFromCart = tripId => {
+        const trips = getCart();
+        const trip_found = trips.find(trip => trip.trip === tripId);
+        return trip_found;
     };
 
     const itemInCart = id => {
@@ -100,6 +106,7 @@ const UserProvider = ({children}) => {
                 removeFromCart,
                 itemInCart,
                 addToPurchasedTrips,
+                getTripFromCart
             }}
         >
             {children}
