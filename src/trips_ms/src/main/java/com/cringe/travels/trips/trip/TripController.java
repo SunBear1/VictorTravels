@@ -52,7 +52,7 @@ public class TripController {
             @RequestParam(required = false) List<String> arrivalRegion,
             @RequestParam(required = false) List<String> transport,
             @RequestParam(required = false) String order,
-            @RequestParam(required = false) List<String> diet,
+            @RequestParam(required = false) String diet,
             @RequestParam(required = false) Integer maxPrice) {
 
         List<Trip> trips = service.getFilteredTrips(adults, kidsTo3yo, kidsTo10yo, kidsTo18yo, dateFrom, dateTo,

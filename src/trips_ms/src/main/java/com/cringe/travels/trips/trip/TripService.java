@@ -35,7 +35,7 @@ public class TripService {
 
     public List<Trip> getFilteredTrips(Integer adults, Integer kidsTo3Yo, Integer kidsTo10Yo, Integer kidsTo18Yo,
             String dateFrom, String dateTo, List<String> departureRegion,
-            List<String> arrivalRegion, List<String> transport, String order, List<String> diet,
+            List<String> arrivalRegion, List<String> transport, String order, String diet,
             Integer max_price) {
         // TODO Zwiększyć logowanie w tym servicie
         String query = "{$and:[{ 'is_booked_up' : false}";
@@ -84,9 +84,7 @@ public class TripService {
         }
         if (diet != null) {
             query = query + ",{$or: [";
-            for (String diet_option : diet) {
-                query = query + "{ \"hotel.diet." + diet_option + "\": { $exists: true } }"; // TODO użyć StringBuildera
-            }
+                query = query + "{ \"hotel.diet." + diet + "\": { $exists: true } }"; // TODO użyć StringBuildera
             query = query + "]}";
         }
 
@@ -102,8 +100,9 @@ public class TripService {
         List<Trip> filteredTrips = repository.findTripsByCustomQuery(query);
         for (int i = 0; i < filteredTrips.size(); i++) {
             int roomPrice = filteredTrips.get(i).getHotel().getRooms().get(room_type).getCost();
+            int dietPrice = filteredTrips.get(i).getHotel().getDiet().get(diet);
             float tripPrice = calculateTripPrices(adults, kidsTo3Yo, kidsTo10Yo, kidsTo18Yo, roomPrice, null, null,
-                    null, null);
+                    null, dietPrice);
             filteredTrips.get(i).setPrice(tripPrice);
             if (max_price != null && tripPrice > max_price) {
                 filteredTrips.remove(i);
