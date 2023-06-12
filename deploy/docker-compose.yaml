@@ -201,8 +201,6 @@ services:
     container_name: event-generator
     image: ${EVENT_GENERATOR_IMAGE}
     restart: always
-    ports:
-      - "18006:8006"
     environment:
       RABBITMQ_ADDRESS: rabbitmq
       RABBITMQ_PORT: 5672
