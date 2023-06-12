@@ -1,12 +1,14 @@
 package messageHandlers;
 
-import DTO.TransportDTO;
+import DTO.TransportEventDTO;
+import DTO.TransportGeneratedEventDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.*;
 import config.Config;
 import database.DatabaseHandler;
+import events.RandomGeneratedEvent;
 import events.ReservationEvent;
 import events.TransportEvent;
 
@@ -68,7 +70,7 @@ public class TransportsHandler implements Runnable {
         }
     }
 
-    public void sendMessage(ReservationEvent reservationEvent) {
+    public void prepareReservationEventMessage(ReservationEvent reservationEvent) {
         String title = "trip_offer_transport_update";
         String trip_offer_id = reservationEvent.getTrip_offer_id();
         String operation_type = (reservationEvent.getReservation_status().equals("created") ? "delete" : "add");
@@ -76,14 +78,31 @@ public class TransportsHandler implements Runnable {
         String connection_id_from = reservationEvent.getConnection_id_from();
         int head_count = reservationEvent.getHead_count();
 
-        TransportDTO transportDTO = new TransportDTO(title, trip_offer_id, operation_type, connection_id_to,
+        TransportEventDTO transportEventDTO = new TransportEventDTO(title, trip_offer_id, operation_type, connection_id_to,
                 connection_id_from, head_count);
-        databaseHandler.saveTransportDTO(transportDTO);
+        databaseHandler.saveTransportDTO(transportEventDTO);
 
+        sendMessage(transportEventDTO);
+    }
+
+    public void prepareGeneratedEventMessage(RandomGeneratedEvent randomGeneratedEvent){
+        String title = "generated_transport_update";
+        String connection_id = randomGeneratedEvent.getName();
+        String resource_type = randomGeneratedEvent.getResource();
+        int value = randomGeneratedEvent.getValue();
+        String operation_type = randomGeneratedEvent.getOperation();
+
+        TransportGeneratedEventDTO transportGeneratedEventDTO = new TransportGeneratedEventDTO(title, connection_id, operation_type, value,
+                resource_type);
+        //databaseHandler.saveHotelDTO(hotelEventDTO);
+        sendMessage(transportGeneratedEventDTO);
+    }
+
+     public void sendMessage(Object payload){
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-            String json = objectMapper.writeValueAsString(transportDTO);
+            String json = objectMapper.writeValueAsString(payload);
             channel.basicPublish(EXCHANGE, ROUTING_KEY, null, json.getBytes());
             System.out.println("[MQ PUBLISH] Published message to transportMS exchange " +
                     ROUTING_KEY + " with payload: " + json);

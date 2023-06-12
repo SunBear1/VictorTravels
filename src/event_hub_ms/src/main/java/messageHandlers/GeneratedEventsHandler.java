@@ -78,13 +78,13 @@ public class GeneratedEventsHandler implements Runnable {
         try {
             ObjectMapper mapper = new ObjectMapper();
             RandomGeneratedEvent randomGeneratedEvent = mapper.readValue(json, RandomGeneratedEvent.class);
-            // databaseHandler.saveReservationEvent(reservationEvent);
+            // TODO databaseHandler.saveReservationEvent(reservationEvent);
 
             if (randomGeneratedEvent.getType().equals("hotel")) {
-                // hotelMQ.sendMessage(randomGeneratedEvent);
+                hotelMQ.prepareGeneratedEventMessage(randomGeneratedEvent);
             }
             if (randomGeneratedEvent.getType().equals("connection")) {
-                // transportMQ.sendMessage(randomGeneratedEvent);
+                transportMQ.prepareGeneratedEventMessage(randomGeneratedEvent);
             }
             liveEventsMQ.sendRandomGeneratedEventMessage(randomGeneratedEvent);
 

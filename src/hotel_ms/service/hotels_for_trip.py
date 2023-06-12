@@ -14,6 +14,7 @@ def get_hotel_for_offer(trip_offer_id: str) -> str:
 
     if not hotel_query:
         raise UnprocessableEntityError(f"Trip offer with ID {trip_offer_id} does not exist.")
+    logger.info(f"Hotel ID of the offer {trip_offer_id} is {hotel_query[0][0]}.")
     return hotel_query[0][0]
 
 
@@ -23,13 +24,15 @@ def get_offers_for_hotel(hotel_id: str):
     pg_client = PostgreSQLClient()
     offers_query = pg_client.execute_query_for_database(query=trip_offer_id_query)
 
-    return [offer[0] for offer in offers_query]
+    result = [offer[0] for offer in offers_query]
+    logger.info(f"Other trip offers for {hotel_id} are {result}.")
+    return result
 
 
-def update_left_rooms_in_hotel(hotel_id: str, room_type: str, operation: str):
-    set_part_of_query = f"{room_type}roomsleft = {room_type}roomsleft - 1"
+def update_left_rooms_in_hotel(hotel_id: str, room_type: str, operation: str, rooms_amount: int):
+    set_part_of_query = f"{room_type}roomsleft = {room_type}roomsleft - {rooms_amount}"
     if operation == "add":
-        set_part_of_query = f"{room_type}roomsleft = {room_type}roomsleft + 1"
+        set_part_of_query = f"{room_type}roomsleft = {room_type}roomsleft + {rooms_amount}"
 
     update_rooms_query = f"UPDATE RoomsLeft SET {set_part_of_query} WHERE HotelID='{hotel_id}';"
 

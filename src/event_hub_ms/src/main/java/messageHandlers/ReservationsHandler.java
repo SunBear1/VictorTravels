@@ -88,8 +88,8 @@ public class ReservationsHandler implements Runnable {
                     reservationEvent.setConnection_id_from(tmp.getConnection_id_from());
                     reservationEvent.setHead_count(tmp.getHead_count());
                 }
-                hotelMQ.sendReservationEventMessage(reservationEvent);
-                transportMQ.sendMessage(reservationEvent);
+                hotelMQ.prepareReservationEventMessage(reservationEvent);
+                transportMQ.prepareReservationEventMessage(reservationEvent);
             }
 
             if (reservationEvent.getReservation_status().equals("created")

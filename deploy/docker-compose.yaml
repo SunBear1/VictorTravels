@@ -201,16 +201,17 @@ services:
     container_name: event-generator
     image: ${EVENT_GENERATOR_IMAGE}
     restart: always
+    ports:
+      - "18006:8006"
     environment:
       RABBITMQ_ADDRESS: rabbitmq
       RABBITMQ_PORT: 5672
-      ACTIVATE_GENERATION: "True"
       GENERATION_FREQUENCY: 10
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
-      interval: 5s
+      test: [ "CMD", "curl", "-f", "http://localhost:8006/api/v1/healthcheck" ]
+      interval: 10s
       timeout: 1s
-      retries: 10
+      retries: 2
   event-hub:
     container_name: eventhub-ms
     image: ${EVENTHUB_IMAGE}
