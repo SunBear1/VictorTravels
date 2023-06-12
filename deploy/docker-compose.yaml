@@ -206,12 +206,13 @@ services:
     environment:
       RABBITMQ_ADDRESS: rabbitmq
       RABBITMQ_PORT: 5672
-      GENERATION_FREQUENCY: 10
+      GENERATION_FREQUENCY: 30
+      ACTIVATE_GENERATION: "True"
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8006/api/v1/healthcheck" ]
-      interval: 10s
+      test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
+      interval: 5s
       timeout: 1s
-      retries: 2
+      retries: 10
   event-hub:
     container_name: eventhub-ms
     image: ${EVENTHUB_IMAGE}

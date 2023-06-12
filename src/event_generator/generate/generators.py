@@ -41,15 +41,13 @@ def generate_connection_price_change() -> Dict:
 def generate_hotel_availability_change() -> Dict:
     random_hotel = random.choice(list(HOTELS_REGISTRY.keys()))
     random_room = random.choice(list(HOTELS_REGISTRY[random_hotel].keys()))
-    random_room_left_change = HOTELS_REGISTRY[random_hotel][random_room]
+    current_rooms_left = HOTELS_REGISTRY[random_hotel][random_room]
 
-    if HOTELS_REGISTRY[random_hotel][random_room] > 1:
-        operation = random.choice(["add", "delete"])
-    else:
+    random_rooms_left_change = random.randint(a=1, b=3)
+    if current_rooms_left - random_rooms_left_change < 0:
         operation = "add"
-
-    while random_room_left_change >= HOTELS_REGISTRY[random_hotel][random_room]:
-        random_room_left_change = random.randint(a=1, b=3)
+    else:
+        operation = random.choice(["add", "delete"])
 
     return {
         "title": MSG_TITLE,
@@ -57,22 +55,20 @@ def generate_hotel_availability_change() -> Dict:
         "name": random_hotel,
         "field": random_room,
         "resource": "availability",
-        "value": random_room_left_change,
+        "value": random_rooms_left_change,
         "operation": operation
     }
 
 
 def generate_connection_availability_change() -> Dict:
     random_connection = random.choice(list(CONNECTIONS_REGISTRY.keys()))
-    random_seats_left_change = CONNECTIONS_REGISTRY[random_connection]
+    current_seats_left = CONNECTIONS_REGISTRY[random_connection]
 
-    if CONNECTIONS_REGISTRY[random_connection] > 1:
-        operation = random.choice(["add", "delete"])
-    else:
+    random_seats_left_change = random.randint(a=1, b=6)
+    if current_seats_left - random_seats_left_change < 0:
         operation = "add"
-
-    while random_seats_left_change >= CONNECTIONS_REGISTRY[random_connection]:
-        random_seats_left_change = random.randint(a=1, b=6)
+    else:
+        operation = random.choice(["add", "delete"])
 
     return {
         "title": MSG_TITLE,
