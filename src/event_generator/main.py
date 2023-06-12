@@ -21,7 +21,6 @@ GENERATION_FREQUENCY = int(os.getenv("GENERATION_FREQUENCY", 5))
 
 if __name__ == "__main__":
     logger.info("Random events generator started")
-    event_generator_client = RabbitMQClient()
 
     message_id = 1
     event_generating_functions = [generate_hotel_price_change, generate_connection_price_change,
@@ -36,8 +35,11 @@ if __name__ == "__main__":
         random_payload = event_generation_function()
         random_payload["id"] = message_id
 
+        event_generator_client = RabbitMQClient()
         event_generator_client.send_data_to_queue(queue_name=RANDOM_EVENTS_PUBLISH_QUEUE_NAME,
                                                   payload=json.dumps(random_payload, ensure_ascii=False).encode(
                                                       'utf-8'),
                                                   exchange_name=RANDOM_EVENTS_EXCHANGE_NAME)
+        event_generator_client.close_connection()
+
         message_id += 1
