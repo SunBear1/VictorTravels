@@ -1,8 +1,8 @@
-import { useParams } from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import axios from 'axios';
-import { useContext, useEffect, useState } from 'react';
+import {useContext, useEffect, useState} from 'react';
 import useAuth from '../useAuth';
-import { UserContext } from '../UserProvider';
+import {UserContext} from '../UserProvider';
 import ReservationInfo from '../components/ReservationInfo/ReservationInfo';
 import Cookies from "js-cookie";
 
@@ -32,7 +32,7 @@ function TripDetails() {
 
   const [selectedRoom, setSelectedRoom] = useState('');
 
-  const [selectedDiet, setSelectedDiet] = useState('');
+  const [selectedDiet, setSelectedDiet] = useState('All inclusive');
   const [adultNumber, setAdultNumber] = useState(1);
   const [kidsTo3yo, setKidsTo3yo] = useState(0);
   const [kidsTo10yo, setKidsTo10yo] = useState(0);
@@ -49,15 +49,17 @@ function TripDetails() {
 
   const [finalPrice, setFinalPrice] = useState(null);
 
+  const [addedToCart, setAddedToCart] = useState(false);
+
   useEffect(
-    () => {
-      const sum = adultNumber + kidsTo3yo + kidsTo10yo + kidsTo18yo;
-      if (sum === 0) {
-        setSelectedRoom(null);
-      } else if (sum === 1) {
-        const roomType = 'studio';
-        if (trip?.hotel.rooms[roomType].available > 0)
-          setSelectedRoom(roomType);
+      () => {
+        const sum = adultNumber + kidsTo3yo + kidsTo10yo + kidsTo18yo;
+        if (sum === 0) {
+          setSelectedRoom(null);
+        } else if (sum === 1) {
+          const roomType = 'studio';
+          if (trip?.hotel.rooms[roomType].available > 0)
+            setSelectedRoom(roomType);
       } else if (sum === 2) {
         const roomType = 'small';
         if (trip?.hotel.rooms[roomType].available > 0)
@@ -158,7 +160,9 @@ function TripDetails() {
       );
       console.log(response.data);
       addToCart(trip.id, response.data.reservation_id);
+      setAddedToCart(true);
     } catch (error) {
+      setAddedToCart(false);
       console.error(error);
     }
   };
@@ -201,7 +205,7 @@ function TripDetails() {
               <ul className="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
                 {Object.keys(trip.hotel.diet).map(diet => (
                   <li key={diet} className="ml-5">
-                    {diet} - {trip.hotel.diet[diet]}zł
+                    {diet}
                   </li>
                 ))}
               </ul>
@@ -216,24 +220,44 @@ function TripDetails() {
           </div>
           <div className="flex justify-center">
             {isLoggedIn &&
-              <ReservationInfo
-                setAdultNumber={setAdultNumber}
-                setKidsTo3yo={setKidsTo3yo}
-                setKidsTo10yo={setKidsTo10yo}
-                setKidsTo18yo={setKidsTo18yo}
-                ownTransportFrom={ownTransportFrom}
-                ownTransportTo={ownTransportTo}
-                setOwnTransportFrom={setOwnTransportFrom}
-                trip={trip}
-                handleTransportFromBooking={handleTransportFromBooking}
-                handleTransportToBooking={handleTransportToBooking}
-                selectedDiet={selectedDiet}
-                selectedRoom={selectedRoom}
-                setSelectedDiet={setSelectedDiet}
-                isReserved={isReserved}
-                finalPrice={finalPrice}
-                handleResravation={handleResravation}
-              />}
+                <div>
+                  <ReservationInfo
+                      setAdultNumber={setAdultNumber}
+                      setKidsTo3yo={setKidsTo3yo}
+                      setKidsTo10yo={setKidsTo10yo}
+                      setKidsTo18yo={setKidsTo18yo}
+                      ownTransportFrom={ownTransportFrom}
+                      ownTransportTo={ownTransportTo}
+                      setOwnTransportFrom={setOwnTransportFrom}
+                      trip={trip}
+                      handleTransportFromBooking={handleTransportFromBooking}
+                      handleTransportToBooking={handleTransportToBooking}
+                      selectedDiet={selectedDiet}
+                      selectedRoom={selectedRoom}
+                      setSelectedDiet={setSelectedDiet}
+                      isReserved={isReserved}
+                      finalPrice={finalPrice}
+                      handleResravation={handleResravation}
+                  />
+                  {addedToCart ?
+                      <div id="alert-border-3"
+                           className=" mt-4 flex p-4 mb-4 text-green-800 border-t-4 border-green-300 bg-green-50 dark:text-green-400 dark:bg-gray-800 dark:border-green-800"
+                           role="alert">
+                        <svg className="flex-shrink-0 w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                             xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd"
+                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                        <div className="ml-3 text-sm font-medium">
+                          Trip offer successfully added to cart. <Link to="/cart"
+                                                                       className="font-semibold underline hover:no-underline">Buy
+                          it now!</Link>
+                        </div>
+                      </div> : null
+                  }
+                </div>
+            }
           </div>
         </div>}
     </div>

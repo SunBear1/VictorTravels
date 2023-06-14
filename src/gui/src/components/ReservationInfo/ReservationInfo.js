@@ -89,7 +89,7 @@ function ReservationInfo({
                     <option value="">Select a diet</option>
                     {Object.keys(trip.hotel.diet).map(diet => (
                         <option key={diet} value={diet}>
-                          {diet} - {trip.hotel.diet[diet]}zł
+                          {diet}
                         </option>
                     ))}
                   </select>
@@ -112,12 +112,13 @@ function ReservationInfo({
                           Loading
                         </p>)}
               </div>
-              {!isReserved
-                  ? selectedRoom &&
-                  <button className="mt-5 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded" onClick={handleResravation}>
-                    Rezerwuj teraz
-                  </button>
-                  : <p>Zarezerwowany</p>}
+                {!isReserved
+                    ? selectedRoom &&
+                    <button className="mt-5 mb-5 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded"
+                            onClick={handleResravation}>
+                        Rezerwuj teraz
+                    </button>
+                    : null}
             </div>}
       </div>
   );
