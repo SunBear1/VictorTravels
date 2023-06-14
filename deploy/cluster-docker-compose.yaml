@@ -1,7 +1,6 @@
 version: "3.8"
 services:
   web-gui:
-    container_name: web-gui
     image: malajski/victor-travels:gui
     ports:
       - "18005:80"
@@ -20,6 +19,7 @@ services:
       PURCHASE_MS_ADDRESS: purchases:8002
       PAYMENT_MS_ADDRESS: payments:8003
       RABBITMQ_ADDRESS: rabbitmq
+      RABBITMQ_PORT: 5672
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
       interval: 5s
@@ -70,6 +70,7 @@ services:
       MONGODB_PASSWORD: student
       MONGODB_DB: rsww_17998_reservations_db
       RABBITMQ_ADDRESS: rabbitmq
+      RABBITMQ_PORT: 5672
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
       interval: 5s
@@ -86,6 +87,7 @@ services:
       MONGODB_PASSWORD: student
       MONGODB_DB: rsww_17998_purchases_db
       RABBITMQ_ADDRESS: rabbitmq
+      RABBITMQ_PORT: 5672
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
       interval: 5s
@@ -102,6 +104,7 @@ services:
       MONGODB_PASSWORD: student
       MONGODB_DB: rsww_17998_payments_db
       RABBITMQ_ADDRESS: rabbitmq
+      RABBITMQ_PORT: 5672
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
       interval: 5s
@@ -118,13 +121,13 @@ services:
       MONGODB_PASSWORD: student
       MONGODB_DB: rsww_17998_trips_db
       RABBITMQ_ADDRESS: rabbitmq
+      RABBITMQ_PORT: 5672
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
       interval: 5s
       timeout: 1s
       retries: 10
   hotels:
-    container_name: hotel-ms
     image: malajski/victor-travels:hotels
     environment:
       RABBITMQ_ADDRESS: rabbitmq
