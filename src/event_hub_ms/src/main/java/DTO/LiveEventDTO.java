@@ -1,6 +1,6 @@
 package DTO;
 
-public class LiveReservationEventsDTO {
+public class LiveEventDTO {
     private static final String title = "user_preferences_live_event";
     private final Integer trip_id;
     private final String country;
@@ -9,8 +9,8 @@ public class LiveReservationEventsDTO {
     private String room_type;
     private String transport_type;
 
-    public LiveReservationEventsDTO(Integer trip_id, String country, String region, String hotel_name, String room_type,
-                         String transport_type) {
+    public LiveEventDTO(Integer trip_id, String country, String region, String hotel_name, String room_type,
+                        String transport_type) {
         this.trip_id = trip_id;
         this.country = country;
         this.region = region;
@@ -20,7 +20,7 @@ public class LiveReservationEventsDTO {
     }
 
     public String getTitle() {
-        return LiveReservationEventsDTO.title;
+        return LiveEventDTO.title;
     }
 
     public String getCountry() {

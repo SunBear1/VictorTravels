@@ -1,10 +1,6 @@
 import config.Config;
 import database.DatabaseHandler;
-import messageHandlers.GeneratedEventsHandler;
-import messageHandlers.HotelsHandler;
-import messageHandlers.LiveEventsHandler;
-import messageHandlers.ReservationsHandler;
-import messageHandlers.TransportsHandler;
+import messageHandlers.*;
 
 import java.sql.Connection;
 import java.util.concurrent.TimeUnit;
