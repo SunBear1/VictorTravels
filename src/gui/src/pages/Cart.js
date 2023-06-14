@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { UserContext } from '../UserProvider';
-import { NavLink, useNavigate } from 'react-router-dom';
+import React, {useContext, useEffect, useState} from 'react';
+import {UserContext} from '../UserProvider';
+import {useNavigate} from 'react-router-dom';
 import Cookies from "js-cookie";
 import axios from 'axios';
 
@@ -107,16 +107,22 @@ function Cart() {
                 </h1>
                 {trips.length > 0
                     ? trips.map(trip => (
-                        <div key={trip.id}>
-                            <h2>{trip.hotel.name}</h2>
-                            <h3>{trip.localisation.country}</h3>
-                            <img src={trip.hotel.image} alt={trip.id} />
+                        <div key={trip.id} className="mb-5">
+                            <h2 className="text-slate-200">{trip.hotel.name}</h2>
+                            <h3 className="text-slate-200 mb-1">{trip.localisation.country}</h3>
+                            <img className="mb-1" src={trip.hotel.image} alt={trip.id}/>
                             <p>
-                                <p className='text-white'>Time left: {tripsId?.filter((obj) => obj.trip === trip.id)[0]?.timeLeft} seconds</p>
+                                <p className='text-slate-200'>Time
+                                    left: {tripsId?.filter((obj) => obj.trip === trip.id)[0]?.timeLeft} seconds</p>
                             </p>
-                            <button className="mt-5 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4" onClick={() => handleRemove(trip.id)}>Remove from Cart</button>
-
-                            <button className="mt-5 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4" onClick={() => handleBuy(trip.id)}>Buy Trip</button>
+                            <div className="flex justify-around mt-2">
+                                <button className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4"
+                                        onClick={() => handleRemove(trip.id)}>Remove from Cart
+                                </button>
+                                <button className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4"
+                                        onClick={() => handleBuy(trip.id)}>Buy Trip
+                                </button>
+                            </div>
                         </div>
                     ))
                     : <p className="tracking-widest text-gray-500 md:text-lg dark:text-gray-400 my-80">
@@ -128,7 +134,7 @@ function Cart() {
                 {boughtTrips.length !== 0
                     ? boughtTrips.map(trip => (
                         <div key={trip.id}>
-                            <h2>{trip.hotel.name}</h2>
+                            <h2 className="text-slate-200">{trip.hotel.name}</h2>
                             <p>{trip.price}</p>
                         </div>
                     ))
