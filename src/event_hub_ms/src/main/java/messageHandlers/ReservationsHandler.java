@@ -28,7 +28,7 @@ public class ReservationsHandler implements Runnable {
     private final LiveEventsHandler liveEventsMQ;
 
     public ReservationsHandler(DatabaseHandler databaseHandler, HotelsHandler hotelMQ,
-            TransportsHandler transportMQ, LiveEventsHandler liveEventsMQ) {
+                               TransportsHandler transportMQ, LiveEventsHandler liveEventsMQ) {
         this.databaseHandler = databaseHandler;
         this.transportMQ = transportMQ;
         this.hotelMQ = hotelMQ;
@@ -40,14 +40,14 @@ public class ReservationsHandler implements Runnable {
         ConnectionFactory factory = new ConnectionFactory();
         Config.setConfigFactory(factory);
         try (com.rabbitmq.client.Connection connection = factory.newConnection();
-                Channel channel = connection.createChannel()) {
+             Channel channel = connection.createChannel()) {
 
             this.channel = channel;
 
             DefaultConsumer consumer = new DefaultConsumer(channel) {
                 @Override
                 public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties,
-                        byte[] body) throws IOException {
+                                           byte[] body) throws IOException {
                     String message = new String(body, StandardCharsets.UTF_8);
                     System.out.println("[MQ CONSUME] Received message from reservationMS queue " + QUEUE_NAME_TO_CONSUME
                             + " with payload: " + message);

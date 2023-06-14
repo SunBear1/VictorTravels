@@ -77,7 +77,7 @@ public class GeneratedEventsHandler implements Runnable {
         try {
             ObjectMapper mapper = new ObjectMapper();
             RandomGeneratedEvent randomGeneratedEvent = mapper.readValue(json, RandomGeneratedEvent.class);
-            // TODO databaseHandler.saveReservationEvent(reservationEvent);
+            databaseHandler.saveRandomGeneratedEvent(randomGeneratedEvent);
 
             if (randomGeneratedEvent.getType().equals("hotel")) {
                 hotelMQ.prepareGeneratedEventMessage(randomGeneratedEvent);
