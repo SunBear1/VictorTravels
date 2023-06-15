@@ -84,6 +84,9 @@ function TripDetails() {
   useEffect(
     () => {
       const fetchPrice = async () => {
+        console.log(selectedRoom);
+        console.log(transportToCost);
+        console.log(transportFromCost);
         try {
           const response = await axios.get(
             'http://localhost:18000/api/v1/trips/price',
@@ -229,6 +232,7 @@ function TripDetails() {
                       ownTransportFrom={ownTransportFrom}
                       ownTransportTo={ownTransportTo}
                       setOwnTransportFrom={setOwnTransportFrom}
+                      setOwnTransportTo={setOwnTransportTo}
                       trip={trip}
                       handleTransportFromBooking={handleTransportFromBooking}
                       handleTransportToBooking={handleTransportToBooking}
