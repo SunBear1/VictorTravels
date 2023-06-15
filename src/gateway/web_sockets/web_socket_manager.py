@@ -10,7 +10,6 @@ logger = logging.getLogger("gateway")
 class WebSocketManager:
     _instance = None
     user_preferences_clients: List[WebSocket] = []
-    generated_offer_change_clients: List[WebSocket] = []
 
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
@@ -24,9 +23,6 @@ class WebSocketManager:
         if title == "user_preferences_live_event":
             connected_clients = self.user_preferences_clients
             endpoint = "preferences"
-        elif title == "generated_offer_change_live_event":
-            connected_clients = self.generated_offer_change_clients
-            endpoint = "generated"
         else:
             logger.info("Unrecognized message title")
             return
