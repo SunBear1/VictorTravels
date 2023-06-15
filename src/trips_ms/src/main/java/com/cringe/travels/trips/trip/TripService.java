@@ -7,12 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 @Service
@@ -38,7 +41,7 @@ public class TripService {
     public List<Trip> getFilteredTrips(Integer adults, Integer kidsTo3Yo, Integer kidsTo10Yo, Integer kidsTo18Yo,
             String dateFrom, String dateTo, List<String> departureRegion,
             List<String> arrivalRegion, List<String> transport, String order, String diet,
-            Integer max_price) {
+            Integer max_price) throws ParseException {
         // TODO Zwiększyć logowanie w tym servicie
         String query = "{$and:[{ 'is_booked_up' : false}";
         int head_count = 0;
@@ -107,14 +110,18 @@ public class TripService {
                     : getTransportToPrice(filteredTrips.get(i), departureRegion, transport);
             int transportFromPrice = transport != null && transport.contains("own") ? 0
                     : getTransportFromPrice(filteredTrips.get(i), departureRegion, transport);
+           logger.info(String.valueOf(transportToPrice) );
+           logger.info(String.valueOf(transportFromPrice) );
 
-            LocalDate fromDate = LocalDate.parse(filteredTrips.get(i).getDateFrom());
-            LocalDate toDate = LocalDate.parse(filteredTrips.get(i).getDateTo());
+            String pattern = "E MMM dd HH:mm:ss z yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            Date fromDate = simpleDateFormat.parse(filteredTrips.get(i).getDateFrom());
 
-            Duration duration = Duration.between(fromDate, toDate);
-            int diff = (int) Math.abs(duration.toDays());
+            Date toDate = simpleDateFormat.parse(filteredTrips.get(i).getDateTo());
+            long diffInMillies = Math.abs(toDate.getTime() - fromDate.getTime());
+            long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 
-            float tripPrice = calculateTripPrices(adults, kidsTo3Yo, kidsTo10Yo, kidsTo18Yo, roomPrice, diff,
+            float tripPrice = calculateTripPrices(adults, kidsTo3Yo, kidsTo10Yo, kidsTo18Yo, roomPrice, (int) diff,
                     transportToPrice,
                     transportFromPrice, dietPrice);
             filteredTrips.get(i).setPrice(tripPrice);
@@ -231,7 +238,7 @@ public class TripService {
 
     public int getTransportFromPrice(Trip trip, List<String> departureRegions, List<String> transportType) {
         HashMap<String, Transport> transportFromMap = trip.getFrom();
-        int minimumPrice = 0;
+        int minimumPrice = 10000000;
 
         for (String region : departureRegions) {
             Transport transport = transportFromMap.get(region);
@@ -249,7 +256,7 @@ public class TripService {
 
     public int getTransportToPrice(Trip trip, List<String> arrivalList, List<String> transportType) {
         HashMap<String, Transport> transportToMap = trip.getTo();
-        int minimumPrice = 0;
+        int minimumPrice = 10000000;
 
         for (String region : arrivalList) {
             Transport transport = transportToMap.get(region);
