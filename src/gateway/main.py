@@ -8,6 +8,7 @@ from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 
+from endpoints.generated_events import router as generated_events_router
 from endpoints.payments import router as payments_router
 from endpoints.purchases import router as purchases_router
 from endpoints.reservations import router as reservations_router
@@ -15,7 +16,6 @@ from endpoints.trips import router as trips_router
 from endpoints.users import router as users_router
 from rabbitmq.consumers import start_consuming, consume_live_event
 from rabbitmq.rabbitmq_client import LIVE_EVENTS_CONSUME_QUEUE_NAME
-from web_sockets.generated_offer_changes import router as generated_offer_changes_router
 from web_sockets.users_preferences import router as user_preferences_router
 
 app = FastAPI()
@@ -38,7 +38,7 @@ app.include_router(purchases_router, tags=["Endpoints for purchase ms operations
 app.include_router(reservations_router, tags=["Endpoints for reservations ms operations"])
 app.include_router(trips_router, tags=["Endpoints for trip researcher operations"])
 app.include_router(user_preferences_router, tags=["Endpoints for user_preferences_router operations"])
-app.include_router(generated_offer_changes_router, tags=["Endpoints for generated_offer_changes_router operations"])
+app.include_router(generated_events_router, tags=["Endpoints for generated events from event-generator"])
 app.include_router(api_router)
 
 logger = logging.getLogger("gateway")

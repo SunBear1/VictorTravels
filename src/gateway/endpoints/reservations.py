@@ -8,8 +8,8 @@ from starlette.responses import JSONResponse
 
 from common.authentication import oauth2_scheme, verify_jwt_token
 from common.constants import RESERVATIONS_MS_ADDRESS
+from service.users import verify_user_identify
 from users.exceptions import UserWrongTokenSchemaException
-from users.service import verify_user_identify
 
 router = APIRouter(prefix="/api/v1/reservations")
 
