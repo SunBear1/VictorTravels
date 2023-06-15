@@ -1,0 +1,30 @@
+.modal{
+    float: right;
+    width: 30%;
+    border-radius: 2px;
+}
+
+.modal-header {
+    padding: 2px;
+    background-color: #baf9b6;
+    border-bottom: none;
+    color: #62925f;
+    text-align: center;
+  }
+  
+  .modal-title {
+    color: #333;
+  }
+  
+  .modal-body {
+    background-color: #ddffda;
+    padding: 4px;
+  }
+  
+  .modal-footer {
+    text-align: center;
+    padding: 4px;
+    background-color: #f5f5f5;
+    border-top: none;
+  }
+  

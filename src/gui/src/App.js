@@ -8,12 +8,17 @@ import RegisterForm from './components/RegisterForm/RegisterForm';
 import Search from './pages/Search';
 import TripDetails from './pages/TripDetails';
 import Cart from './pages/Cart';
+import History from './pages/History';
+import WebSocketPreference from './components/WebSocket/WebSocketPreference';
 
 const App = () => {
   return (
       <div>
         <Navbar/>
+        <WebSocketPreference/>
         <Routes>
+          <Route path="/history" element={<History/>}/>
+
           <Route path="/"/>
           <Route path="/search" element={<Search/>}/>
 
