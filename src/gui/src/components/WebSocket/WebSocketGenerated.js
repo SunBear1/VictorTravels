@@ -1,34 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import "./history.css"
+import axios from 'axios';
 
 const WebSocketGenerated = () => {
-    const [socket, setSocket] = useState(null);
     const [stack, setStack] = useState([]);
 
     useEffect(() => {
-        const ws = new WebSocket('ws://localhost:18000/ws/events/generated');
-
-        ws.onopen = () => {
-            console.log('WebSocket generator connection established.');
+        const fetchData = async () => {
+          try {
+            const response = await axios.get('http://localhost:18000/api/v1/events/generated');
+            const data = response.data;
+            setStack(data);
+            console.log(stack.length);
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
         };
-
-        ws.onmessage = (event) => {
-            const receivedData = JSON.parse(event.data);
-            console.log(receivedData);
-            setStack([...stack, receivedData]);
-        };
-
-        ws.onclose = () => {
-            console.log('WebSocket connection closed.');
-        };
-
-        setSocket(ws);
-
-        // Clean up the effect
-        return () => {
-            ws.close();
-        };
-    }, []);
+    
+        // Fetch data initially
+        fetchData();
+    
+        // Fetch data every 20 seconds
+        const intervalId = setInterval(fetchData, 20000);
+    
+        // Clean up the interval on component unmount
+        return () => clearInterval(intervalId);
+      }, []);
 
 
     return (

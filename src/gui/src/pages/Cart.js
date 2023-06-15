@@ -117,9 +117,6 @@ function Cart() {
                             </p>
                             <div className="flex justify-around mt-2">
                                 <button className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4"
-                                        onClick={() => handleRemove(trip.id)}>Remove from Cart
-                                </button>
-                                <button className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4"
                                         onClick={() => handleBuy(trip.id)}>Buy Trip
                                 </button>
                             </div>

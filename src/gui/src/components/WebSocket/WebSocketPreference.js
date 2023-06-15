@@ -7,7 +7,8 @@ import "./modal.css"
 
 const WebSocketPreference = () => {
     const [socket, setSocket] = useState(null);
-    const [showModal, setShowModal] = useState(false);
+    const [showModal1, setShowModal1] = useState(false);
+    const [showModal2, setShowModal2] = useState(false);
     const [receivedMessage, setReceivedMessage] = useState('');
   
     useEffect(() => {
@@ -21,7 +22,9 @@ const WebSocketPreference = () => {
         const receivedData = JSON.parse(event.data);
         console.log(receivedData);
         setReceivedMessage(receivedData);
-        setShowModal(true);
+        setShowModal1(true);
+        setShowModal2(true);
+        toast.success("Trip " + receivedData.tripID + " has been bought or reserved",{position:toast.POSITION.TOP_RIGHT})
       };
   
       ws.onclose = () => {
@@ -37,30 +40,47 @@ const WebSocketPreference = () => {
     }, []);
   
   
-    const handleCloseModal = () => {
-      setShowModal(false);
+    const handleCloseModal1 = () => {
+      setShowModal1(false);
+    };
+    const handleCloseModal2 = () => {
+      setShowModal2(false);
     };
   
     return (
       <div>
-        <Modal show={showModal} onHide={handleCloseModal} className="modal">
+        <Modal show={showModal1} onHide={handleCloseModal1} className="modal">
           <Modal.Header closeButton className="modal-header">
-            <Modal.Title className="modal-title"><b>Trip has been bought or reserved</b></Modal.Title>
+            <Modal.Title className="modal-title"><b>Preferences direction trip</b></Modal.Title>
           </Modal.Header>
           <Modal.Body className="modal-body">
             <h1>Trip number {receivedMessage?.tripID}</h1>
             <p>To country: {receivedMessage?.country}</p>
             <p>To region: {receivedMessage?.region}</p>
+          </Modal.Body>
+          <Modal.Footer className="modal-footer">
+            <Button variant="secondary" onClick={handleCloseModal1}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        <Modal show={showModal2} onHide={handleCloseModal2} className="modal">
+          <Modal.Header closeButton className="modal-header">
+            <Modal.Title className="modal-title"><b>Preferences hotel, room, transport trip</b></Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="modal-body">
+            <h1>Trip number {receivedMessage?.tripID}</h1>
             <p>Hotel: {receivedMessage?.hotelName}</p>
             <p>Room: {receivedMessage?.roomType}</p>
             <p>Transport: {receivedMessage.transportType ? receivedMessage?.transportType : "Own"}</p>
           </Modal.Body>
           <Modal.Footer className="modal-footer">
-            <Button variant="secondary" onClick={handleCloseModal}>
+            <Button variant="secondary" onClick={handleCloseModal2}>
               Close
             </Button>
           </Modal.Footer>
         </Modal>
+        <ToastContainer/>
       </div>
     );
   };
