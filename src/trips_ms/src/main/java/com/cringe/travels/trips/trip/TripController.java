@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 import javax.validation.constraints.Min;
@@ -52,8 +53,8 @@ public class TripController {
             @RequestParam(required = false) List<String> arrivalRegion,
             @RequestParam(required = false) List<String> transport,
             @RequestParam(required = false) String order,
-            @RequestParam(required = false) List<String> diet,
-            @RequestParam(required = false) Integer maxPrice) {
+            @RequestParam(required = false) String diet,
+            @RequestParam(required = false) Integer maxPrice) throws ParseException {
 
         List<Trip> trips = service.getFilteredTrips(adults, kidsTo3yo, kidsTo10yo, kidsTo18yo, dateFrom, dateTo,
                 departureRegion, arrivalRegion, transport, order, diet, maxPrice);

@@ -7,10 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 @Service
@@ -35,8 +40,8 @@ public class TripService {
 
     public List<Trip> getFilteredTrips(Integer adults, Integer kidsTo3Yo, Integer kidsTo10Yo, Integer kidsTo18Yo,
             String dateFrom, String dateTo, List<String> departureRegion,
-            List<String> arrivalRegion, List<String> transport, String order, List<String> diet,
-            Integer max_price) {
+            List<String> arrivalRegion, List<String> transport, String order, String diet,
+            Integer max_price) throws ParseException {
         // TODO Zwiększyć logowanie w tym servicie
         String query = "{$and:[{ 'is_booked_up' : false}";
         int head_count = 0;
@@ -56,7 +61,7 @@ public class TripService {
         if (room_type.isEmpty()) {
             return new ArrayList<Trip>();
         }
-        
+
         if (head_count > 0) {
             query = query + ",{\"hotel.rooms." + room_type + ".available\": { $gt: 0 }}";
         }
@@ -84,9 +89,7 @@ public class TripService {
         }
         if (diet != null) {
             query = query + ",{$or: [";
-            for (String diet_option : diet) {
-                query = query + "{ \"hotel.diet." + diet_option + "\": { $exists: true } }"; // TODO użyć StringBuildera
-            }
+            query = query + "{ \"hotel.diet." + diet + "\": { $exists: true } }"; // TODO użyć StringBuildera
             query = query + "]}";
         }
 
@@ -102,8 +105,25 @@ public class TripService {
         List<Trip> filteredTrips = repository.findTripsByCustomQuery(query);
         for (int i = 0; i < filteredTrips.size(); i++) {
             int roomPrice = filteredTrips.get(i).getHotel().getRooms().get(room_type).getCost();
-            float tripPrice = calculateTripPrices(adults, kidsTo3Yo, kidsTo10Yo, kidsTo18Yo, roomPrice, null, null,
-                    null, null);
+            int dietPrice = filteredTrips.get(i).getHotel().getDiet().get(diet);
+            int transportToPrice = transport != null && transport.contains("own") ? 0
+                    : getTransportToPrice(filteredTrips.get(i), departureRegion, transport);
+            int transportFromPrice = transport != null && transport.contains("own") ? 0
+                    : getTransportFromPrice(filteredTrips.get(i), departureRegion, transport);
+           logger.info(String.valueOf(transportToPrice) );
+           logger.info(String.valueOf(transportFromPrice) );
+
+            String pattern = "E MMM dd HH:mm:ss z yyyy";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            Date fromDate = simpleDateFormat.parse(filteredTrips.get(i).getDateFrom());
+
+            Date toDate = simpleDateFormat.parse(filteredTrips.get(i).getDateTo());
+            long diffInMillies = Math.abs(toDate.getTime() - fromDate.getTime());
+            long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+            float tripPrice = calculateTripPrices(adults, kidsTo3Yo, kidsTo10Yo, kidsTo18Yo, roomPrice, (int) diff,
+                    transportToPrice,
+                    transportFromPrice, dietPrice);
             filteredTrips.get(i).setPrice(tripPrice);
             if (max_price != null && tripPrice > max_price) {
                 filteredTrips.remove(i);
@@ -214,6 +234,42 @@ public class TripService {
         List<String> departureLocations = getDepartureLocations(trips);
 
         return new TripConfigurations(departureLocations, arrivalLocations, transportTypes);
+    }
+
+    public int getTransportFromPrice(Trip trip, List<String> departureRegions, List<String> transportType) {
+        HashMap<String, Transport> transportFromMap = trip.getFrom();
+        int minimumPrice = 10000000;
+
+        for (String region : departureRegions) {
+            Transport transport = transportFromMap.get(region);
+            if (transport.getPlane() != null && minimumPrice > transport.getPlane().getCost()
+                    && transportType.contains("plane")) {
+                minimumPrice = transport.getPlane().getCost();
+            }
+            if (transport.getTrain() != null && minimumPrice > transport.getTrain().getCost()
+                    && transportType.contains("train")) {
+                minimumPrice = transport.getTrain().getCost();
+            }
+        }
+        return minimumPrice;
+    }
+
+    public int getTransportToPrice(Trip trip, List<String> arrivalList, List<String> transportType) {
+        HashMap<String, Transport> transportToMap = trip.getTo();
+        int minimumPrice = 10000000;
+
+        for (String region : arrivalList) {
+            Transport transport = transportToMap.get(region);
+            if (transport.getPlane() != null && minimumPrice > transport.getPlane().getCost()
+                    && transportType.contains("plane") && !transport.getPlane().isTransportBookedUp()) {
+                minimumPrice = transport.getPlane().getCost();
+            }
+            if (transport.getTrain() != null && minimumPrice > transport.getTrain().getCost()
+                    && transportType.contains("train") && !transport.getTrain().isTransportBookedUp()) {
+                minimumPrice = transport.getTrain().getCost();
+            }
+        }
+        return minimumPrice;
     }
 
     private void removeBookedUpTransport(HashMap<String, Transport> transports) {
