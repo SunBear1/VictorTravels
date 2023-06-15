@@ -1,12 +1,10 @@
 version: "3.8"
 services:
   web-gui:
-    container_name: web-gui
     image: malajski/victor-travels:gui
     ports:
       - "18005:80"
   gateway:
-    container_name: gateway
     image: malajski/victor-travels:gateway
     ports:
       - "18000:8080"
@@ -21,8 +19,13 @@ services:
       PURCHASE_MS_ADDRESS: purchases:8002
       PAYMENT_MS_ADDRESS: payments:8003
       RABBITMQ_ADDRESS: rabbitmq
+      RABBITMQ_PORT: 5672
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
+      interval: 5s
+      timeout: 1s
+      retries: 10
   data-init:
-    container_name: data-init
     image: malajski/victor-travels:data-init
     deploy:
       restart_policy:
@@ -47,13 +50,16 @@ services:
       MONGODB_PURCHASES_DB: rsww_17998_purchases_db
       MONGODB_PAYMENTS_DB: rsww_17998_payments_db
   rabbitmq:
-    container_name: rabbitmq
     image: malajski/victor-travels:rabbitmq
     ports:
       - "17998:5672"
       - "18004:15672"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
+      interval: 5s
+      timeout: 1s
+      retries: 10
   reservations:
-    container_name: reservations-ms
     image: malajski/victor-travels:reservations
     ports:
       - "18001:8001"
@@ -64,8 +70,13 @@ services:
       MONGODB_PASSWORD: student
       MONGODB_DB: rsww_17998_reservations_db
       RABBITMQ_ADDRESS: rabbitmq
+      RABBITMQ_PORT: 5672
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
+      interval: 5s
+      timeout: 1s
+      retries: 10
   purchases:
-    container_name: purchase-ms
     image: malajski/victor-travels:purchases
     ports:
       - "18002:8002"
@@ -76,8 +87,13 @@ services:
       MONGODB_PASSWORD: student
       MONGODB_DB: rsww_17998_purchases_db
       RABBITMQ_ADDRESS: rabbitmq
+      RABBITMQ_PORT: 5672
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
+      interval: 5s
+      timeout: 1s
+      retries: 10
   payments:
-    container_name: payment-ms
     image: malajski/victor-travels:payments
     ports:
       - "18003:8003"
@@ -88,8 +104,13 @@ services:
       MONGODB_PASSWORD: student
       MONGODB_DB: rsww_17998_payments_db
       RABBITMQ_ADDRESS: rabbitmq
+      RABBITMQ_PORT: 5672
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
+      interval: 5s
+      timeout: 1s
+      retries: 10
   trips:
-    container_name: trips-ms
     image: malajski/victor-travels:trips
     ports:
       - "17999:8000"
@@ -100,33 +121,66 @@ services:
       MONGODB_PASSWORD: student
       MONGODB_DB: rsww_17998_trips_db
       RABBITMQ_ADDRESS: rabbitmq
+      RABBITMQ_PORT: 5672
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
+      interval: 5s
+      timeout: 1s
+      retries: 10
   hotels:
-    container_name: hotel-ms
     image: malajski/victor-travels:hotels
     environment:
       RABBITMQ_ADDRESS: rabbitmq
+      RABBITMQ_PORT: 5672
       POSTGRES_PORT: 5432
       POSTGRES_ADDRESS: actina20.maas
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: student
       PG_DB_HOTELS_NAME: rsww_17998_hotels
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
+      interval: 5s
+      timeout: 1s
+      retries: 10
   transports:
-    container_name: transport-ms
     image: malajski/victor-travels:transports
     environment:
       RABBITMQ_ADDRESS: rabbitmq
+      RABBITMQ_PORT: 5672
       POSTGRES_PORT: 5432
       POSTGRES_ADDRESS: actina20.maas
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: student
       PG_DB_TRANSPORTS_NAME: rsww_17998_transports
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
+      interval: 5s
+      timeout: 1s
+      retries: 10
   event-hub:
-    container_name: eventhub-ms
     image: malajski/victor-travels:eventhub
     environment:
       RABBITMQ_ADDRESS: rabbitmq
+      RABBITMQ_PORT: 5672
       POSTGRES_PORT: 5432
       POSTGRES_ADDRESS: actina20.maas
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: student
       PG_DB_EVENTHUB_NAME: rsww_17998_events
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
+      interval: 5s
+      timeout: 1s
+      retries: 10
+  event-generator:
+    image: malajski/victor-travels:event-generator
+    environment:
+      RABBITMQ_ADDRESS: rabbitmq
+      RABBITMQ_PORT: 5672
+      GENERATION_FREQUENCY: 60
+      ACTIVATE_GENERATION: "True"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
+      interval: 5s
+      timeout: 1s
+      retries: 10

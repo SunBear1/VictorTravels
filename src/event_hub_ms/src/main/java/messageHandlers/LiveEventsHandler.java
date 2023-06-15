@@ -1,6 +1,6 @@
 package messageHandlers;
 
-import DTO.LiveReservationEventsDTO;
+import DTO.LiveEventDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
@@ -32,7 +32,7 @@ public class LiveEventsHandler implements Runnable {
         ConnectionFactory factory = new ConnectionFactory();
         Config.setConfigFactory(factory);
         try (com.rabbitmq.client.Connection connection = factory.newConnection();
-                Channel channel = connection.createChannel()) {
+             Channel channel = connection.createChannel()) {
 
             this.channel = channel;
 
@@ -72,7 +72,7 @@ public class LiveEventsHandler implements Runnable {
         String room_type = reservationEvent.getRoom_type();
         String connection_to = reservationEvent.getConnection_id_to();
 
-        LiveReservationEventsDTO liveEventDTO = databaseHandler.getTripById(trip_offer_id);
+        LiveEventDTO liveEventDTO = databaseHandler.getTripById(trip_offer_id);
         liveEventDTO.setRoomType(room_type);
         liveEventDTO.setTransportType(extractTransportType(connection_to));
 
@@ -84,7 +84,7 @@ public class LiveEventsHandler implements Runnable {
             channel.basicPublish(EXCHANGE, ROUTING_KEY, null, json.getBytes(StandardCharsets.UTF_8));
             System.out.println("[MQ PUBLISH] Published message to LiveEvents exchange " +
                     ROUTING_KEY + " with payload: " + json);
-            databaseHandler.saveLiveEventsDTO(liveEventDTO);
+            databaseHandler.saveLiveEventDTO(liveEventDTO);
 
         } catch (IOException e) {
             e.printStackTrace();

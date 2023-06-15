@@ -37,14 +37,14 @@ public class HotelsHandler implements Runnable {
         ConnectionFactory factory = new ConnectionFactory();
         Config.setConfigFactory(factory);
         try (com.rabbitmq.client.Connection connection = factory.newConnection();
-                Channel channel = connection.createChannel()) {
+             Channel channel = connection.createChannel()) {
 
             this.channel = channel;
 
             DefaultConsumer consumer = new DefaultConsumer(channel) {
                 @Override
                 public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties,
-                        byte[] body) throws IOException {
+                                           byte[] body) throws IOException {
                     String message = new String(body, StandardCharsets.UTF_8);
                     System.out.println("[MQ CONSUME] Received message from hotelMS queue " + QUEUE_NAME_TO_CONSUME
                             + " with payload: " + message);
@@ -90,7 +90,7 @@ public class HotelsHandler implements Runnable {
         sendMessage(hotelEventDTO);
     }
 
-   public void prepareGeneratedEventMessage(RandomGeneratedEvent randomGeneratedEvent){
+    public void prepareGeneratedEventMessage(RandomGeneratedEvent randomGeneratedEvent) {
         String title = "trip_offer_hotel_room_update";
         String trip_offer_id = databaseHandler.getTripOfferIDbyHotelID(randomGeneratedEvent.getName());
         String operation_type = (randomGeneratedEvent.getOperation());
@@ -105,7 +105,7 @@ public class HotelsHandler implements Runnable {
         sendMessage(hotelEventDTO);
     }
 
-    public void sendMessage(Object payload){
+    public void sendMessage(Object payload) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);

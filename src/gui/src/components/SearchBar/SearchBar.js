@@ -17,6 +17,9 @@ function SearchBar({setTrips}) {
   const [kidsTo10yo, setKidsTo10yo] = useState(0);
   const [kidsTo18yo, setKidsTo18yo] = useState(0);
   const [selectedTransport, setSelectedTransport] = useState([]);
+  const [selectedDiet, setSelectedDiet] = useState([]);
+  const [selectedMaxPrice, setSelectedMaxPrice] = useState(1200);
+  const [maxPriceError, setMaxPriceError] = useState(false);
 
   const handleDateChange = selectedDate => {
     setDate(selectedDate);
@@ -59,6 +62,22 @@ function SearchBar({setTrips}) {
     );
   };
 
+  const setHandleDiet = e => {
+    setSelectedDiet(
+        Array.isArray(e) ? e.map(diet => diet.value) : []
+    );
+  };
+
+  const setMaxPrice = e => {
+    if (e.target.value < 1) {
+      console.log("DUPSKO")
+      setMaxPriceError(true);
+    } else {
+      setSelectedMaxPrice(e.target.value);
+      setMaxPriceError(false);
+    }
+  }
+
   function filterByUniqueTripId(arr) {
     const uniqueTripIds = {};
 
@@ -97,6 +116,8 @@ function SearchBar({setTrips}) {
                 arrival_region: convertArrayToString(selectedArrivalLocations),
                 departure_region: convertArrayToString(selectedDepartureLocations),
                 transport: convertArrayToString(selectedTransport),
+                diet: convertArrayToString(selectedDiet),
+                max_price: selectedMaxPrice,
               },
             },
             {
@@ -117,6 +138,13 @@ function SearchBar({setTrips}) {
     {value: 'own', label: 'own'},
     {value: 'train', label: 'train'},
     {value: 'plane', label: 'plane'},
+  ];
+
+  const dietType = [
+    {value: 'AllInclusive', label: 'All inclusive'},
+    {value: 'Breakfast', label: 'Breakfast'},
+    {value: 'TwoMeals', label: 'Two meals'},
+    {value: 'None', label: 'No diet'},
   ];
 
   useEffect(() => {
@@ -191,6 +219,38 @@ function SearchBar({setTrips}) {
             </div>
           </div>
         </div>
+        <div className="mt-2">
+          <div className="mx-auto container">
+            <label className="block text-sm font-medium text-gray-900 dark:text-white">
+              Select diet type
+            </label>
+            <div className="flex flex-wrap items-center lg:justify-between justify-center">
+              <div className="px-2">
+                <Select
+                    options={dietType}
+                    defaultValue={{value: 'AllInclusive', label: 'All inclusive'}}
+                    onChange={setHandleDiet}
+                    isMulti
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="mt-2">
+          <label htmlFor="default-input" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Max
+            trip offer price</label>
+          <input type="number" id="default-input"
+                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                 defaultValue={selectedMaxPrice}
+                 min={1}
+                 onChange={setMaxPrice}/>
+        </div>
+        {maxPriceError ?
+            <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                 role="alert">
+              <span className="font-medium">Price value error</span> Minimum price must be at least 1.
+            </div> : null
+        }
         <button
             onClick={handleSubmit}
             className="mt-5 bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded"

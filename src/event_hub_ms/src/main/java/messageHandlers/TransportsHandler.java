@@ -57,11 +57,7 @@ public class TransportsHandler implements Runnable {
             channel.basicConsume(QUEUE_NAME_TO_CONSUME, false, consumer);
 
             while (true) {
-                try {
-                    Thread.sleep(250);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+                Thread.sleep(250);
             }
 
         } catch (ConnectException e) {
@@ -72,6 +68,8 @@ public class TransportsHandler implements Runnable {
         } catch (IOException e) {
             System.err.println("Error: I/O exception occurred.");
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -90,7 +88,7 @@ public class TransportsHandler implements Runnable {
         sendMessage(transportEventDTO);
     }
 
-    public void prepareGeneratedEventMessage(RandomGeneratedEvent randomGeneratedEvent){
+    public void prepareGeneratedEventMessage(RandomGeneratedEvent randomGeneratedEvent) {
         String title = "generated_transport_update";
         String connection_id = randomGeneratedEvent.getName();
         String resource_type = randomGeneratedEvent.getResource();
@@ -99,11 +97,12 @@ public class TransportsHandler implements Runnable {
 
         TransportGeneratedEventDTO transportGeneratedEventDTO = new TransportGeneratedEventDTO(title, connection_id, operation_type, value,
                 resource_type);
-        //databaseHandler.saveHotelDTO(hotelEventDTO);
+
+        databaseHandler.saveTransportGeneratedEventDTO(transportGeneratedEventDTO);
         sendMessage(transportGeneratedEventDTO);
     }
 
-     public void sendMessage(Object payload){
+    public void sendMessage(Object payload) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
