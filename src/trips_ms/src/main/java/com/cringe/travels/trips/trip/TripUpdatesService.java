@@ -27,13 +27,15 @@ public class TripUpdatesService {
         String operationType = jsonObject.getString("operation_type");
         String roomType = jsonObject.getString("room_type");
 
+        logger.info("Received reservation message for updating rooms from HotelMS: " + jsonObject);
+
         for (int i = 0; i < listIds.length(); i++) {
             String id = listIds.getString(i);
             Optional<Trip> tripOpt = repository.findById(id);
             if (tripOpt.isPresent()) {
                 Trip trip = tripOpt.get();
                 int freeSeats = trip.getHotel().getRooms().get(roomType).getAvailable();
-                logger.info("BEFORE: TRIP: " + trip.getId() + "\n Room type:" + roomType + "\n seats left:" + freeSeats);
+                int oldFreeSeats = freeSeats;
                 if (operationType.equals("add")) {
                     freeSeats++;
                 } else {
@@ -41,7 +43,140 @@ public class TripUpdatesService {
                 }
                 trip.getHotel().getRooms().get(roomType).setAvailable(freeSeats);
                 repository.save(trip);
-                logger.info("NOW: TRIP: " + trip.getId() + "\n Room type:" + roomType + "\n seats left:" + freeSeats);
+                logger.info("Updated trip with id: " + trip.getId() + ". Room type: " + roomType + " seats left: " + freeSeats + " (was: " + oldFreeSeats + ")");
+            } else {
+                logger.info("NO TRIP IN DB WITH ID:" + id);
+            }
+        }
+    }
+
+    public void updateHotelPrice(JSONObject jsonObject) {
+        JSONArray listIds = jsonObject.getJSONArray("trip_offers_id");
+        String operationType = jsonObject.getString("operation_type");
+        String roomType = jsonObject.getString("room_type");
+        int price = jsonObject.getInt("resource_type");
+
+        logger.info("Received generated message for updating price from HotelMS: " + jsonObject);
+
+        for (int i = 0; i < listIds.length(); i++) {
+            String id = listIds.getString(i);
+            Optional<Trip> tripOpt = repository.findById(id);
+            if (tripOpt.isPresent()) {
+                Trip trip = tripOpt.get();
+                int roomPrice = trip.getHotel().getRooms().get(roomType).getCost();
+                int oldRoomPrice = roomPrice;
+                if (operationType.equals("add")) {
+                    roomPrice += price;
+                } else {
+                    roomPrice -= price;
+                }
+                trip.getHotel().getRooms().get(roomType).setCost(roomPrice);
+                repository.save(trip);
+                logger.info("Updated trip with id: " + trip.getId() + ". Room type: " + roomType + " price: " + roomPrice + " (was: " + oldRoomPrice + ")");
+            } else {
+                logger.info("NO TRIP IN DB WITH ID:" + id);
+            }
+        }
+    }
+
+    public void updateGeneratedTransportSeats(JSONObject jsonObject) {
+
+        JSONArray listIds = jsonObject.getJSONArray("trip_offers_id");
+        String operationType = jsonObject.getString("operation_type");
+        String connectionId = jsonObject.getString("connection_id");
+        int headCount = jsonObject.getInt("head_count");
+
+        logger.info("Received generated message for updating seats from TransportMS: " + jsonObject);
+
+        for (int i = 0; i < listIds.length(); i++) {
+            String id = listIds.getString(i);
+            Optional<Trip> tripOpt = repository.findById(id);
+            if (tripOpt.isPresent()) {
+                Trip trip = tripOpt.get();
+                trip.getFrom().forEach((key, transport) -> {
+                    if (transport.getPlane() != null) {
+                        if (transport.getPlane().getId().equals(connectionId)) {
+                            int seatsLeft = transport.getPlane().getSeatsLeft();
+                            int oldSeatsLeft = seatsLeft;
+                            if (operationType.equals("add")) {
+                                seatsLeft += headCount;
+                            } else {
+                                seatsLeft -= headCount;
+                            }
+                            transport.getPlane().setSeatsLeft(seatsLeft);
+                            repository.save(trip);
+                            logger.info("Updated trip with id: " + trip.getId() + ". Connection id: " + connectionId + " seats left: " + seatsLeft + " (was: " + oldSeatsLeft + ")");
+                        }
+                    }
+                });
+                trip.getTo().forEach((key, transport) -> {
+                    if (transport.getPlane() != null) {
+                        if (transport.getPlane().getId().equals(connectionId)) {
+                            int seatsLeft = transport.getPlane().getSeatsLeft();
+                            int oldSeatsLeft = seatsLeft;
+                            if (operationType.equals("add")) {
+                                seatsLeft += headCount;
+                            } else {
+                                seatsLeft -= headCount;
+                            }
+                            transport.getPlane().setSeatsLeft(seatsLeft);
+                            repository.save(trip);
+                            logger.info("Updated trip with id: " + trip.getId() + ". Connection id: " + connectionId + " seats left: " + seatsLeft + " (was: " + oldSeatsLeft + ")");
+                        }
+                    }
+                });
+            } else {
+                logger.info("NO TRIP IN DB WITH ID:" + id);
+            }
+        }
+    }
+
+    public void updateGeneratedTransportPrice(JSONObject jsonObject) {
+
+        JSONArray listIds = jsonObject.getJSONArray("trip_offers_id");
+        String operationType = jsonObject.getString("operation_type");
+        String connectionId = jsonObject.getString("connection_id");
+        int price = jsonObject.getInt("price");
+
+        logger.info("Received generated message for updating price from TransportMS: " + jsonObject);
+
+        for (int i = 0; i < listIds.length(); i++) {
+            String id = listIds.getString(i);
+            Optional<Trip> tripOpt = repository.findById(id);
+            if (tripOpt.isPresent()) {
+                Trip trip = tripOpt.get();
+                trip.getFrom().forEach((key, transport) -> {
+                    if (transport.getPlane() != null) {
+                        if (transport.getPlane().getId().equals(connectionId)) {
+                            int transportPrice = transport.getPlane().getCost();
+                            int oldTransportPrice = transportPrice;
+                            if (operationType.equals("add")) {
+                                transportPrice += price;
+                            } else {
+                                transportPrice -= price;
+                            }
+                            transport.getPlane().setCost(transportPrice);
+                            repository.save(trip);
+                            logger.info("Updated trip with id: " + trip.getId() + ". Connection id: " + connectionId + " price: " + transportPrice + " (was: " + oldTransportPrice + ")");
+                        }
+                    }
+                });
+                trip.getTo().forEach((key, transport) -> {
+                    if (transport.getPlane() != null) {
+                        if (transport.getPlane().getId().equals(connectionId)) {
+                            int transportPrice = transport.getPlane().getCost();
+                            int oldTransportPrice = transportPrice;
+                            if (operationType.equals("add")) {
+                                transportPrice += price;
+                            } else {
+                                transportPrice -= price;
+                            }
+                            transport.getPlane().setCost(transportPrice);
+                            repository.save(trip);
+                            logger.info("Updated trip with id: " + trip.getId() + ". Connection id: " + connectionId + " price: " + transportPrice + " (was: " + oldTransportPrice + ")");
+                        }
+                    }
+                });
             } else {
                 logger.info("NO TRIP IN DB WITH ID:" + id);
             }
@@ -53,6 +188,8 @@ public class TripUpdatesService {
         JSONArray listIds = jsonObject.getJSONArray("trip_offers_id");
         boolean isHotelBookedUp = jsonObject.getBoolean("is_hotel_booked_up");
 
+        logger.info("Received reservation message for updating trip status from HotelMS: " + jsonObject);
+
         for (int i = 0; i < listIds.length(); i++) {
             String id = listIds.getString(i);
             Optional<Trip> tripOpt = repository.findById(id);
@@ -60,7 +197,7 @@ public class TripUpdatesService {
                 Trip trip = tripOpt.get();
                 trip.setBookedUp(isHotelBookedUp);
                 repository.save(trip);
-                logger.info("UPDATED TRIP STATUS IN TRIP: " + trip.getId() + "\n bookedUp:" + isHotelBookedUp);
+                logger.info("Updated trip with id: " + trip.getId() + ". isHotelBookedUp: " + isHotelBookedUp);
 
             } else {
                 logger.info("NO TRIP IN DB WITH ID:" + id);
