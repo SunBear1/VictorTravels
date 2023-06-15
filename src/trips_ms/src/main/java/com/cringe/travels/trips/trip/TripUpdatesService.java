@@ -26,6 +26,7 @@ public class TripUpdatesService {
         JSONArray listIds = jsonObject.getJSONArray("trip_offers_id");
         String operationType = jsonObject.getString("operation_type");
         String roomType = jsonObject.getString("room_type");
+        int roomsAmount = jsonObject.getInt("resource_amount");
 
         logger.info("Received reservation message for updating rooms from HotelMS: " + jsonObject);
 
@@ -37,9 +38,9 @@ public class TripUpdatesService {
                 int freeSeats = trip.getHotel().getRooms().get(roomType).getAvailable();
                 int oldFreeSeats = freeSeats;
                 if (operationType.equals("add")) {
-                    freeSeats++;
+                    freeSeats+= roomsAmount;
                 } else {
-                    freeSeats--;
+                    freeSeats-= roomsAmount;
                 }
                 trip.getHotel().getRooms().get(roomType).setAvailable(freeSeats);
                 repository.save(trip);
@@ -54,7 +55,7 @@ public class TripUpdatesService {
         JSONArray listIds = jsonObject.getJSONArray("trip_offers_id");
         String operationType = jsonObject.getString("operation_type");
         String roomType = jsonObject.getString("room_type");
-        int price = jsonObject.getInt("resource_type");
+        int price = jsonObject.getInt("resource_amount");
 
         logger.info("Received generated message for updating price from HotelMS: " + jsonObject);
 
