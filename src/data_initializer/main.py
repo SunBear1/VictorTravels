@@ -17,8 +17,10 @@ logger.setLevel(logging.INFO)
 logger.addHandler(handler)
 
 
-def convert_dates_in_mongodb(documents: list):
-    for doc_id in documents:
+def convert_dates_in_mongodb():
+    documents = MongoDBClient.trips_collection.find({})
+    for document in documents:
+        doc_id = document["_id"]
         document = MongoDBClient.trips_collection.find_one({"_id": doc_id})
 
         date_obj = datetime.strptime(document["date_from"], "%d-%m-%Y")
@@ -57,7 +59,7 @@ if __name__ == "__main__":
     try:
         MongoDBClient.drop_database(db_name=MONGO_DB_TRIPS_NAME)
         MongoDBClient.trips_collection.insert_many(documents=trips_db_docs)
-        convert_dates_in_mongodb(documents=["0001", "0002", "0003", "0004", "0005", "0006"])
+        convert_dates_in_mongodb()
         logger.info(f"Committed init {MONGO_DB_TRIPS_NAME} data to mongoDB")
 
         MongoDBClient.drop_database(db_name=MONGO_DB_RESERVATIONS_NAME)
