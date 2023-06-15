@@ -36,6 +36,13 @@ function Navbar() {
               Homepage
             </NavLink>
             <NavLink
+                exact
+                to="/history"
+                className="un link text-m font-semibold leading-6 text-slate-300 hover:text-cyan-300"
+            >
+              History
+            </NavLink>
+            <NavLink
                 to="/search"
                 className="un link text-m font-semibold leading-6 text-slate-300 hover:text-cyan-300"
             >

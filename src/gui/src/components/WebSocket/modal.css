@@ -2,6 +2,9 @@
     float: right;
     width: 30%;
     border-radius: 2px;
+    position: fixed;
+    top: 50%;
+    padding: 20px;
 }
 
 .modal-header {
@@ -10,6 +13,7 @@
     border-bottom: none;
     color: #62925f;
     text-align: center;
+
   }
   
   .modal-title {
