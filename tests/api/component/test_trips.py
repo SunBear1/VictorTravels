@@ -290,7 +290,7 @@ def test_get_trips_max_price_bigger_than_price(gateway_trips_url):
         "arrival_region": None,
         "transport": None,
         "diet": None,
-        "max_price": 1100
+        "max_price": 3851
     }
     response = requests.get(f"{gateway_trips_url}", params=query_params,
                             timeout=3.00,
@@ -299,4 +299,5 @@ def test_get_trips_max_price_bigger_than_price(gateway_trips_url):
     response_payload = json.loads(response.content.decode("utf-8"))
 
     assert (response.status_code == status.HTTP_200_OK
-            and response_payload[3]["price"] == 1089)
+            and response_payload[0]["price"] == 3850 
+            and response_payload[1]["price"] == 341)
