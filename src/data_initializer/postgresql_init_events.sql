@@ -25,4 +25,5 @@ VALUES ('0001', 1, 'HFP-1', 'Hotel Fuerteventura Princess', 'Wyspy Kanaryjskie',
        ('0003', 3, 'HGR-1', 'Hotel Gaia Royal', 'Grecja', 'Kos'),
        ('0004', 4, 'HSMKB-1', 'Hotel Smy Kos Beach & Splash', 'Grecja', 'Kos'),
        ('0005', 5, 'HHINER-1', 'Hotel Holiday Inn Express Rzeszów Airport', 'Polska', 'Rzeszów'),
-       ('0006', 5, 'HHINER-2', 'Hotel Holiday Inn Express Rzeszów Airport', 'Polska', 'Rzeszów');
+       ('0006', 5, 'HHINER-2', 'Hotel Holiday Inn Express Rzeszów Airport', 'Polska', 'Rzeszów'),
+       ('0007', 6, 'HCMR-1', 'Hotel Casa Mare Resort', 'Egipt', 'Marsa Alam');

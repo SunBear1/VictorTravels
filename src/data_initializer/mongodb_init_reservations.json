@@ -60,7 +60,15 @@
     "RZE-WAW-PLANE-002": 16,
     "RZE-WAW-TRAIN-002": 42,
     "RZE-PZN-PLANE-002": 10,
-    "RZE-PZN-TRAIN-002": 24
+    "RZE-PZN-TRAIN-002": 24,
+    "KTK-EMA-PLANE-001": 13,
+    "KRK-EMA-PLANE-001": 15,
+    "GDN-EMA-PLANE-001": 10,
+    "WAW-EMA-PLANE-001": 2,
+    "EMA-KTK-PLANE-001": 3,
+    "EMA-KRK-PLANE-001": 18,
+    "EMA-GDN-PLANE-001": 22,
+    "EMA-WAW-PLANE-001": 15
   },
   {
     "_id": "available_hotels",
@@ -105,6 +113,13 @@
       "largeroomsleft": 3,
       "apartmentroomsleft": 0,
       "studioroomsleft": 1
+    },
+    "HCMR-1": {
+      "smallroomsleft": 10,
+      "mediumroomsleft": 11,
+      "largeroomsleft": 12,
+      "apartmentroomsleft": 13,
+      "studioroomsleft": 14
     }
   },
   {
@@ -115,7 +130,8 @@
       "0003",
       "0004",
       "0005",
-      "0006"
+      "0006",
+      "0007"
     ]
   }
 ]

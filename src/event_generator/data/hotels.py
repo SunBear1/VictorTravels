@@ -40,5 +40,12 @@ HOTELS_REGISTRY = {
         "large": 3,
         "apartment": 0,
         "studio": 1
+    },
+    "HCMR-1": {
+        "small": 10,
+        "medium": 11,
+        "large": 12,
+        "apartment": 13,
+        "studio": 14
     }
 }
