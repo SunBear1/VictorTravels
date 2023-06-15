@@ -69,7 +69,7 @@ const UserProvider = ({children}) => {
         const newTrip = {
             trip,
             reservationId,
-            timeLeft: 600,
+            timeLeft: 60,
         };
         trips.push(newTrip);
         Cookies.set('cart', JSON.stringify(trips));
