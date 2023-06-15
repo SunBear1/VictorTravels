@@ -818,6 +818,127 @@
         }
       }
     }
+  },
+  {
+    "_id": "0007",
+    "trip_id": "6",
+    "is_booked_up": false,
+    "hotel": {
+      "hotel_id": "HCMR-1",
+      "name": "Hotel Casa Mare Resort",
+      "image": "https://i.content4travel.com/cms/img/u/desktop/seres/rmftulr_0.jpg?version=1",
+      "description": [
+        "Aktywne wakacje",
+        "Piękna plaża i rafa koralowa",
+        "Długie molo",
+        "Zadbany, zielony ogród"
+      ],
+      "diet": {
+        "AllInclusive": 950,
+        "Breakfast": 350,
+        "TwoMeals": 490,
+        "None": 0
+      },
+      "rooms": {
+        "small": {
+          "cost": 250,
+          "available": 10
+        },
+        "medium": {
+          "cost": 470,
+          "available": 11
+        },
+        "large": {
+          "cost": 550,
+          "available": 12
+        },
+        "apartment": {
+          "cost": 365,
+          "available": 13
+        },
+        "studio": {
+          "cost": 370,
+          "available": 14
+        }
+      }
+    },
+    "localisation": {
+      "country": "Egipt",
+      "region": "Marsa Alam"
+    },
+    "date_from": "12-08-2023",
+    "date_to": "22-08-2023",
+    "transport_types": [
+      "plane"
+    ],
+    "from": {
+      "Katowice": {
+        "plane": {
+          "id": "KTK-EMA-PLANE-001",
+          "cost": 80,
+          "seatsLeft": 13,
+          "transportBookedUp": false
+        }
+      },
+      "Kraków": {
+        "plane": {
+          "id": "KRK-EMA-PLANE-001",
+          "cost": 80,
+          "seatsLeft": 15,
+          "transportBookedUp": false
+        }
+      },
+      "Gdańsk": {
+        "plane": {
+          "id": "GDN-EMA-PLANE-001",
+          "cost": 60,
+          "seatsLeft": 10,
+          "transportBookedUp": false
+        }
+      },
+      "Warszawa": {
+        "plane": {
+          "id": "WAW-EMA-PLANE-001",
+          "cost": 100,
+          "seatsLeft": 2,
+          "transportBookedUp": false
+        }
+      }
+    },
+    "to": {
+      "Katowice": {
+        "plane": {
+          "id": "EMA-KTK-PLANE-001",
+          "cost": 75,
+          "seatsLeft": 3,
+          "transportBookedUp": false
+        }
+      },
+      "Kraków": {
+        "plane": {
+          "id": "EMA-KRK-PLANE-001",
+          "cost": 90,
+          "seatsLeft": 18,
+          "transportBookedUp": false
+        }
+      },
+      "Gdańsk": {
+        "plane": {
+          "id": "EMA-GDN-PLANE-001",
+          "cost": 112,
+          "seatsLeft": 22,
+          "transportBookedUp": false
+        }
+      },
+      "Warszawa": {
+        "plane": {
+          "id": "EMA-WAW-PLANE-001",
+          "cost": 95,
+          "seatsLeft": 15,
+          "transportBookedUp": false
+        }
+      }
+    }
   }
 ]
 

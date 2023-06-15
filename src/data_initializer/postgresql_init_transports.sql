@@ -81,7 +81,15 @@ VALUES ('0001', '1', 'LDZ-KNR-PLANE-001'),
        ('0006', '5', 'RZE-WAW-PLANE-002'),
        ('0006', '5', 'RZE-WAW-TRAIN-002'),
        ('0006', '5', 'RZE-PZN-PLANE-002'),
-       ('0006', '5', 'RZE-PZN-TRAIN-002');
+       ('0006', '5', 'RZE-PZN-TRAIN-002'),
+       ('0007', '6', 'KTK-EMA-PLANE-001'),
+       ('0007', '6', 'KRK-EMA-PLANE-001'),
+       ('0007', '6', 'GDN-EMA-PLANE-001'),
+       ('0007', '6', 'WAW-EMA-PLANE-001'),
+       ('0007', '6', 'EMA-KTK-PLANE-001'),
+       ('0007', '6', 'EMA-KRK-PLANE-001'),
+       ('0007', '6', 'EMA-GDN-PLANE-001'),
+       ('0007', '6', 'EMA-WAW-PLANE-001');
 
 INSERT INTO SeatsLeft (ConnectionID, SeatsLeft)
 VALUES ('LDZ-KNR-PLANE-001', 21),
@@ -148,4 +156,13 @@ VALUES ('LDZ-KNR-PLANE-001', 21),
        ('RZE-WAW-PLANE-002', 16),
        ('RZE-WAW-TRAIN-002', 42),
        ('RZE-PZN-PLANE-002', 10),
-       ('RZE-PZN-TRAIN-002', 24);
+       ('RZE-PZN-TRAIN-002', 24),
+
+       ('KTK-EMA-PLANE-001', 13),
+       ('KRK-EMA-PLANE-001', 15),
+       ('GDN-EMA-PLANE-001', 10),
+       ('WAW-EMA-PLANE-001', 2),
+       ('EMA-KTK-PLANE-001', 3),
+       ('EMA-KRK-PLANE-001', 18),
+       ('EMA-GDN-PLANE-001', 22),
+       ('EMA-WAW-PLANE-001', 15);
