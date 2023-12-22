@@ -228,3 +228,9 @@ services:
       interval: 5s
       timeout: 1s
       retries: 10
+  event-hub-v2:
+    container_name: eventhub-v2-ms
+    image: ${EVENTHUB_V2_IMAGE}
+    restart: always
+    ports:
+      - "17997:8080"

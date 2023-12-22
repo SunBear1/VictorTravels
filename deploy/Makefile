@@ -23,6 +23,8 @@ TRANSPORT_IMAGE_NAME := malajski/victor-travels:transports
 TRANSPORT_CONTAINER_NAME := transport-ms
 EVENTHUB_IMAGE_NAME := malajski/victor-travels:eventhub
 EVENTHUB_CONTAINER_NAME := event-hub-ms
+EVENTHUB_IMAGE_V2_NAME :=  event-hub-v2-image:development
+EVENTHUB_CONTAINER_V2_NAME := event-hub-ms-v2
 GUI_IMAGE_NAME := malajski/victor-travels:gui
 GUI_CONTAINER_NAME := web-gui
 EVENT_GENERATOR_IMAGE_NAME := malajski/victor-travels:event-generator
@@ -32,7 +34,7 @@ EVENT_GENERATOR_CONTAINER_NAME := event-generator
 build-and-run: build run
 
 
-build: base gui gateway rabbit reservations purchases payments event-hub hotels transports trips data-init data-generator clean
+build: base gui gateway rabbit reservations purchases payments event-hub hotels transports event-hub-v2 trips data-init data-generator clean
 
 
 run:
@@ -47,6 +49,7 @@ run:
 	HOTEL_IMAGE=${HOTEL_IMAGE_NAME} \
 	TRANSPORT_IMAGE=${TRANSPORT_IMAGE_NAME} \
 	EVENTHUB_IMAGE=${EVENTHUB_IMAGE_NAME} \
+	EVENTHUB_V2_IMAGE=${EVENTHUB_IMAGE_V2_NAME} \
 	GUI_IMAGE=${GUI_IMAGE_NAME} \
 	EVENT_GENERATOR_IMAGE=${EVENT_GENERATOR_IMAGE_NAME} \
 	docker-compose -p "victor-travels" up
@@ -62,7 +65,7 @@ clean:
 
 
 delete:
-	@docker image rm ${GATEWAY_IMAGE_NAME} ${RABBIT_IMAGE_NAME} ${RESERVATIONS_IMAGE_NAME} ${PURCHASE_IMAGE_NAME} ${PAYMENT_IMAGE_NAME} ${DATA_INIT_IMAGE_NAME} ${HOTEL_IMAGE_NAME} ${TRANSPORT_IMAGE_NAME} ${EVENTHUB_IMAGE_NAME} ${GUI_IMAGE_NAME} --force
+	@docker image rm ${GATEWAY_IMAGE_NAME} ${RABBIT_IMAGE_NAME} ${RESERVATIONS_IMAGE_NAME} ${PURCHASE_IMAGE_NAME} ${PAYMENT_IMAGE_NAME} ${DATA_INIT_IMAGE_NAME} ${HOTEL_IMAGE_NAME} ${TRANSPORT_IMAGE_NAME} ${EVENTHUB_IMAGE_NAME} ${EVENTHUB_IMAGE_V2_NAME} ${GUI_IMAGE_NAME} --force
 
 
 base:
@@ -109,6 +112,10 @@ transports:
 event-hub:
 	@echo "Building image for ${EVENTHUB_CONTAINER_NAME}..."
 	@docker build -f ../src/event_hub_ms/Dockerfile -t ${EVENTHUB_IMAGE_NAME} ../src/event_hub_ms
+
+event-hub-v2:
+	@echo "Building image for ${EVENTHUB_CONTAINER_V2_NAME}..."
+	@docker build -f ../src/event_hub_ms_v2/Dockerfile -t ${EVENTHUB_IMAGE_V2_NAME} ../src/event_hub_ms_v2
 
 gui:
 	@echo "Building image for ${GUI_CONTAINER_NAME}..."
