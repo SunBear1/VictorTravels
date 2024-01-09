@@ -126,6 +126,6 @@ data-generator:
 	@docker build -f ../src/event_generator/Dockerfile -t ${EVENT_GENERATOR_IMAGE_NAME} ../src/event_generator
 
 test:
-	@pip install pytest pytest-md pytest-emoji starlette fastapi
+	@pip3 install pytest pytest-md pytest-emoji starlette fastapi
 	@echo "Running component tests..."
 	@pytest -v --emoji --md ../tests/api/api-test-report.md ../tests/api/component
