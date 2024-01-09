@@ -11,10 +11,11 @@ import (
 )
 
 type ReservationHandler struct {
-	DbHandler        *db.DatabaseHandler
-	channel          *amqp.Channel
-	HotelHandler     *HotelHandler
-	TransportHandler *TransportHandler
+	DbHandler         *db.DatabaseHandler
+	channel           *amqp.Channel
+	HotelHandler      *HotelHandler
+	TransportHandler  *TransportHandler
+	LiveEventsHandler *LiveEventsHandler
 }
 
 func (reservation *ReservationHandler) Initialize() {
@@ -71,8 +72,7 @@ func (reservation *ReservationHandler) Initialize() {
 			reservation.TransportHandler.PrepareReservationEventMessage(reservationEvent)
 		}
 		if reservationEvent.ReservationStatus == "created" || reservationEvent.ReservationStatus == "finalized" {
-			// TODO	liveEventsMQ.sendReservationEventMessage(reservationEvent);
-
+			reservation.LiveEventsHandler.sendReservationMessage(reservationEvent)
 		}
 
 	}

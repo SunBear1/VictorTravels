@@ -17,14 +17,14 @@ type HotelEventDTO struct {
 }
 
 type RandomGeneratedEvent struct {
-	Title     string
-	Type      string
-	Name      string
-	Field     string
-	Resource  string
-	Value     int
-	Operation string
-	Id        int
+	Title     string `json:"title"`
+	Type      string `json:"type"`
+	Name      string `json:"name"`
+	Field     string `json:"field"`
+	Resource  string `json:"resource"`
+	Value     int    `json:"value"`
+	Operation string `json:"operation"`
+	Id        int    `json:"id"`
 }
 
 type ReservationEvent struct {
@@ -67,4 +67,14 @@ type TransportGeneratedDTO struct {
 	ResourceType  string `json:"resource_type"`
 	Value         int    `json:"value"`
 	OperationType string `json:"operation_type"`
+}
+
+type LiveEventDTO struct {
+	Title         string `json:"title"`
+	TripId        int    `json:"trip_id"`
+	Country       string `json:"country"`
+	Region        string `json:"region"`
+	HotelName     string `json:"hotel_name"`
+	RoomType      string `json:"room_type"`
+	TransportType string `json:"transport_type"`
 }

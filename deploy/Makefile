@@ -34,7 +34,7 @@ EVENT_GENERATOR_CONTAINER_NAME := event-generator
 build-and-run: build run
 
 
-build: base gui gateway rabbit reservations purchases payments event-hub hotels transports event-hub-v2 trips data-init data-generator clean
+build: base gui gateway rabbit reservations purchases payments hotels transports event-hub-v2 trips data-init data-generator clean
 
 
 run:
@@ -48,7 +48,6 @@ run:
 	DATA_INIT_IMAGE=${DATA_INIT_IMAGE_NAME} \
 	HOTEL_IMAGE=${HOTEL_IMAGE_NAME} \
 	TRANSPORT_IMAGE=${TRANSPORT_IMAGE_NAME} \
-	EVENTHUB_IMAGE=${EVENTHUB_IMAGE_NAME} \
 	EVENTHUB_V2_IMAGE=${EVENTHUB_IMAGE_V2_NAME} \
 	GUI_IMAGE=${GUI_IMAGE_NAME} \
 	EVENT_GENERATOR_IMAGE=${EVENT_GENERATOR_IMAGE_NAME} \

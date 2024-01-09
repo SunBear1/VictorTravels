@@ -11,9 +11,10 @@ import (
 )
 
 type GeneratedEventsHandler struct {
-	DbHandler        *db.DatabaseHandler
-	HotelHandler     *HotelHandler
-	TransportHandler *TransportHandler
+	DbHandler         *db.DatabaseHandler
+	HotelHandler      *HotelHandler
+	TransportHandler  *TransportHandler
+	LiveEventsHandler *LiveEventsHandler
 }
 
 func (generatedEventsHandler *GeneratedEventsHandler) Initialize() {
@@ -48,28 +49,28 @@ func (generatedEventsHandler *GeneratedEventsHandler) Initialize() {
 	failOnError(err, "Failed to register a consumer")
 
 	// print consumed messages from queue
-	forever := make(chan bool)
-	go func() {
-		for msg := range msgs {
-			fmt.Printf("Received Message: %s\n", msg.Body)
-			var randomGeneratedEvent events.RandomGeneratedEvent
-			err := json.Unmarshal([]byte(msg.Body), &randomGeneratedEvent)
-			if err != nil {
-				log.Printf("Error decoding JSON: %v\n", err)
-				return
-			}
-			generatedEventsHandler.DbHandler.SaveRandomGeneratedEvent(randomGeneratedEvent)
-
-			if randomGeneratedEvent.Type == "hotel" {
-				generatedEventsHandler.HotelHandler.PrepareGeneratedEventMessage(randomGeneratedEvent)
-			}
-			if randomGeneratedEvent.Type == "connection" {
-				generatedEventsHandler.TransportHandler.PrepareGeneratedEventMessage(randomGeneratedEvent)
-			}
-			//TODO liveEventsMQ.sendRandomGeneratedEventMessage(randomGeneratedEvent)
+	// forever := make(chan bool)
+	//go func() {
+	for msg := range msgs {
+		fmt.Printf("Received Message: %s\n", msg.Body)
+		var randomGeneratedEvent events.RandomGeneratedEvent
+		err := json.Unmarshal([]byte(msg.Body), &randomGeneratedEvent)
+		if err != nil {
+			log.Printf("Error decoding JSON: %v\n", err)
+			return
 		}
-	}()
+		generatedEventsHandler.DbHandler.SaveRandomGeneratedEvent(randomGeneratedEvent)
 
-	fmt.Println("Waiting for messages...")
-	<-forever
+		if randomGeneratedEvent.Type == "hotel" {
+			generatedEventsHandler.HotelHandler.PrepareGeneratedEventMessage(randomGeneratedEvent)
+		}
+		if randomGeneratedEvent.Type == "connection" {
+			generatedEventsHandler.TransportHandler.PrepareGeneratedEventMessage(randomGeneratedEvent)
+		}
+		generatedEventsHandler.LiveEventsHandler.sendRandomGeneratedMessage(randomGeneratedEvent)
+	}
+	//}()
+
+	// fmt.Println("Waiting for messages...")
+	// <-forever
 }

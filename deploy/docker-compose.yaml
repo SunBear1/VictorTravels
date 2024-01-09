@@ -211,25 +211,6 @@ services:
       interval: 5s
       timeout: 1s
       retries: 10
-  event-hub:
-    container_name: eventhub-ms
-    image: ${EVENTHUB_IMAGE}
-    restart: always
-    environment:
-      RABBITMQ_ADDRESS: rabbitmq
-      RABBITMQ_PORT: 5672
-      POSTGRES_PORT: 5432
-      POSTGRES_ADDRESS: postgresql
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: student
-      PG_DB_EVENTHUB_NAME: rsww_17998_events
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://rabbitmq:15672" ]
-      interval: 5s
-      timeout: 1s
-      retries: 10
   event-hub-v2:
     container_name: eventhub-v2-ms
     image: ${EVENTHUB_V2_IMAGE}
-    ports:
-      - "17997:8080"

@@ -120,6 +120,7 @@ func (db *DatabaseHandler) SaveTransportEventDTO(transportEvent events.Transport
 	}
 	db.SaveEvent(eventType, operation, from, to, timeStamp, string(jsonData))
 }
+
 func (db *DatabaseHandler) SaveTransportGeneratedEventDTO(transportEvent events.TransportGeneratedDTO) {
 	timeStamp := time.Now()
 	to := "TransportMS"
@@ -171,4 +172,18 @@ func (db *DatabaseHandler) GetReservationById(id string) events.ReservationEvent
 		return event
 	}
 	return events.ReservationEvent{}
+}
+
+func (db *DatabaseHandler) GetTripById(id string) events.LiveEventDTO {
+	query := "SELECT tripid,hotelname,country,region FROM eventslog WHERE offerid = $1"
+	rows, _ := db.Db.Query(query, id)
+	for rows.Next() {
+		var tripID int
+		var hotelName string
+		var country string
+		var region string
+		rows.Scan(&tripID, &hotelName, &country, &region)
+		return events.LiveEventDTO{TripId: tripID, HotelName: hotelName, Country: country, Region: region}
+	}
+	return events.LiveEventDTO{}
 }
